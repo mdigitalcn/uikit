@@ -200,6 +200,10 @@ const Mentions = React.memo<MentionsProps>(
             rows={rows}
             disabled={disabled}
             readOnly={readOnly}
+            role="combobox"
+            aria-expanded={showDropdown && filteredOptions.length > 0}
+            aria-autocomplete="list"
+            aria-activedescendant={showDropdown && filteredOptions[highlightedIdx] ? `mention-option-${filteredOptions[highlightedIdx].value}` : undefined}
             data-slot="textarea"
             className={cn(
               'mentions_textarea',
@@ -212,6 +216,7 @@ const Mentions = React.memo<MentionsProps>(
           {showDropdown && filteredOptions.length > 0 && (
             <div
               data-slot="dropdown"
+              role="listbox"
               className={cn(
                 'mentions_dropdown',
                 'absolute z-[var(--z-popover)] rounded-md border border-border bg-background shadow-md max-h-[200px] overflow-auto min-w-[180px]',
@@ -225,6 +230,9 @@ const Mentions = React.memo<MentionsProps>(
                 filteredOptions.map((option, idx) => (
                   <div
                     key={option.value}
+                    id={`mention-option-${option.value}`}
+                    role="option"
+                    aria-selected={idx === highlightedIdx}
                     onMouseDown={(e) => { e.preventDefault(); insertMention(option) }}
                     onMouseEnter={() => setHighlightedIdx(idx)}
                     data-slot="option"

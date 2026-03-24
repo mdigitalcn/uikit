@@ -1,24 +1,32 @@
 'use client'
 
+import { cva } from 'class-variance-authority'
 import React from 'react'
 
 import { cn, getValidationStatus as getStatus, statusMessageVariants } from '../utils'
 import type { InputOTPProps } from './types'
 
-const sizeClasses = {
-  xs: 'h-(--otp-size-xs) w-(--otp-size-xs) text-xs',
-  sm: 'h-(--otp-size-sm) w-(--otp-size-sm) text-sm',
-  md: 'h-(--otp-size-md) w-(--otp-size-md) text-base',
-  lg: 'h-(--otp-size-lg) w-(--otp-size-lg) text-lg',
-}
-
-const statusBorderClasses = {
-  default: 'border-border focus:border-primary',
-  error: 'border-error focus:border-error',
-  warning: 'border-warning focus:border-warning',
-  info: 'border-info focus:border-info',
-  success: 'border-success focus:border-success',
-}
+const otpSlotVariants = cva(
+  'inline-flex items-center justify-center border rounded-md bg-background text-text-primary font-medium text-center outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+  {
+    variants: {
+      size: {
+        xs: 'h-(--otp-size-xs) w-(--otp-size-xs) text-xs',
+        sm: 'h-(--otp-size-sm) w-(--otp-size-sm) text-sm',
+        md: 'h-(--otp-size-md) w-(--otp-size-md) text-base',
+        lg: 'h-(--otp-size-lg) w-(--otp-size-lg) text-lg',
+      },
+      status: {
+        default: 'border-border focus:border-primary',
+        error: 'border-error focus:border-error',
+        warning: 'border-warning focus:border-warning',
+        info: 'border-info focus:border-info',
+        success: 'border-success focus:border-success',
+      },
+    },
+    defaultVariants: { size: 'md', status: 'default' },
+  }
+)
 
 const InputOTP = React.memo<InputOTPProps>(
   ({
@@ -176,14 +184,10 @@ const InputOTP = React.memo<InputOTPProps>(
                 data-slot="inputOTP_slot"
                 className={cn(
                   'inputOTP_slot',
-                  'text-center font-semibold',
-                  'border rounded-md outline-none transition-colors',
-                  'disabled:opacity-50 disabled:cursor-not-allowed',
+                  otpSlotVariants({ size, status }),
+                  'font-semibold',
                   'hover:border-primary/50',
                   'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary',
-                  'text-text-primary',
-                  sizeClasses[size],
-                  statusBorderClasses[status],
                   classNames?.slot,
                   isActive && classNames?.slotActive,
                 )}

@@ -1,5 +1,6 @@
 'use client'
 
+import { cva } from 'class-variance-authority'
 import { Check, Copy } from 'lucide-react'
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 
@@ -10,23 +11,40 @@ const levelElements: Record<TypographyLevel, string> = {
   h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6',
 }
 
-const levelClasses: Record<TypographyLevel, string> = {
-  h1: 'text-4xl font-bold tracking-tight',
-  h2: 'text-3xl font-semibold tracking-tight',
-  h3: 'text-2xl font-semibold',
-  h4: 'text-xl font-semibold',
-  h5: 'text-lg font-medium',
-  h6: 'text-base font-medium',
-}
+const titleVariants = cva('', {
+  variants: {
+    level: {
+      h1: 'text-4xl font-bold tracking-tight',
+      h2: 'text-3xl font-semibold tracking-tight',
+      h3: 'text-2xl font-semibold',
+      h4: 'text-xl font-semibold',
+      h5: 'text-lg font-medium',
+      h6: 'text-base font-medium',
+    },
+  },
+  defaultVariants: { level: 'h1' },
+})
 
-const sizeClasses: Record<TextSize, string> = {
-  xs: 'text-xs',
-  sm: 'text-sm',
-  md: 'text-base',
-  lg: 'text-lg',
-  xl: 'text-xl',
-  '2xl': 'text-2xl',
-}
+const textVariants = cva('', {
+  variants: {
+    size: {
+      xs: 'text-xs',
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg',
+      xl: 'text-xl',
+      '2xl': 'text-2xl',
+    },
+    weight: {
+      light: 'font-light',
+      normal: 'font-normal',
+      medium: 'font-medium',
+      semibold: 'font-semibold',
+      bold: 'font-bold',
+    },
+  },
+  defaultVariants: { size: 'md', weight: 'normal' },
+})
 
 const weightClasses = {
   light: 'font-light',
@@ -99,7 +117,7 @@ const Title = React.memo<TitleProps>(
       Tag as any,
       {
         'data-slot': 'title',
-        className: cn('typography_title', levelClasses[level], textColorClasses[color] || '', className),
+        className: cn('typography_title', titleVariants({ level }), textColorClasses[color] || '', className),
         ...props,
       },
       <>
@@ -156,7 +174,7 @@ const Text = React.memo<TextProps>(
         'data-slot': 'text',
         className: cn(
           'typography_text',
-          sizeClasses[size],
+          textVariants({ size }),
           weight && weightClasses[weight],
           textColorClasses[color] || '',
           truncateClass,
@@ -210,7 +228,7 @@ const Paragraph = React.memo<ParagraphProps>(
         data-slot="paragraph"
         className={cn(
           'typography_paragraph',
-          sizeClasses[size],
+          textVariants({ size }),
           textColorClasses[color] || '',
           truncateClass,
           'leading-relaxed',

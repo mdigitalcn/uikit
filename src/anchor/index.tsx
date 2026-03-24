@@ -1,16 +1,24 @@
 'use client'
 
+import { cva } from 'class-variance-authority'
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 
 import { cn } from '../utils'
 import type { AnchorItem, AnchorProps } from './types'
 
-const sizeClasses = {
-  xs: { link: 'text-xs py-0.5 pl-3', indicator: 'w-0.5' },
-  sm: { link: 'text-sm py-0.5 pl-3', indicator: 'w-0.5' },
-  md: { link: 'text-sm py-1 pl-4', indicator: 'w-0.5' },
-  lg: { link: 'text-base py-1 pl-5', indicator: 'w-1' },
-}
+const anchorLinkVariants = cva('block transition-colors duration-200 text-text-secondary hover:text-text-primary', {
+  variants: {
+    size: {
+      xs: 'text-xs py-0.5 pl-3',
+      sm: 'text-sm py-0.5 pl-3',
+      md: 'text-sm py-1 pl-4',
+      lg: 'text-base py-1 pl-5',
+    },
+  },
+  defaultVariants: { size: 'md' },
+})
+
+const indicatorWidths = { xs: 'w-0.5', sm: 'w-0.5', md: 'w-0.5', lg: 'w-1' }
 
 function flattenIds(list: AnchorItem[]): string[] {
   return list.flatMap((item) => [item.id, ...(item.children ? flattenIds(item.children) : [])])
@@ -121,7 +129,6 @@ const Anchor = React.memo<AnchorProps>(
       [targetOffset, onChange, getContainer],
     )
 
-    const s = sizeClasses[size]
     const depthPadding = { 0: '', 1: 'pl-6', 2: 'pl-10', 3: 'pl-14' } as Record<number, string>
 
     const renderLink = (item: AnchorItem, depth = 0) => (
@@ -133,8 +140,8 @@ const Anchor = React.memo<AnchorProps>(
           data-slot="link"
           className={cn(
             'anchor_link',
-            'block text-text-secondary hover:text-text-primary transition-colors truncate',
-            s.link,
+            anchorLinkVariants({ size }),
+            'truncate',
             depth > 0 && (depthPadding[depth] || 'pl-14'),
             activeId === item.id && 'text-primary font-medium',
             activeId === item.id && classNames?.activeLink,
@@ -166,7 +173,7 @@ const Anchor = React.memo<AnchorProps>(
           className={cn(
             'anchor_indicator',
             'absolute left-0 rounded-full bg-primary transition-all duration-200',
-            s.indicator,
+            indicatorWidths[size],
             classNames?.indicator,
           )}
           style={{

@@ -13,6 +13,7 @@ import {
   iconSizes,
   statusMessageVariants,
 } from "../utils";
+import { colorVars } from "../variants";
 import type { InputProps } from "./types";
 
 const inputVariants = cva(
@@ -54,6 +55,7 @@ const Input = React.memo<InputProps>(
   ({
     variant = "outline",
     size = "md",
+    color = "primary",
     label,
     error,
     warning,
@@ -124,6 +126,7 @@ const Input = React.memo<InputProps>(
     const wrapperClass = cn(
       "input_wrapper",
       "relative w-full",
+      color !== "primary" && colorVars[color],
       wrapperClassName,
       loading && "opacity-50 cursor-not-allowed",
       classNames?.wrapper,

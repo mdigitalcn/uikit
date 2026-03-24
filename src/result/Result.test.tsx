@@ -53,3 +53,35 @@ describe('Result', () => {
     expect(screen.getByTestId('custom-icon')).toBeInTheDocument()
   })
 })
+
+  it('renders with role="status"', () => {
+    const { container } = render(<Result status="success" />)
+    expect(container.querySelector('[role="status"]')).toBeInTheDocument()
+  })
+
+  it('renders with aria-label', () => {
+    const { container } = render(<Result status="success" title="Done" />)
+    expect(container.querySelector('[role="status"]')).toHaveAttribute('aria-label', 'Done')
+  })
+
+  it('renders all status variants', () => {
+    const statuses = ['success', 'error', 'info', 'warning', '403', '404', '500'] as const
+    statuses.forEach((status) => {
+      const { unmount } = render(<Result status={status} />)
+      unmount()
+    })
+  })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<Result status="info" size={size} />)
+      unmount()
+    })
+  })
+
+  it('renders custom icon', () => {
+    render(<Result status="info" icon={<span data-testid="custom-icon">★</span>} />)
+    expect(screen.getByTestId('custom-icon')).toBeInTheDocument()
+
+})

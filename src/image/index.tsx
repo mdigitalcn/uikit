@@ -1,10 +1,35 @@
 'use client'
 
+import { cva } from 'class-variance-authority'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { cn } from '../utils'
 
 import { ImageProps } from './types'
+
+const imageVariants = cva('', {
+  variants: {
+    fit: {
+      cover: 'object-cover',
+      contain: 'object-contain',
+      fill: 'object-fill',
+      none: 'object-none',
+      'scale-down': 'object-scale-down',
+    },
+    radius: {
+      none: 'rounded-none',
+      sm: 'rounded-sm',
+      md: 'rounded-md',
+      lg: 'rounded-lg',
+      xl: 'rounded-xl',
+      full: 'rounded-full',
+    },
+  },
+  defaultVariants: {
+    fit: 'cover',
+    radius: 'md',
+  },
+})
 
 const Image = React.memo<ImageProps>(({
   src,

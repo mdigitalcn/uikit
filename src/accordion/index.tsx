@@ -2,7 +2,10 @@
 
 import { cva } from "class-variance-authority";
 import { ChevronDown } from "lucide-react";
-import React, { useCallback, useId, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+
+// SSR-safe useLayoutEffect — avoids React warnings in server environments
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 import { cn, iconSizes } from "../utils";
 import { colorVars } from "../variants";
@@ -153,7 +156,7 @@ const AccordionItemComponent = React.memo<AccordionItemComponentProps>(
     }, []);
 
     // Set initial height before first paint (no animation on mount)
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
       if (panelRef.current) {
         panelRef.current.style.height = isItemActive ? "auto" : "0";
       }
@@ -161,7 +164,7 @@ const AccordionItemComponent = React.memo<AccordionItemComponentProps>(
     }, []);
 
     // WAAPI animation — browser pre-computes full path, cancellable on rapid clicks
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
       const panel = panelRef.current;
       const content = contentRef.current;
       if (!panel || !content) return;
@@ -411,10 +414,32 @@ const Accordion = React.memo<AccordionProps>(
       onChange?.(newActiveKey);
     }, [multiple, activeKey, collapsible, controlledActiveKey, onChange]);
 
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+      const triggers = Array.from(
+        (e.currentTarget as HTMLElement).querySelectorAll<HTMLButtonElement>(
+          'button[data-slot="trigger"]:not(:disabled)'
+        )
+      );
+      const index = triggers.indexOf(e.target as HTMLButtonElement);
+      if (index === -1) return;
+
+      let next: number | null = null;
+      switch (e.key) {
+        case 'ArrowDown': next = (index + 1) % triggers.length; break;
+        case 'ArrowUp': next = (index - 1 + triggers.length) % triggers.length; break;
+        case 'Home': next = 0; break;
+        case 'End': next = triggers.length - 1; break;
+        default: return;
+      }
+      e.preventDefault();
+      triggers[next]?.focus();
+    }, []);
+
     return (
       <div
         ref={ref}
         data-slot="root"
+        onKeyDown={handleKeyDown}
         className={cn(
           "accordion_root",
           accordionContainerVariants({

@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export type TextareaVariant = 'outline' | 'filled'
 
@@ -23,6 +23,10 @@ export interface TextareaProps
   > {
   variant?: TextareaVariant
   size?: TextareaSize
+  /** Color for focus ring and active border
+   * @default 'primary'
+   */
+  color?: ComponentColor
   label?: string
   helperText?: string
   messagePosition?: 'top' | 'bottom'

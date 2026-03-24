@@ -1,4 +1,4 @@
-import type { BaseOption, ComponentSize, ValidationMessages } from '../types'
+import type { BaseOption, ComponentColor, ComponentSize, ValidationMessages } from '../types'
 
 export type SelectSize = ComponentSize
 
@@ -25,6 +25,10 @@ export interface SelectProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size' | 'onChange'>,
     ValidationMessages {
   size?: SelectSize
+  /** Color for focus ring, selected option, and active border
+   * @default 'primary'
+   */
+  color?: ComponentColor
   label?: string
   options?: SelectOption[]
   placeholder?: string

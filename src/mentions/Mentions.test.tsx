@@ -27,7 +27,7 @@ describe('Mentions', () => {
   it('calls onChange on input', () => {
     const onChange = vi.fn()
     render(<Mentions options={users} onChange={onChange} />)
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'hello' } })
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'hello' } })
     expect(onChange).toHaveBeenCalledWith('hello')
   })
 
@@ -48,6 +48,6 @@ describe('Mentions', () => {
 
   it('respects disabled state', () => {
     render(<Mentions options={users} disabled />)
-    expect(screen.getByRole('textbox')).toBeDisabled()
+    expect(screen.getByRole('combobox')).toBeDisabled()
   })
 })

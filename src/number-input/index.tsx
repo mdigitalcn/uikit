@@ -14,6 +14,7 @@ import {
   iconSizes,
   statusMessageVariants,
 } from "../utils";
+import { colorVars } from "../variants";
 import type { NumberInputProps } from "./types";
 
 const numberInputVariants = cva(
@@ -93,6 +94,7 @@ const NumberInput = React.memo<NumberInputProps>(
     step = 1,
     precision,
     size = "md",
+    color = "primary",
     label,
     placeholder,
     disabled = false,
@@ -271,10 +273,11 @@ const NumberInput = React.memo<NumberInputProps>(
         cn(
           "number-input_root",
           "w-full flex flex-col relative",
+          color !== "primary" && colorVars[color],
           !fullWidth && "inline-block",
           classNames?.root,
         ),
-      [fullWidth, classNames?.root],
+      [fullWidth, color, classNames?.root],
     );
 
     const labelClass = useMemo(

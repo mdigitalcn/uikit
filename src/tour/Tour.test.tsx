@@ -63,4 +63,49 @@ describe('Tour', () => {
     expect(screen.getByText('Continue')).toBeInTheDocument()
     expect(screen.getByText('Exit')).toBeInTheDocument()
   })
+
+  it('renders tour popover with role="dialog"', () => {
+    const { container } = render(<Tour steps={steps} open current={0} />)
+    const popover = container.querySelector('[role="dialog"]')
+    expect(popover).toBeInTheDocument()
+  })
+
+  it('has aria-label on popover', () => {
+    const { container } = render(<Tour steps={steps} open current={0} />)
+    const popover = container.querySelector('[role="dialog"]')
+    expect(popover).toHaveAttribute('aria-label')
+  })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<Tour steps={steps} open current={0} size={size} />)
+      unmount()
+    })
+  })
+
+  it('renders with showProgress prop', () => {
+    const { container } = render(<Tour steps={steps} open current={0} showProgress />)
+    expect(container.querySelector('[data-slot="popover"]')).toBeInTheDocument()
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<Tour steps={steps} open current={0} className="custom" />)
+    expect(container.querySelector('.custom')).toBeInTheDocument()
+  })
+
+  it('renders next and prev buttons', () => {
+    render(<Tour steps={steps} open current={0} />)
+    expect(screen.getByText('Next')).toBeInTheDocument()
+  })
+
+  it('shows skip button when showSkip is true', () => {
+    render(<Tour steps={steps} open current={0} showSkip />)
+    expect(screen.getByText('Skip')).toBeInTheDocument()
+  })
+
+  it('renders on last step', () => {
+    const { container } = render(<Tour steps={steps} open current={1} />)
+    expect(container.querySelector('[data-slot="popover"]')).toBeInTheDocument()
+  })
 })

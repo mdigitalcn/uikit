@@ -213,10 +213,19 @@ const Tour = React.memo<TourProps>(
 
     useEffect(() => {
       if (!isOpen) return
-      const handleEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') handleSkip() }
-      document.addEventListener('keydown', handleEsc)
-      return () => document.removeEventListener('keydown', handleEsc)
-    }, [isOpen])
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') handleSkip()
+        else if (e.key === 'ArrowRight' || (e.key === 'Enter' && !e.shiftKey)) {
+          e.preventDefault()
+          handleNext()
+        } else if (e.key === 'ArrowLeft' || (e.key === 'Enter' && e.shiftKey)) {
+          e.preventDefault()
+          if (current > 0) handlePrev()
+        }
+      }
+      document.addEventListener('keydown', handleKeyDown)
+      return () => document.removeEventListener('keydown', handleKeyDown)
+    }, [isOpen, current, steps.length])
 
     if (!isOpen || !step) return null
 
@@ -297,6 +306,9 @@ const Tour = React.memo<TourProps>(
         <div
           ref={popoverRef}
           data-slot="popover"
+          role="dialog"
+          aria-label={step.title ? String(step.title) : `Tour step ${current + 1} of ${steps.length}`}
+          aria-modal="false"
           className={cn(
             'tour_popover',
             'z-[var(--z-tour)] rounded-lg border border-border bg-background shadow-lg',

@@ -1,5 +1,6 @@
 'use client'
 
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { cva } from 'class-variance-authority'
 import React from 'react'
 
@@ -467,9 +468,34 @@ const Tree = React.memo<TreeProps>(
       ],
     )
 
+    const scrollRef = React.useRef<HTMLDivElement>(null)
+    const shouldVirtualize = flatNodes.length > 100
+    const virtualizer = useVirtualizer({
+      count: flatNodes.length,
+      getScrollElement: () => scrollRef.current,
+      estimateSize: () => size === 'xs' ? 28 : size === 'sm' ? 32 : size === 'lg' ? 44 : 36,
+      enabled: shouldVirtualize,
+      overscan: 10,
+    })
+
     return (
-      <div data-slot="root" className={cn('tree_root', 'w-full', className, classNames?.root)}>
-        {flatNodes.map((item, index) => renderNode(item, index))}
+      <div
+        ref={shouldVirtualize ? scrollRef : undefined}
+        data-slot="root"
+        className={cn('tree_root', 'w-full', shouldVirtualize && 'overflow-auto', className, classNames?.root)}
+        style={shouldVirtualize ? { maxHeight: '400px' } : undefined}
+      >
+        {shouldVirtualize ? (
+          <div style={{ height: `${virtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}>
+            {virtualizer.getVirtualItems().map((vItem) => (
+              <div key={flatNodes[vItem.index].node.key} style={{ position: 'absolute', top: 0, left: 0, width: '100%', transform: `translateY(${vItem.start}px)` }}>
+                {renderNode(flatNodes[vItem.index], vItem.index)}
+              </div>
+            ))}
+          </div>
+        ) : (
+          flatNodes.map((item, index) => renderNode(item, index))
+        )}
       </div>
     )
   },

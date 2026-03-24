@@ -1,5 +1,6 @@
 'use client'
 
+import { useVirtualizer } from '@tanstack/react-virtual'
 import React from 'react'
 
 import {
@@ -18,7 +19,7 @@ import {
   statusMessageVariants,
 } from '../utils'
 import { colorVars } from '../variants'
-import type { TransferItem, TransferListProps, TransferProps } from './types'
+import type { TransferClassNames, TransferItem, TransferListProps, TransferProps } from './types'
 import {
   filterItems,
   getEnabledItems,
@@ -29,6 +30,101 @@ import {
   transferHeaderVariants,
   transferItemVariants,
 } from './utils'
+
+const VIRTUAL_THRESHOLD = 100
+
+const TransferListBody = React.memo(({
+  filteredData,
+  selectedKeySet,
+  disabled,
+  listHeight,
+  title,
+  render,
+  classNames,
+  handleItemSelect,
+}: {
+  filteredData: TransferItem[]
+  selectedKeySet: Set<string>
+  disabled: boolean
+  listHeight: number
+  title: string
+  render?: (item: TransferItem) => React.ReactNode
+  classNames?: TransferClassNames
+  handleItemSelect: (item: TransferItem) => void
+}) => {
+  const scrollRef = React.useRef<HTMLDivElement>(null)
+  const shouldVirtualize = filteredData.length > VIRTUAL_THRESHOLD
+
+  const virtualizer = useVirtualizer({
+    count: filteredData.length,
+    getScrollElement: () => scrollRef.current,
+    estimateSize: () => 40,
+    enabled: shouldVirtualize,
+    overscan: 8,
+  })
+
+  const renderItem = (item: TransferItem) => (
+    <div
+      key={item.key}
+      role="option"
+      aria-selected={selectedKeySet.has(item.key)}
+      aria-disabled={!!item.disabled || disabled}
+      className={cn(
+        transferItemVariants({
+          selected: selectedKeySet.has(item.key),
+          disabled: !!item.disabled || disabled,
+        }),
+        "transfer_item",
+        classNames?.item
+      )}
+      onClick={() => handleItemSelect(item)}
+    >
+      <Checkbox
+        checked={selectedKeySet.has(item.key)}
+        disabled={!!item.disabled || disabled}
+        size="sm"
+        onChange={() => {}}
+      />
+      {render ? render(item) : (
+        <div className="flex-1 min-w-0">
+          <div className="text-sm text-text-primary truncate">{item.label}</div>
+          {item.description && (
+            <div className="text-xs text-text-secondary truncate">{item.description}</div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+
+  return (
+    <div
+      ref={scrollRef}
+      role="listbox"
+      aria-label={title}
+      aria-multiselectable="true"
+      className={transferBodyVariants()}
+      style={{ height: listHeight, overflow: 'auto' }}
+    >
+      {filteredData.length === 0 ? (
+        <div className="flex items-center justify-center h-full text-sm text-text-secondary">No data</div>
+      ) : shouldVirtualize ? (
+        <div style={{ height: `${virtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}>
+          {virtualizer.getVirtualItems().map((vItem) => {
+            const item = filteredData[vItem.index]
+            return (
+              <div key={item.key} style={{ position: 'absolute', top: 0, left: 0, width: '100%', transform: `translateY(${vItem.start}px)` }}>
+                {renderItem(item)}
+              </div>
+            )
+          })}
+        </div>
+      ) : (
+        filteredData.map(renderItem)
+      )}
+    </div>
+  )
+})
+TransferListBody.displayName = 'TransferListBody'
 
 const TransferList = React.memo<TransferListProps>(
   ({
@@ -140,58 +236,16 @@ const TransferList = React.memo<TransferListProps>(
         )}
 
         {/* Body */}
-        <div
-          role="listbox"
-          aria-label={title}
-          aria-multiselectable="true"
-          className={transferBodyVariants()}
-          style={{ height: listHeight }}
-        >
-          {filteredData.length === 0 ? (
-            <div className="flex items-center justify-center h-full text-sm text-text-secondary">
-              No data
-            </div>
-          ) : (
-            filteredData.map((item) => (
-              <div
-                key={item.key}
-                role="option"
-                aria-selected={selectedKeySet.has(item.key)}
-                aria-disabled={!!item.disabled || disabled}
-                className={cn(
-                  transferItemVariants({
-                    selected: selectedKeySet.has(item.key),
-                    disabled: !!item.disabled || disabled,
-                  }),
-                  "transfer_item",
-                  classNames?.item
-                )}
-                onClick={() => handleItemSelect(item)}
-              >
-                <Checkbox
-                  checked={selectedKeySet.has(item.key)}
-                  disabled={!!item.disabled || disabled}
-                  size="sm"
-                    onChange={() => {}} // Handled by parent click
-                />
-                {render ? (
-                  render(item)
-                ) : (
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm text-text-primary truncate">
-                      {item.label}
-                    </div>
-                    {item.description && (
-                      <div className="text-xs text-text-secondary truncate">
-                        {item.description}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-        </div>
+        <TransferListBody
+          filteredData={filteredData}
+          selectedKeySet={selectedKeySet}
+          disabled={disabled}
+          listHeight={listHeight}
+          title={title}
+          render={render}
+          classNames={classNames}
+          handleItemSelect={handleItemSelect}
+        />
 
         {/* Footer */}
         {footer && (

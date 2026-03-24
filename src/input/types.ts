@@ -1,4 +1,4 @@
-import type { ComponentSize, ValidationMessages } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages } from '../types'
 
 export type InputVariant = 'outline' | 'filled'
 
@@ -21,6 +21,10 @@ export interface InputProps
     ValidationMessages {
   variant?: InputVariant
   size?: InputSize
+  /** Color for focus ring and active border
+   * @default 'primary'
+   */
+  color?: ComponentColor
   label?: string
   messagePosition?: 'top' | 'bottom'
   leftIcon?: React.ReactNode

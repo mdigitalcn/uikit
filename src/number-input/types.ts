@@ -1,4 +1,4 @@
-import type { ComponentSize, ValidationMessages, CreateClassNames } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages, CreateClassNames } from '../types'
 
 export type NumberInputSize = ComponentSize
 
@@ -15,6 +15,10 @@ export interface NumberInputProps extends ValidationMessages {
   step?: number
   precision?: number
   size?: NumberInputSize
+  /** Color for focus ring and active border
+   * @default 'primary'
+   */
+  color?: ComponentColor
   label?: string
   placeholder?: string
   disabled?: boolean

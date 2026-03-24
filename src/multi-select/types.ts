@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export type MultiSelectSize = ComponentSize
 
@@ -26,6 +26,10 @@ export interface MultiSelectClassNames {
 export interface MultiSelectProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size' | 'onChange'> {
   size?: MultiSelectSize
+  /** Color for focus ring, selected options, and active border
+   * @default 'primary'
+   */
+  color?: ComponentColor
   label?: string
   helperText?: string
   error?: string | boolean

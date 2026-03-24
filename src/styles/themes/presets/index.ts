@@ -15,8 +15,10 @@
  * - corporate: Professional blue/gray palette for business applications
  * - vibrant: Bold, saturated colors with purple/pink/teal
  * - minimal: Muted, low-contrast palette with subtle accents
+ * - ocean: Calm teal/cyan palette for professional SaaS
+ * - rose: Warm pink/rose palette for friendly applications
  */
 
-export const themePresets = ['corporate', 'vibrant', 'minimal'] as const
+export const themePresets = ['corporate', 'vibrant', 'minimal', 'ocean', 'rose'] as const
 
 export type ThemePreset = typeof themePresets[number]

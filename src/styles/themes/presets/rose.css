@@ -1,0 +1,118 @@
+/**
+ * Rose Theme Preset
+ * Warm pink/rose palette for friendly, approachable applications
+ * Elegant, warm, inviting
+ */
+
+html[data-theme="rose"],
+:root[data-theme="rose"] {
+  --color-primary: oklch(60% 0.18 0);
+  --color-primary-hover: oklch(55% 0.20 0);
+  --color-primary-active: oklch(50% 0.22 0);
+  --color-primary-foreground: oklch(100% 0 0);
+
+  --color-secondary: oklch(55% 0.10 340);
+  --color-secondary-hover: oklch(50% 0.12 340);
+  --color-secondary-active: oklch(45% 0.14 340);
+  --color-secondary-foreground: oklch(100% 0 0);
+
+  --color-accent: oklch(70% 0.14 30);
+  --color-accent-hover: oklch(65% 0.16 30);
+  --color-accent-active: oklch(60% 0.18 30);
+  --color-accent-foreground: oklch(15% 0 0);
+
+  --color-success: oklch(55% 0.18 155);
+  --color-success-hover: oklch(50% 0.20 155);
+  --color-success-active: oklch(45% 0.22 155);
+  --color-success-foreground: oklch(100% 0 0);
+
+  --color-error: oklch(55% 0.22 25);
+  --color-error-hover: oklch(50% 0.24 25);
+  --color-error-active: oklch(45% 0.26 25);
+  --color-error-foreground: oklch(100% 0 0);
+
+  --color-warning: oklch(70% 0.15 75);
+  --color-warning-hover: oklch(65% 0.17 75);
+  --color-warning-active: oklch(60% 0.19 75);
+  --color-warning-foreground: oklch(15% 0 0);
+
+  --color-info: oklch(55% 0.15 260);
+  --color-info-hover: oklch(50% 0.17 260);
+  --color-info-active: oklch(45% 0.19 260);
+  --color-info-foreground: oklch(100% 0 0);
+
+  --color-background: oklch(99% 0.005 350);
+  --color-background-secondary: oklch(97% 0.008 350);
+  --color-surface: oklch(95% 0.01 350);
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(18% 0.015 350);
+  --color-border: oklch(90% 0.015 350);
+  --color-border-primary: oklch(82% 0.02 350);
+
+  --color-text-primary: oklch(18% 0.015 350);
+  --color-text-secondary: oklch(40% 0.01 350);
+  --color-text-muted: oklch(56% 0.008 350);
+
+  --color-input-border: oklch(87% 0.01 350);
+  --color-input-border-focus: oklch(60% 0.18 0);
+  --color-input-border-error: oklch(55% 0.22 25);
+  --color-input-bg: oklch(100% 0 0);
+}
+
+html[data-theme="rose"].dark,
+:root[data-theme="rose"].dark,
+html[data-theme="rose"] .dark,
+[data-theme="rose"].dark,
+[data-theme="rose"] .dark {
+  --color-primary: oklch(62% 0.18 0);
+  --color-primary-hover: oklch(67% 0.20 0);
+  --color-primary-active: oklch(72% 0.22 0);
+  --color-primary-foreground: oklch(100% 0 0);
+
+  --color-secondary: oklch(58% 0.12 340);
+  --color-secondary-hover: oklch(63% 0.14 340);
+  --color-secondary-active: oklch(68% 0.16 340);
+  --color-secondary-foreground: oklch(100% 0 0);
+
+  --color-accent: oklch(65% 0.14 30);
+  --color-accent-hover: oklch(70% 0.16 30);
+  --color-accent-active: oklch(75% 0.18 30);
+  --color-accent-foreground: oklch(15% 0 0);
+
+  --color-success: oklch(58% 0.16 155);
+  --color-success-hover: oklch(63% 0.18 155);
+  --color-success-active: oklch(68% 0.20 155);
+  --color-success-foreground: oklch(100% 0 0);
+
+  --color-error: oklch(60% 0.20 25);
+  --color-error-hover: oklch(65% 0.22 25);
+  --color-error-active: oklch(70% 0.24 25);
+  --color-error-foreground: oklch(100% 0 0);
+
+  --color-warning: oklch(78% 0.15 75);
+  --color-warning-hover: oklch(82% 0.17 75);
+  --color-warning-active: oklch(86% 0.19 75);
+  --color-warning-foreground: oklch(15% 0 0);
+
+  --color-info: oklch(58% 0.15 260);
+  --color-info-hover: oklch(63% 0.17 260);
+  --color-info-active: oklch(68% 0.19 260);
+  --color-info-foreground: oklch(100% 0 0);
+
+  --color-background: oklch(12% 0.02 350);
+  --color-background-secondary: oklch(15% 0.025 350);
+  --color-surface: oklch(18% 0.03 350);
+  --color-card: oklch(16% 0.025 350);
+  --color-card-foreground: oklch(95% 0.01 350);
+  --color-border: oklch(26% 0.04 350);
+  --color-border-primary: oklch(36% 0.05 350);
+
+  --color-text-primary: oklch(95% 0.01 350);
+  --color-text-secondary: oklch(75% 0.008 350);
+  --color-text-muted: oklch(55% 0.006 350);
+
+  --color-input-border: oklch(28% 0.03 350);
+  --color-input-border-focus: oklch(62% 0.18 0);
+  --color-input-border-error: oklch(60% 0.20 25);
+  --color-input-bg: oklch(14% 0.02 350);
+}

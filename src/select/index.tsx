@@ -71,6 +71,7 @@ const selectGroupVariants = cva(
 const Select = React.memo<SelectProps>(
   ({
     size = "md",
+    color = "primary",
     label,
     helperText,
     error,
@@ -480,7 +481,7 @@ const Select = React.memo<SelectProps>(
         className={cn(
           "select_root",
           "relative group",
-          colorVars.primary,
+          colorVars[color],
           fullWidth ? "w-full" : "inline-block",
           classNames?.root,
         )}

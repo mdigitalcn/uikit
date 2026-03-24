@@ -4,6 +4,7 @@ import { cva } from "class-variance-authority";
 import React, { useId, useMemo } from "react";
 
 import { cn, getValidationStatus, statusMessageVariants } from "../utils";
+import { colorVars } from "../variants";
 import type { TextareaProps } from "./types";
 
 const textareaVariants = cva(
@@ -52,6 +53,7 @@ const Textarea = React.memo<TextareaProps>(
   ({
     variant = "outline",
     size = "md",
+    color = "primary",
     label,
     helperText,
     messagePosition = "bottom",
@@ -156,6 +158,7 @@ const Textarea = React.memo<TextareaProps>(
         className={cn(
           "textarea_root",
           "w-full flex flex-col relative",
+          color !== "primary" && colorVars[color],
           !fullWidth && "inline-block",
           classNames?.root,
         )}

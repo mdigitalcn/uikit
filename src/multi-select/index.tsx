@@ -20,6 +20,7 @@ import {
 const MultiSelect = React.memo<MultiSelectProps>(
   ({
     size = "md",
+    color = "primary",
     label,
     helperText,
     error,
@@ -527,7 +528,7 @@ const MultiSelect = React.memo<MultiSelectProps>(
       <div
         className={cn(
           "multiSelect_root relative group",
-          colorVars.primary,
+          colorVars[color],
           fullWidth ? "w-full" : "inline-block",
           classNames?.root,
         )}
