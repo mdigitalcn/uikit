@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { cva } from "class-variance-authority";
 import React from "react";
@@ -80,6 +80,7 @@ const Timeline = React.memo<TimelineProps>(
     pending = false,
     pendingText = "Loading...",
     reverse = false,
+    ariaLabel,
     className,
     classNames,
     ref,
@@ -220,7 +221,7 @@ const Timeline = React.memo<TimelineProps>(
             "grid grid-cols-[1fr_auto_1fr]",
             classNames?.item,
           )}
-          data-slot="item"
+          data-slot="item" role="listitem"
         >
           {/* Left column */}
           <div className="pb-8 pr-4">
@@ -273,7 +274,7 @@ const Timeline = React.memo<TimelineProps>(
             "grid grid-cols-[1fr_auto_1fr]",
             classNames?.item,
           )}
-          data-slot="item"
+          data-slot="item" role="listitem"
         >
           <div className="pr-4">
             {!contentOnRight && (
@@ -341,7 +342,7 @@ const Timeline = React.memo<TimelineProps>(
             "flex-1 flex flex-col items-center min-w-0",
             classNames?.item,
           )}
-          data-slot="item"
+          data-slot="item" role="listitem"
         >
           {/* Date above */}
           <div
@@ -418,7 +419,7 @@ const Timeline = React.memo<TimelineProps>(
           "flex-1 flex flex-col items-center min-w-0",
           classNames?.item,
         )}
-        data-slot="item"
+        data-slot="item" role="listitem"
       >
         <div
           className={cn(
@@ -472,6 +473,8 @@ const Timeline = React.memo<TimelineProps>(
             className,
           )}
           data-slot="root"
+          role="list"
+          aria-label={ariaLabel ?? "Timeline"}
         >
           {displayItems.map((item, index) => renderHorizontalItem(item, index))}
           {pending && renderHorizontalPending()}
@@ -484,6 +487,8 @@ const Timeline = React.memo<TimelineProps>(
         ref={ref}
         className={cn("timeline_root", "relative", classNames?.root, className)}
         data-slot="root"
+        role="list"
+        aria-label={ariaLabel ?? "Timeline"}
       >
         {displayItems.map((item, index) => renderVerticalItem(item, index))}
         {pending && renderVerticalPending()}

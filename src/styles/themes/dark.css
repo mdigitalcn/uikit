@@ -16,18 +16,7 @@
   --color-white: oklch(100% 0 0);
   --color-black: oklch(0% 0 0);
 
-  /* === GRAY SCALE === */
-  --color-gray-50: oklch(98% 0 0);
-  --color-gray-100: oklch(96% 0 0);
-  --color-gray-200: oklch(92% 0 0);
-  --color-gray-300: oklch(87% 0 0);
-  --color-gray-400: oklch(71% 0 0);
-  --color-gray-500: oklch(55% 0 0);
-  --color-gray-600: oklch(45% 0 0);
-  --color-gray-700: oklch(35% 0 0);
-  --color-gray-800: oklch(25% 0 0);
-  --color-gray-900: oklch(15% 0 0);
-  --color-gray-950: oklch(10% 0 0);
+  /* Gray scale defined once in global.css :root */
 
   /* === BRAND COLORS (DARK) ===
      Same hues as light mode. L at 58-62% keeps white text readable.
@@ -105,11 +94,12 @@
   --color-input-placeholder: oklch(50% 0 0);
 
   /* === SHADOWS (DARK) === */
-  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.4);
-  --shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.5);
-  --shadow-lg: 0 12px 20px -3px rgb(0 0 0 / 0.6);
-  --shadow-xl: 0 20px 30px -5px rgb(0 0 0 / 0.6);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.7);
+  --shadow-xs: 0 1px 2px 0 oklch(0% 0 0 / 0.3);
+  --shadow-sm: 0 1px 3px 0 oklch(0% 0 0 / 0.4), 0 1px 2px -1px oklch(0% 0 0 / 0.4);
+  --shadow-md: 0 4px 8px -1px oklch(0% 0 0 / 0.5), 0 2px 4px -2px oklch(0% 0 0 / 0.4);
+  --shadow-lg: 0 12px 20px -3px oklch(0% 0 0 / 0.6), 0 4px 8px -4px oklch(0% 0 0 / 0.4);
+  --shadow-xl: 0 20px 30px -5px oklch(0% 0 0 / 0.6), 0 8px 10px -6px oklch(0% 0 0 / 0.3);
+  --shadow-2xl: 0 25px 50px -12px oklch(0% 0 0 / 0.7);
 
   /* === OVERLAYS & EFFECTS (DARK) === */
   --overlay-stripe: oklch(100% 0 0 / 0.08);

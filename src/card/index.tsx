@@ -24,6 +24,7 @@ interface CardContextValue {
   variant: CardVariant;
   color: CardColor;
   classNames?: CardClassNames;
+  titleId?: string;
 }
 
 const CardContext = React.createContext<CardContextValue | null>(null);
@@ -122,9 +123,11 @@ const Card = React.memo<CardProps>(
       className,
     );
 
+    const titleId = React.useId();
+
     const contextValue = React.useMemo(
-      () => ({ variant, color, classNames }),
-      [variant, color, classNames],
+      () => ({ variant, color, classNames, titleId }),
+      [variant, color, classNames, titleId],
     );
 
     if (clickable) {
@@ -143,6 +146,7 @@ const Card = React.memo<CardProps>(
               }
             }}
             data-slot="root"
+            aria-labelledby={titleId}
             {...props}
           >
             {cardContent}
@@ -153,7 +157,7 @@ const Card = React.memo<CardProps>(
 
     return (
       <CardContext.Provider value={contextValue}>
-        <div ref={ref} className={cardClassName} onClick={onClick} data-slot="root" {...props}>
+        <div ref={ref} className={cardClassName} onClick={onClick} data-slot="root" aria-labelledby={titleId} {...props}>
           {cardContent}
         </div>
       </CardContext.Provider>
@@ -180,6 +184,7 @@ const CardTitle: React.FC<CardTitleProps> = ({ className, as: Tag = "h3", ref, .
   return (
     <Tag
       ref={ref}
+      id={ctx?.titleId}
       className={cn(
         "card_title",
         "text-lg font-semibold leading-none tracking-tight",

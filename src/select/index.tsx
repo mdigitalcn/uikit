@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { cva } from "class-variance-authority";
 import { Check, ChevronDown, ChevronUp, Search, X } from "lucide-react";
@@ -409,6 +409,7 @@ const Select = React.memo<SelectProps>(
         aria-controls={listboxId}
         aria-labelledby={label ? labelId : undefined}
         aria-describedby={helperMessage ? helperId : undefined}
+        aria-invalid={status === 'error' || undefined}
       >
         <input
           ref={inputRef}

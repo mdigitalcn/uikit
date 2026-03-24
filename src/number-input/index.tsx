@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { cva } from "class-variance-authority";
 import { Plus, Minus } from "lucide-react";

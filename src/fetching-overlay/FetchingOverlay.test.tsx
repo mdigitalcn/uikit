@@ -47,13 +47,15 @@ describe('FetchingOverlay', () => {
   it('applies default backdrop opacity', () => {
     const { container } = render(<FetchingOverlay isFetching={true} />)
     const root = container.querySelector('.fetchingOverlay_root') as HTMLElement
-    expect(root?.style.backgroundColor).toBe('rgba(0, 0, 0, 0.3)')
+    expect(root?.style.backgroundColor).toContain('oklch(')
+    expect(root?.style.backgroundColor).toContain('0.3')
   })
 
   it('applies custom backdrop opacity', () => {
     const { container } = render(<FetchingOverlay isFetching={true} backdropOpacity={50} />)
     const root = container.querySelector('.fetchingOverlay_root') as HTMLElement
-    expect(root?.style.backgroundColor).toBe('rgba(0, 0, 0, 0.5)')
+    expect(root?.style.backgroundColor).toContain('oklch(')
+    expect(root?.style.backgroundColor).toContain('0.5')
   })
 
   it('does not apply background color when not fetching', () => {
@@ -145,13 +147,12 @@ describe('FetchingOverlay', () => {
   it('renders with zero backdrop opacity', () => {
     const { container } = render(<FetchingOverlay isFetching={true} backdropOpacity={0} />)
     const root = container.querySelector('.fetchingOverlay_root') as HTMLElement
-    expect(root?.style.backgroundColor).toBe('rgba(0, 0, 0, 0)')
+    expect(root?.style.backgroundColor).toContain('oklch(')
   })
 
   it('renders with full backdrop opacity', () => {
     const { container } = render(<FetchingOverlay isFetching={true} backdropOpacity={100} />)
     const root = container.querySelector('.fetchingOverlay_root') as HTMLElement
-    // Browser normalizes rgba(0, 0, 0, 1) to rgb(0, 0, 0)
-    expect(root?.style.backgroundColor).toMatch(/rgba?\(0, 0, 0/)
+    expect(root?.style.backgroundColor).toContain('oklch(')
   })
 })

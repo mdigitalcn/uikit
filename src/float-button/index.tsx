@@ -55,6 +55,7 @@ const FloatButton = React.memo<FloatButtonProps>(
       <Component
         {...(href ? { href, target } : { type: 'button' as const, onClick, disabled })}
         data-slot="button"
+        aria-label={tooltip ?? (typeof label === 'string' ? label : undefined) ?? 'Action button'}
         title={tooltip}
         className={cn(
           'floatButton_button',

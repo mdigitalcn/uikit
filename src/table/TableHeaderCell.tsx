@@ -51,6 +51,15 @@ export function TableHeaderCell<TData>({
         isPinnedRight && 'sticky right-0 bg-surface z-20',
         className,
       )}
+      aria-sort={
+        header.column.getIsSorted() === 'asc'
+          ? 'ascending'
+          : header.column.getIsSorted() === 'desc'
+            ? 'descending'
+            : header.column.getCanSort()
+              ? 'none'
+              : undefined
+      }
       onClick={header.column.getToggleSortingHandler()}
       {...props}
     >

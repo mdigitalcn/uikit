@@ -27,6 +27,10 @@ export interface TimelineProps {
   pending?: boolean // show pending indicator at the end
   pendingText?: React.ReactNode
   reverse?: boolean
+  /** Accessible label for the timeline
+   * @default "Timeline"
+   */
+  ariaLabel?: string
   className?: string
   classNames?: TimelineClassNames
   ref?: React.Ref<HTMLDivElement>

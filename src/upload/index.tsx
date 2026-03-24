@@ -344,6 +344,7 @@ const Upload = React.memo<UploadProps>(
                   <button
                     type="button"
                     onClick={() => handleRemove(file)}
+                    aria-label={`Remove ${file.name}`}
                     className="text-background hover:text-error transition-colors"
                   >
                     <X className={iconSizes[size]} />
@@ -417,6 +418,7 @@ const Upload = React.memo<UploadProps>(
                 <button
                   type="button"
                   onClick={() => handleRemove(file)}
+                  aria-label={`Remove ${file.name}`}
                   className="text-text-secondary hover:text-error transition-colors"
                 >
                   <X className={iconSizes[size]} />
@@ -673,6 +675,7 @@ const Upload = React.memo<UploadProps>(
       <div
         ref={ref}
         data-slot="upload_root"
+        aria-busy={fileList?.some(f => f.status === 'uploading') || undefined}
         className={cn('upload_root', 'w-full', classNames?.root)}
       >
         <input

@@ -1,5 +1,6 @@
 'use client'
 
+import { cva } from 'class-variance-authority'
 import { CircleCheck, CircleX, Info, SearchX, TriangleAlert } from 'lucide-react'
 import React from 'react'
 
@@ -16,12 +17,28 @@ const statusConfig: Record<ResultStatus, { color: string; defaultTitle: string }
   '500': { color: 'text-error', defaultTitle: '500 — Server Error' },
 }
 
-const sizeMap = {
-  xs: { icon: 'w-10 h-10', title: 'text-base font-semibold', subtitle: 'text-xs', padding: 'py-6 px-4', maxW: 'max-w-xs' },
-  sm: { icon: 'w-12 h-12', title: 'text-lg font-semibold', subtitle: 'text-sm', padding: 'py-8 px-4', maxW: 'max-w-sm' },
-  md: { icon: 'w-16 h-16', title: 'text-xl font-semibold', subtitle: 'text-sm', padding: 'py-12 px-6', maxW: 'max-w-md' },
-  lg: { icon: 'w-20 h-20', title: 'text-2xl font-bold', subtitle: 'text-base', padding: 'py-16 px-8', maxW: 'max-w-lg' },
-}
+const resultVariants = cva('flex flex-col items-center text-center', {
+  variants: {
+    size: {
+      xs: 'py-6 px-4',
+      sm: 'py-8 px-4',
+      md: 'py-12 px-6',
+      lg: 'py-16 px-8',
+    },
+  },
+  defaultVariants: { size: 'md' },
+})
+
+const iconSizeMap = { xs: 'w-10 h-10', sm: 'w-12 h-12', md: 'w-16 h-16', lg: 'w-20 h-20' }
+const titleVariants = cva('text-text-primary mb-2', {
+  variants: { size: { xs: 'text-base font-semibold', sm: 'text-lg font-semibold', md: 'text-xl font-semibold', lg: 'text-2xl font-bold' } },
+  defaultVariants: { size: 'md' },
+})
+const subtitleVariants = cva('text-text-secondary mb-6', {
+  variants: { size: { xs: 'text-xs max-w-xs', sm: 'text-sm max-w-sm', md: 'text-sm max-w-md', lg: 'text-base max-w-lg' } },
+  defaultVariants: { size: 'md' },
+})
+const contentMaxW = { xs: 'max-w-xs', sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-lg' }
 
 const statusIcons: Record<ResultStatus, React.ElementType> = {
   success: CircleCheck,
@@ -51,29 +68,29 @@ const Result = React.memo<ResultProps>(
     classNames,
   }) => {
     const config = statusConfig[status]
-    const s = sizeMap[size]
 
     return (
       <div
         data-slot="root"
+        role="status"
+        aria-label={typeof title === 'string' ? title : config.defaultTitle}
         className={cn(
           'result_root',
-          'flex flex-col items-center text-center',
-          s.padding,
+          resultVariants({ size }),
           classNames?.root,
           className,
         )}
       >
         <div data-slot="icon" className={cn('result_icon', 'mb-6', classNames?.icon)}>
-          {icon ?? <StatusIcon status={status} sizeClass={s.icon} />}
+          {icon ?? <StatusIcon status={status} sizeClass={iconSizeMap[size]} />}
         </div>
 
-        <h3 data-slot="title" className={cn('result_title', s.title, 'text-text-primary mb-2', classNames?.title)}>
+        <h3 data-slot="title" className={cn('result_title', titleVariants({ size }), classNames?.title)}>
           {title ?? config.defaultTitle}
         </h3>
 
         {subtitle && (
-          <p data-slot="subtitle" className={cn('result_subtitle', s.subtitle, 'text-text-secondary', s.maxW, 'mb-6', classNames?.subtitle)}>
+          <p data-slot="subtitle" className={cn('result_subtitle', subtitleVariants({ size }), classNames?.subtitle)}>
             {subtitle}
           </p>
         )}
@@ -85,7 +102,7 @@ const Result = React.memo<ResultProps>(
         )}
 
         {children && (
-          <div data-slot="content" className={cn('result_content', 'w-full', s.maxW, classNames?.content)}>
+          <div data-slot="content" className={cn('result_content', 'w-full', contentMaxW[size], classNames?.content)}>
             {children}
           </div>
         )}

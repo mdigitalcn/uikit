@@ -299,7 +299,7 @@ const Tour = React.memo<TourProps>(
           data-slot="popover"
           className={cn(
             'tour_popover',
-            'z-[calc(var(--z-overlay)+1)] rounded-lg border border-border bg-background shadow-lg',
+            'z-[var(--z-tour)] rounded-lg border border-border bg-background shadow-lg',
             s.popover,
             classNames?.popover,
           )}

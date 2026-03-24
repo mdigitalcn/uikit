@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { Pagination } from 'swiper/modules'
-import { Swiper, SwiperProps } from 'swiper/react'
+import { Swiper } from 'swiper/react'
 import { PaginationOptions, Swiper as SwiperType } from 'swiper/types'
 
 // Swiper styles — also available as separate import: '@fmlj/uikit/carousel/styles'
@@ -10,62 +10,7 @@ import './styles'
 
 import { cn } from '../utils'
 import { CarouselNavigation } from './carousel-navigation'
-
-export interface CarouselClassNames {
-  /**
-   * Class name for the root container
-   */
-  root?: string
-
-  /**
-   * Class name for the wrapper element
-   */
-  wrapper?: string
-
-  /**
-   * Class name for individual slides
-   */
-  slide?: string
-
-  /**
-   * Class name for the navigation container
-   */
-  navigation?: string
-
-  /**
-   * Class name for navigation buttons
-   */
-  navButton?: string
-
-  /**
-   * Class name for the pagination container
-   */
-  pagination?: string
-
-  /**
-   * Class name for pagination dots
-   */
-  dot?: string
-
-  /**
-   * Class name for active pagination dot
-   */
-  dotActive?: string
-}
-
-export interface CarouselProps extends SwiperProps {
-  withArrows?: boolean
-  withPagination?: boolean
-  children: React.ReactNode
-  /**
-   * ClassNames for component parts
-   */
-  classNames?: CarouselClassNames
-  /**
-   * Accessible label for the carousel
-   */
-  ariaLabel?: string
-}
+import type { CarouselProps } from './types'
 
 const pagination: PaginationOptions = {
   clickable: true,
@@ -149,4 +94,5 @@ const Carousel = React.memo<CarouselProps>(
 
 Carousel.displayName = 'Carousel'
 
+export type * from './types'
 export default Carousel

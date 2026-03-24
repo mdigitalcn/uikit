@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { cva } from "class-variance-authority";
 import React from "react";
@@ -183,7 +183,7 @@ const Stepper = React.memo<StepperProps>(
                   state === "finish" && classNames?.stepCompleted,
                   classNames?.step,
                 )}
-                {...(index === currentStep && { "aria-current": "step" })}
+                {...(index === currentStep && { "aria-current": "step" as const })} {...(state === "wait" && { "aria-disabled": true })}
               >
                 <div className="flex flex-col items-center mr-4">
                   <div
@@ -292,7 +292,7 @@ const Stepper = React.memo<StepperProps>(
                     state === "finish" && classNames?.stepCompleted,
                     classNames?.step,
                   )}
-                  {...(index === currentStep && { "aria-current": "step" })}
+                  {...(index === currentStep && { "aria-current": "step" as const })} {...(state === "wait" && { "aria-disabled": true })}
                 >
                   <div className="flex items-center w-full">
                     {index > 0 && (
@@ -415,7 +415,7 @@ const Stepper = React.memo<StepperProps>(
                   state === "finish" && classNames?.stepCompleted,
                   classNames?.step,
                 )}
-                {...(index === currentStep && { "aria-current": "step" })}
+                {...(index === currentStep && { "aria-current": "step" as const })} {...(state === "wait" && { "aria-disabled": true })}
               >
                 <div className="flex items-center w-full">
                   {index > 0 && (

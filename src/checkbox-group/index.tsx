@@ -1,9 +1,20 @@
 'use client'
 
+import { cva } from 'class-variance-authority'
 import React, { useId } from 'react'
 
 import { cn } from '../utils'
 import type { CheckboxGroupProps } from './types'
+
+const checkboxGroupVariants = cva('flex', {
+  variants: {
+    orientation: {
+      vertical: 'flex-col gap-2',
+      horizontal: 'flex-row flex-wrap gap-4',
+    },
+  },
+  defaultVariants: { orientation: 'vertical' },
+})
 
 const CheckboxGroup = React.memo<CheckboxGroupProps>(
   ({
@@ -44,10 +55,7 @@ const CheckboxGroup = React.memo<CheckboxGroupProps>(
         <div
           className={cn(
             'checkboxGroup_group',
-            'flex',
-            orientation === 'vertical'
-              ? 'flex-col gap-2'
-              : 'flex-row flex-wrap gap-4',
+            checkboxGroupVariants({ orientation }),
             classNames?.group,
           )}
           data-slot="group"

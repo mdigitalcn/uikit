@@ -141,6 +141,9 @@ const TransferList = React.memo<TransferListProps>(
 
         {/* Body */}
         <div
+          role="listbox"
+          aria-label={title}
+          aria-multiselectable="true"
           className={transferBodyVariants()}
           style={{ height: listHeight }}
         >
@@ -152,6 +155,9 @@ const TransferList = React.memo<TransferListProps>(
             filteredData.map((item) => (
               <div
                 key={item.key}
+                role="option"
+                aria-selected={selectedKeySet.has(item.key)}
+                aria-disabled={!!item.disabled || disabled}
                 className={cn(
                   transferItemVariants({
                     selected: selectedKeySet.has(item.key),

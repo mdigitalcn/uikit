@@ -38,5 +38,6 @@ export interface ToggleGroupProps {
   className?: string
   centered?: boolean
   classNames?: ToggleGroupClassNames
+  'aria-label'?: string
   ref?: React.Ref<HTMLDivElement>
 }

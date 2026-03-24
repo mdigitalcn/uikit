@@ -1,9 +1,20 @@
 'use client'
 
+import { cva } from 'class-variance-authority'
 import React, { useId } from 'react'
 
 import { cn } from '../utils'
 import type { RadioGroupProps } from './types'
+
+const radioGroupVariants = cva('flex', {
+  variants: {
+    orientation: {
+      vertical: 'flex-col gap-2',
+      horizontal: 'flex-row flex-wrap gap-4',
+    },
+  },
+  defaultVariants: { orientation: 'vertical' },
+})
 
 export const RadioGroup = React.memo<RadioGroupProps>(
   ({
@@ -42,10 +53,7 @@ export const RadioGroup = React.memo<RadioGroupProps>(
         <div
           className={cn(
             'radioGroup_group',
-            'flex',
-            orientation === 'vertical'
-              ? 'flex-col gap-2'
-              : 'flex-row flex-wrap gap-4',
+            radioGroupVariants({ orientation }),
             classNames?.group,
           )}
         >

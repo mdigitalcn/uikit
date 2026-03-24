@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import React, {
   useRef,
@@ -419,6 +419,8 @@ const QRCode = React.memo<QRCodeProps>(
       <div
         ref={rootRef}
         data-slot="root"
+        role="img"
+        aria-label={`QR code for: ${value}`}
         className={cn(
           "qrCode_root",
           "relative inline-flex flex-col items-center",

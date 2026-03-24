@@ -87,3 +87,5 @@ storybook-static/
 
 # Claude configuration
 .claude/
+improvements.md
+/docs

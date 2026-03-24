@@ -131,6 +131,7 @@ const Watermark = React.memo<WatermarkProps>(
           <div
             ref={watermarkRef}
             data-slot="watermark"
+            aria-hidden="true"
             className={cn('watermark_layer', 'absolute inset-0 pointer-events-none', classNames?.watermark)}
             style={{
               backgroundImage: `url(${bgImage})`,

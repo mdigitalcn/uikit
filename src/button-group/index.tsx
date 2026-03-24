@@ -72,6 +72,7 @@ const ButtonGroup = React.memo<ButtonGroupProps>(
       <div
         ref={ref}
         role="group"
+        aria-label={props['aria-label']}
         className={cn(
           'buttonGroup_root',
           buttonGroupVariants({ vertical, fullWidth }),

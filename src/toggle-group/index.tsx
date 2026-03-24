@@ -72,6 +72,7 @@ export const ToggleGroup = React.memo<ToggleGroupProps>(
     className,
     centered = false,
     classNames,
+    'aria-label': ariaLabel,
     ref,
   }) => {
     const [internalValue, setInternalValue] = useState<string | string[]>(
@@ -123,6 +124,7 @@ export const ToggleGroup = React.memo<ToggleGroupProps>(
         data-slot="root"
         ref={ref}
         role="group"
+        aria-label={ariaLabel}
         className={cn(
           'toggleGroup_root',
           toggleGroupVariants(),

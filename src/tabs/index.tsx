@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { cva } from "class-variance-authority";
 import React, {
@@ -66,7 +66,7 @@ const indicatorRadiusMap: Record<TabsRadius, string> = {
 };
 
 const tabItemVariants = cva(
-  "relative z-[1] font-medium transition-colors duration-200 ease-out cursor-pointer flex items-center gap-2 whitespace-nowrap shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-slot/50 focus-visible:rounded-sm",
+  "relative z-[var(--z-tab)] font-medium transition-colors duration-200 ease-out cursor-pointer flex items-center gap-2 whitespace-nowrap shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-slot/50 focus-visible:rounded-sm",
   {
     variants: {
       size: {

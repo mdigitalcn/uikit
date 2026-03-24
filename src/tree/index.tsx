@@ -317,6 +317,11 @@ const Tree = React.memo<TreeProps>(
         return (
           <div
             key={node.key}
+            role="treeitem"
+            aria-level={level + 1}
+            aria-selected={isSelected}
+            aria-expanded={hasChildren ? isExpanded : undefined}
+            aria-disabled={!!node.disabled || undefined}
             className={cn(
               'tree_node',
               'relative animate-in fade-in slide-in-from-top-1 duration-200',

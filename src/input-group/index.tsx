@@ -68,6 +68,7 @@ const InputGroup = memo<InputGroupProps>(
     return (
       <div
         data-slot="inputGroup_root"
+        role="group"
         className={cn(
           "inputGroup_root",
           inputGroupVariants({ size }),

@@ -121,6 +121,8 @@ const Badge = React.memo<BadgeProps>(({
       <span
         ref={ref}
         data-slot="root"
+        role="status"
+        aria-label={dot ? "Status indicator" : typeof badgeContent === 'number' ? `${badgeContent} notifications` : undefined}
         className={cn(
           "badge_root",
           badgeVariants({ variant, color, size, shape }),

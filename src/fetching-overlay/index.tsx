@@ -3,14 +3,8 @@
 import React from 'react'
 
 import { Spinner } from '../spinner'
-import { SpinnerProps } from '../spinner/types'
 import { cn } from '../utils'
-
-export interface FetchingOverlayProps extends SpinnerProps {
-  isFetching: boolean
-  fullscreen?: boolean
-  backdropOpacity?: number
-}
+import type { FetchingOverlayProps } from './types'
 
 const FetchingOverlay = React.memo<FetchingOverlayProps>(({
   isFetching,
@@ -30,7 +24,7 @@ const FetchingOverlay = React.memo<FetchingOverlayProps>(({
         isFetching ? 'opacity-100' : 'opacity-0 pointer-events-none',
         className,
       )}
-      style={isFetching ? { backgroundColor: `rgba(0, 0, 0, ${backdropOpacity / 100})` } : undefined}
+      style={isFetching ? { backgroundColor: `oklch(0% 0 0 / ${backdropOpacity}%)` } : undefined}
       role="status"
       aria-busy={isFetching}
       aria-label={isFetching ? "Loading content" : undefined}
@@ -47,4 +41,5 @@ const FetchingOverlay = React.memo<FetchingOverlayProps>(({
 
 FetchingOverlay.displayName = 'FetchingOverlay'
 
+export type * from './types'
 export default FetchingOverlay
