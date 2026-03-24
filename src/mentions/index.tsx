@@ -65,6 +65,7 @@ const Mentions = React.memo<MentionsProps>(
     triggers = ['@'],
     loading = false,
     size = 'md',
+    color = 'primary',
     disabled = false,
     readOnly = false,
     placeholder,

@@ -83,11 +83,46 @@ function getPopoverStyle(
   return style
 }
 
+import { cva } from 'class-variance-authority'
+
+const tourPopoverVariants = cva('', {
+  variants: {
+    size: {
+      xs: 'p-3 max-w-[260px]',
+      sm: 'p-3.5 max-w-[300px]',
+      md: 'p-4 max-w-[340px]',
+      lg: 'p-5 max-w-[400px]',
+    },
+  },
+  defaultVariants: { size: 'md' },
+})
+
+const tourTitleVariants = cva('text-text-primary', {
+  variants: {
+    size: { xs: 'text-sm font-semibold', sm: 'text-sm font-semibold', md: 'text-base font-semibold', lg: 'text-lg font-semibold' },
+  },
+  defaultVariants: { size: 'md' },
+})
+
+const tourDescVariants = cva('text-text-secondary mt-1', {
+  variants: {
+    size: { xs: 'text-xs', sm: 'text-sm', md: 'text-sm', lg: 'text-base' },
+  },
+  defaultVariants: { size: 'md' },
+})
+
+const tourBtnVariants = cva('', {
+  variants: {
+    size: { xs: 'h-6 px-2.5 text-xs', sm: 'h-7 px-3 text-xs', md: 'h-8 px-3 text-sm', lg: 'h-9 px-4 text-sm' },
+  },
+  defaultVariants: { size: 'md' },
+})
+
 const sizeMap = {
-  xs: { padding: 4, gap: 8, popover: 'p-3 max-w-[260px]', title: 'text-sm font-semibold', desc: 'text-xs', btn: 'h-6 px-2.5 text-xs' },
-  sm: { padding: 6, gap: 10, popover: 'p-3.5 max-w-[300px]', title: 'text-sm font-semibold', desc: 'text-sm', btn: 'h-7 px-3 text-xs' },
-  md: { padding: 8, gap: 12, popover: 'p-4 max-w-[340px]', title: 'text-base font-semibold', desc: 'text-sm', btn: 'h-8 px-3 text-sm' },
-  lg: { padding: 10, gap: 14, popover: 'p-5 max-w-[400px]', title: 'text-lg font-semibold', desc: 'text-base', btn: 'h-9 px-4 text-sm' },
+  xs: { padding: 4, gap: 8 },
+  sm: { padding: 6, gap: 10 },
+  md: { padding: 8, gap: 12 },
+  lg: { padding: 10, gap: 14 },
 }
 
 // Transition easing
@@ -312,7 +347,7 @@ const Tour = React.memo<TourProps>(
           className={cn(
             'tour_popover',
             'z-[var(--z-tour)] rounded-lg border border-border bg-background shadow-lg',
-            s.popover,
+            tourPopoverVariants({ size }),
             classNames?.popover,
           )}
           style={popoverStyle}
@@ -323,12 +358,12 @@ const Tour = React.memo<TourProps>(
             </div>
           )}
 
-          <div data-slot="title" className={cn('tour_title', s.title, 'text-text-primary', classNames?.title)}>
+          <div data-slot="title" className={cn('tour_title', tourTitleVariants({ size }), classNames?.title)}>
             {step.title}
           </div>
 
           {step.description && (
-            <div data-slot="description" className={cn('tour_description', s.desc, 'text-text-secondary mt-1', classNames?.description)}>
+            <div data-slot="description" className={cn('tour_description', tourDescVariants({ size }), classNames?.description)}>
               {step.description}
             </div>
           )}
@@ -347,7 +382,7 @@ const Tour = React.memo<TourProps>(
                 <button
                   type="button"
                   onClick={handleSkip}
-                  className={cn('inline-flex items-center justify-center rounded-md text-text-secondary hover:text-text-primary transition-colors font-medium cursor-pointer', s.btn)}
+                  className={cn('inline-flex items-center justify-center rounded-md text-text-secondary hover:text-text-primary transition-colors font-medium cursor-pointer', tourBtnVariants({ size }))}
                 >
                   {skipText}
                 </button>
@@ -357,7 +392,7 @@ const Tour = React.memo<TourProps>(
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className={cn('inline-flex items-center justify-center rounded-md border border-border bg-background text-text-primary hover:bg-surface transition-colors font-medium cursor-pointer', s.btn)}
+                  className={cn('inline-flex items-center justify-center rounded-md border border-border bg-background text-text-primary hover:bg-surface transition-colors font-medium cursor-pointer', tourBtnVariants({ size }))}
                 >
                   {step.prevText || prevText}
                 </button>
@@ -366,7 +401,7 @@ const Tour = React.memo<TourProps>(
               <button
                 type="button"
                 onClick={handleNext}
-                className={cn('inline-flex items-center justify-center rounded-md bg-slot text-slot-fg hover:bg-slot-90 transition-colors font-medium cursor-pointer', s.btn)}
+                className={cn('inline-flex items-center justify-center rounded-md bg-slot text-slot-fg hover:bg-slot-90 transition-colors font-medium cursor-pointer', tourBtnVariants({ size }))}
               >
                 {isLast ? finishText : step.nextText || nextText}
               </button>

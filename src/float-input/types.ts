@@ -1,4 +1,4 @@
-import type { ComponentSize, ValidationMessages, CreateClassNames } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages, CreateClassNames } from '../types'
 
 export type FloatInputSize = ComponentSize
 
@@ -10,6 +10,10 @@ export interface FloatInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
     ValidationMessages {
   label: string
+  /** Color accent
+   * @default 'primary'
+   */
+  color?: ComponentColor
   size?: FloatInputSize
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode

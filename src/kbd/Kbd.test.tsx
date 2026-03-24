@@ -121,4 +121,19 @@ describe('Kbd', () => {
     const kbd = screen.getByTestId('test-kbd')
     expect(kbd).toHaveAttribute('title', 'Keyboard shortcut')
   })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<Kbd size={size}>K</Kbd>)
+      unmount()
+    })
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<Kbd className="custom">K</Kbd>)
+    expect(container.querySelector('.custom')).toBeInTheDocument()
+  })
+
+
 })

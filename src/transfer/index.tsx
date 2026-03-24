@@ -267,6 +267,7 @@ export const Transfer = React.memo<TransferProps>(
     defaultTargetKeys = [],
     titles = ['Source', 'Target'],
     size = 'md',
+    color = 'primary',
     showSearch = false,
     searchPlaceholder = 'Search...',
     listHeight = 300,

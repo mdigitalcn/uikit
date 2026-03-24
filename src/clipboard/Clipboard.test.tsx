@@ -95,4 +95,49 @@ describe('Clipboard', () => {
     expect(button).toHaveAttribute('aria-disabled', 'true')
     expect(button).toHaveAttribute('tabIndex', '-1')
   })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<Clipboard value="test" size={size} />)
+      unmount()
+    })
+  })
+
+  it('has aria-live for announcements', () => {
+    const { container } = render(<Clipboard value="test" />)
+    expect(container.querySelector('[aria-live]')).toBeInTheDocument()
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<Clipboard value="test" className="custom" />)
+    expect(container.querySelector('.custom')).toBeInTheDocument()
+  })
+
+  it('renders data-slot on root', () => {
+    const { container } = render(<Clipboard value="test" />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('renders value text', () => {
+    render(<Clipboard value="Copy this text" />)
+    expect(screen.getByText('Copy this text')).toBeInTheDocument()
+  })
+
+  it('renders with variant solid', () => {
+    const { container } = render(<Clipboard value="test" variant="solid" />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('renders with variant soft', () => {
+    const { container } = render(<Clipboard value="test" variant="soft" />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('renders copy button', () => {
+    const { container } = render(<Clipboard value="test" />)
+    expect(container.querySelector('[data-slot="icon"]')).toBeInTheDocument()
+  })
+
+
 })

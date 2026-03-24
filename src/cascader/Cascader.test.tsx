@@ -117,4 +117,24 @@ describe('Cascader', () => {
 
     expect(onChange).toHaveBeenCalledWith([], [])
   })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<Cascader options={mockOptions} size={size} />)
+      unmount()
+    })
+  })
+
+  it('renders with label', () => {
+    render(<Cascader options={mockOptions} label="Category" />)
+    expect(screen.getByText('Category')).toBeInTheDocument()
+  })
+
+  it('renders with error message', () => {
+    render(<Cascader options={mockOptions} error="Required" />)
+    expect(screen.getByText('Required')).toBeInTheDocument()
+  })
+
+
 })

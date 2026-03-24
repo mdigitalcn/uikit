@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export interface AnchorItem {
   id: string
@@ -18,6 +18,10 @@ export interface AnchorProps {
   offset?: number
   bounds?: number
   targetOffset?: number
+  /** Color accent
+   * @default 'primary'
+   */
+  color?: ComponentColor
   size?: ComponentSize
   affix?: boolean
   affixTop?: number

@@ -141,4 +141,24 @@ describe('ToggleGroup', () => {
     rerender(<ToggleGroup options={mockOptions} variant="default" />);
     expect(screen.getByText('Option 1')).toBeInTheDocument();
   });
+
+  it('renders all color variants', () => {
+    const colors = ['primary', 'success', 'error', 'warning'] as const
+    colors.forEach((color) => {
+      const { unmount } = render(<ToggleGroup options={mockOptions} color={color} />)
+      unmount()
+    })
+  })
+
+  it('has role="group"', () => {
+    const { container } = render(<ToggleGroup options={mockOptions} />)
+    expect(container.querySelector('[role="group"]')).toBeInTheDocument()
+  })
+
+  it('renders with fullWidth', () => {
+    const { container } = render(<ToggleGroup options={mockOptions} fullWidth />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+
 });

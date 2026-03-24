@@ -112,6 +112,7 @@ const Calendar = React.memo<CalendarProps>(
     maxDate,
     disabledDates,
     size = 'md',
+    color = 'primary',
     weekStartsOn = 0,
     showOutsideDays = true,
     className,

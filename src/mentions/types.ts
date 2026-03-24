@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export interface MentionOption {
   label: string
@@ -23,6 +23,10 @@ export interface MentionsProps {
   options?: MentionOption[]
   triggers?: string[]
   loading?: boolean
+  /** Color accent
+   * @default 'primary'
+   */
+  color?: ComponentColor
   size?: ComponentSize
   disabled?: boolean
   readOnly?: boolean

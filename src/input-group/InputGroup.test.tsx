@@ -140,4 +140,35 @@ describe('InputGroup', () => {
     const input = screen.getByPlaceholderText('test');
     expect(input).toHaveClass('custom-input');
   });
+
+  it('has role="group"', () => {
+    const { container } = render(<InputGroup><InputGroupInput /><InputGroupAddon>@</InputGroupAddon></InputGroup>)
+    expect(container.querySelector('[role="group"]')).toBeInTheDocument()
+  })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<InputGroup size={size}><InputGroupInput /></InputGroup>)
+      unmount()
+    })
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<InputGroup className="custom"><InputGroupInput /></InputGroup>)
+    expect(container.querySelector('[data-slot="inputGroup_root"]')).toHaveClass('custom')
+  })
+
+  it('renders addon before and after input', () => {
+    render(<InputGroup><InputGroupAddon>$</InputGroupAddon><InputGroupInput /><InputGroupAddon>.00</InputGroupAddon></InputGroup>)
+    expect(screen.getByText('$')).toBeInTheDocument()
+    expect(screen.getByText('.00')).toBeInTheDocument()
+  })
+
+  it('passes aria-label to group', () => {
+    const { container } = render(<InputGroup aria-label="Price input"><InputGroupInput /></InputGroup>)
+    expect(container.querySelector('[aria-label="Price input"]')).toBeInTheDocument()
+  })
+
+
 });

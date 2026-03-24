@@ -80,4 +80,16 @@ describe('Spinner', () => {
     render(<Spinner />)
     expect(screen.getByRole('status')).toBeInTheDocument()
   })
+
+  it('has role="status"', () => {
+    const { container } = render(<Spinner />)
+    expect(container.querySelector('[role="status"]')).toBeInTheDocument()
+  })
+
+  it('has aria-label', () => {
+    const { container } = render(<Spinner />)
+    expect(container.querySelector('[aria-label]')).toBeInTheDocument()
+  })
+
+
 })

@@ -92,4 +92,20 @@ describe('Anchor', () => {
     const indicator = container.querySelector('[data-slot="indicator"]')
     expect(indicator).toHaveClass('anchor_indicator')
   })
+
+  it('renders with classNames.link', () => {
+    const { container } = render(<Anchor items={items} classNames={{ link: 'link-cls' }} />)
+    const links = container.querySelectorAll('[data-slot="link"]')
+    expect(links.length).toBeGreaterThan(0)
+  })
+
+
+
+  it('renders with classNames.link', () => {
+    const { container } = render(<Anchor items={items} classNames={{ link: 'link-cls' }} />)
+    const links = container.querySelectorAll('[data-slot="link"]')
+    expect(links.length).toBeGreaterThan(0)
+  })
+
+
 })

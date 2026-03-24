@@ -98,4 +98,11 @@ describe('DatePicker', () => {
 
     expect(handleChange).toHaveBeenCalledWith(null);
   });
+
+  it('renders with disabled state', () => {
+    const { container } = render(<DatePicker disabled />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+
 });

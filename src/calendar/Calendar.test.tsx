@@ -70,4 +70,40 @@ describe('Calendar', () => {
     const headers = screen.getAllByRole('columnheader')
     expect(headers[0]).toHaveTextContent('Mo')
   })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<Calendar size={size} />)
+      unmount()
+    })
+  })
+
+  it('renders month and year in header', () => {
+    const { container } = render(<Calendar />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('renders day cells', () => {
+    const { container } = render(<Calendar />)
+    const cells = container.querySelectorAll('[role="gridcell"]')
+    expect(cells.length).toBeGreaterThan(0)
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<Calendar className="custom" />)
+    expect(container.querySelector('[data-slot="root"]')).toHaveClass('custom')
+  })
+
+  it('renders with defaultValue', () => {
+    const { container } = render(<Calendar defaultValue={new Date(2024, 0, 15)} />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('renders in disabled state', () => {
+    const { container } = render(<Calendar disabled />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+
 })

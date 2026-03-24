@@ -50,6 +50,7 @@ const treeSelectTriggerVariants = cva(
 const TreeSelect = React.memo<TreeSelectProps>(
   ({
     size = 'md',
+    color = 'primary',
     label,
     helperText,
     error,

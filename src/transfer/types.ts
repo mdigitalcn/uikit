@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export interface TransferClassNames {
   root?: string
@@ -24,6 +24,10 @@ export interface TransferProps {
 
   // Display
   titles?: [string, string]
+  /** Color accent
+   * @default 'primary'
+   */
+  color?: ComponentColor
   size?: ComponentSize
   showSearch?: boolean
   searchPlaceholder?: string
@@ -76,6 +80,10 @@ export interface TransferListProps {
   onSearch?: (value: string) => void
   render?: (item: TransferItem) => React.ReactNode
   footer?: React.ReactNode
+  /** Color accent
+   * @default 'primary'
+   */
+  color?: ComponentColor
   size?: ComponentSize
   classNames?: TransferClassNames
 }

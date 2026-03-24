@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 import type { TreeNode } from '../tree/types'
 
 export type TreeSelectSize = ComponentSize
@@ -18,6 +18,10 @@ export interface TreeSelectProps
   /**
    * Size variant (tree-select only supports xs, sm, md, lg)
    */
+  /** Color accent
+   * @default 'primary'
+   */
+  color?: ComponentColor
   size?: TreeSelectSize
   label?: string
   helperText?: string

@@ -55,4 +55,49 @@ describe('TreeSelect', () => {
     const visibleSpan = matches.find(el => !el.closest('[aria-hidden="true"]'))
     expect(visibleSpan).toBeInTheDocument()
   })
+
+  it('renders with disabled state', () => {
+    const { container } = render(<TreeSelect data={sampleData} disabled />)
+    expect(container.querySelector('.treeSelect_trigger')).toBeInTheDocument()
+  })
+
+  it('renders with loading state', () => {
+    const { container } = render(<TreeSelect data={sampleData} loading />)
+    expect(container.querySelector('.treeSelect_trigger')).toBeInTheDocument()
+  })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<TreeSelect data={sampleData} size={size} />)
+      unmount()
+    })
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<TreeSelect data={sampleData} className="custom" />)
+    expect(container.querySelector('.custom')).toBeInTheDocument()
+  })
+
+  it('renders with label', () => {
+    render(<TreeSelect data={sampleData} label="Select tree" />)
+    expect(screen.getByText('Select tree')).toBeInTheDocument()
+  })
+
+  it('renders with placeholder', () => {
+    render(<TreeSelect data={sampleData} placeholder="Choose..." />)
+    expect(screen.getByText('Choose...')).toBeInTheDocument()
+  })
+
+  it('renders with helperText', () => {
+    render(<TreeSelect data={sampleData} helperText="Pick one" />)
+    expect(screen.getByText('Pick one')).toBeInTheDocument()
+  })
+
+  it('renders with error message', () => {
+    render(<TreeSelect data={sampleData} error="Required field" />)
+    expect(screen.getByText('Required field')).toBeInTheDocument()
+  })
+
+
 })

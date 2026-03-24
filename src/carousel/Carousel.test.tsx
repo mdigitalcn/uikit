@@ -113,4 +113,36 @@ describe('Carousel', () => {
     )
     expect(screen.getByText('Only Slide')).toBeInTheDocument()
   })
+
+  it('renders with withArrows', () => {
+    const { container } = render(<Carousel withArrows><div>Slide 1</div></Carousel>)
+    expect(container.querySelector('.carousel_root')).toBeInTheDocument()
+  })
+
+  it('renders with withPagination', () => {
+    const { container } = render(<Carousel withPagination><div>Slide 1</div></Carousel>)
+    expect(container.querySelector('.carousel_root')).toBeInTheDocument()
+  })
+
+  it('has aria-roledescription="carousel"', () => {
+    const { container } = render(<Carousel><div>Slide</div></Carousel>)
+    expect(container.querySelector('[aria-roledescription="carousel"]')).toBeInTheDocument()
+  })
+
+  it('applies classNames.root', () => {
+    const { container } = render(<Carousel classNames={{ root: 'custom-root' }}><div>S</div></Carousel>)
+    expect(container.querySelector('.carousel_root')).toHaveClass('custom-root')
+  })
+
+  it('renders with custom ariaLabel', () => {
+    const { container } = render(<Carousel ariaLabel="Image gallery"><div>S</div></Carousel>)
+    expect(container.querySelector('[aria-label="Image gallery"]')).toBeInTheDocument()
+  })
+
+  it('renders with loop prop', () => {
+    const { container } = render(<Carousel loop><div>S</div></Carousel>)
+    expect(container.querySelector('.carousel_root')).toBeInTheDocument()
+  })
+
+
 })

@@ -50,4 +50,44 @@ describe('Mentions', () => {
     render(<Mentions options={users} disabled />)
     expect(screen.getByRole('combobox')).toBeDisabled()
   })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<Mentions options={users} size={size} />)
+      unmount()
+    })
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<Mentions options={users} className="custom" />)
+    expect(container.querySelector('.custom')).toBeInTheDocument()
+  })
+
+  it('renders with label', () => {
+    render(<Mentions options={users} label="Mention someone" />)
+    expect(screen.getByText('Mention someone')).toBeInTheDocument()
+  })
+
+  it('has combobox role on textarea', () => {
+    const { container } = render(<Mentions options={users} />)
+    expect(container.querySelector('[role="combobox"]')).toBeInTheDocument()
+  })
+
+  it('renders data-slot root', () => {
+    const { container } = render(<Mentions options={users} />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('renders with helperText', () => {
+    render(<Mentions options={users} helperText="Type @ to mention" />)
+    expect(screen.getByText('Type @ to mention')).toBeInTheDocument()
+  })
+
+  it('renders with error message', () => {
+    render(<Mentions options={users} error="Required" />)
+    expect(screen.getByText('Required')).toBeInTheDocument()
+  })
+
+
 })

@@ -66,4 +66,27 @@ describe('Paragraph', () => {
     const { container } = render(<Paragraph>Test</Paragraph>)
     expect(container.querySelector('[data-slot="paragraph"]')).toBeInTheDocument()
   })
+
+  it('renders all heading levels', () => {
+    const levels = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const
+    levels.forEach((level) => {
+      const { unmount } = render(<Title level={level}>Heading</Title>)
+      unmount()
+    })
+  })
+
+  it('renders Text with all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<Text size={size}>Text</Text>)
+      unmount()
+    })
+  })
+
+  it('renders Paragraph component', () => {
+    render(<Paragraph>Paragraph text</Paragraph>)
+    expect(screen.getByText('Paragraph text')).toBeInTheDocument()
+  })
+
+
 })

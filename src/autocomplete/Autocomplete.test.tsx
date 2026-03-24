@@ -47,7 +47,47 @@ describe('Autocomplete', () => {
       { label: 'Red', value: 'red' },
       { label: 'Blue', value: 'blue' },
     ]
-    render(<Autocomplete options={options} placeholder="Pick" />)
+    render(<Autocomplete options={fruits} placeholder="Pick" />)
     expect(screen.getByPlaceholderText('Pick')).toBeInTheDocument()
   })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<Autocomplete options={fruits} size={size} />)
+      unmount()
+    })
+  })
+
+  it('renders with disabled state', () => {
+    const { container } = render(<Autocomplete options={fruits} disabled />)
+    expect(container.querySelector('input')).toBeDisabled()
+  })
+
+  it('renders with loading state', () => {
+    const { container } = render(<Autocomplete options={fruits} loading />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<Autocomplete options={fruits} className="custom" />)
+    expect(container.querySelector('.custom')).toBeInTheDocument()
+  })
+
+  it('renders with label', () => {
+    render(<Autocomplete options={fruits} label="Search" />)
+    expect(screen.getByText('Search')).toBeInTheDocument()
+  })
+
+  it('renders with helperText', () => {
+    render(<Autocomplete options={fruits} helperText="Type to search" />)
+    expect(screen.getByText('Type to search')).toBeInTheDocument()
+  })
+
+  it('renders with error message', () => {
+    render(<Autocomplete options={fruits} error="Required" />)
+    expect(screen.getByText('Required')).toBeInTheDocument()
+  })
+
+
 })

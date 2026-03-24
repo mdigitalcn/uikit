@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export interface CalendarClassNames {
   root?: string
@@ -22,6 +22,10 @@ export interface CalendarProps {
   minDate?: Date
   maxDate?: Date
   disabledDates?: (date: Date) => boolean
+  /** Color accent
+   * @default 'primary'
+   */
+  color?: ComponentColor
   size?: ComponentSize
   weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
   showOutsideDays?: boolean

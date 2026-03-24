@@ -107,4 +107,12 @@ describe('QRCode', () => {
     const { container } = render(<QRCode value="test" bgColor="#00ff00" />)
     expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
   })
+
+  it('has role="img" and aria-label', () => {
+    const { container } = render(<QRCode value="https://test.com" />)
+    expect(container.querySelector('[role="img"]')).toBeInTheDocument()
+    expect(container.querySelector('[aria-label]')).toBeInTheDocument()
+  })
+
+
 })

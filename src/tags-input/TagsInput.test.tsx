@@ -76,4 +76,29 @@ describe('TagsInput', () => {
     fireEvent.click(screen.getByLabelText('Clear all tags'))
     expect(onChange).toHaveBeenCalledWith([])
   })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<TagsInput size={size} />)
+      unmount()
+    })
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<TagsInput className="custom" />)
+    expect(container.querySelector('.custom')).toBeInTheDocument()
+  })
+
+  it('renders with label', () => {
+    render(<TagsInput label="Tags" />)
+    expect(screen.getByText('Tags')).toBeInTheDocument()
+  })
+
+  it('renders with placeholder', () => {
+    render(<TagsInput placeholder="Add tags..." />)
+    expect(screen.getByPlaceholderText('Add tags...')).toBeInTheDocument()
+  })
+
+
 })

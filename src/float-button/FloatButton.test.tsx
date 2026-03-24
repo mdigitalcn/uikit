@@ -63,4 +63,42 @@ describe('BackTop', () => {
     const { container } = render(<BackTop />)
     expect(container.querySelector('[data-slot="button"]')).not.toBeInTheDocument()
   })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<FloatButton icon={<span>+</span>} size={size} />)
+      unmount()
+    })
+  })
+
+  it('renders all variants', () => {
+    const variants = ['solid', 'outline', 'soft', 'ghost'] as const
+    variants.forEach((variant) => {
+      const { unmount } = render(<FloatButton icon={<span>+</span>} variant={variant} />)
+      unmount()
+    })
+  })
+
+  it('has aria-label', () => {
+    const { container } = render(<FloatButton icon={<span>+</span>} tooltip="Add item" />)
+    expect(container.querySelector('[aria-label="Add item"]')).toBeInTheDocument()
+  })
+
+  it('renders with badge', () => {
+    const { container } = render(<FloatButton icon={<span>+</span>} badge={5} />)
+    expect(container.querySelector('[data-slot="badge"]')).toBeInTheDocument()
+  })
+
+  it('renders as link when href provided', () => {
+    const { container } = render(<FloatButton icon={<span>+</span>} href="/test" />)
+    expect(container.querySelector('a')).toBeInTheDocument()
+  })
+
+  it('renders with label text', () => {
+    render(<FloatButton label="Add" />)
+    expect(screen.getByText('Add')).toBeInTheDocument()
+  })
+
+
 })

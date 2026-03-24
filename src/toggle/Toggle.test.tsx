@@ -96,4 +96,29 @@ describe('Toggle', () => {
     render(<Toggle className="custom-class">Toggle</Toggle>);
     expect(screen.getByRole('button')).toHaveClass('custom-class');
   });
+
+  it('renders all color variants', () => {
+    const colors = ['default', 'primary', 'success', 'error', 'warning', 'info'] as const
+    colors.forEach((color) => {
+      const { unmount } = render(<Toggle color={color}>T</Toggle>)
+      unmount()
+    })
+  })
+
+  it('has aria-pressed attribute', () => {
+    const { container } = render(<Toggle pressed>On</Toggle>)
+    expect(container.querySelector('[aria-pressed="true"]')).toBeInTheDocument()
+  })
+
+  it('renders with disabled state', () => {
+    const { container } = render(<Toggle disabled>T</Toggle>)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<Toggle className="custom">T</Toggle>)
+    expect(container.querySelector('.custom')).toBeInTheDocument()
+  })
+
+
 });

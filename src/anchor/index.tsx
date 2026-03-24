@@ -44,6 +44,7 @@ const Anchor = React.memo<AnchorProps>(
     offset = 0,
     targetOffset = 0,
     size = 'md',
+    color = 'primary',
     affix = false,
     affixTop = 0,
     getContainer,

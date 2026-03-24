@@ -94,4 +94,16 @@ describe('Skeleton', () => {
     const skeleton = container.querySelector('[data-slot="root"]')
     expect(skeleton).toHaveClass('rounded-full')
   })
+
+  it('has aria-busy', () => {
+    const { container } = render(<Skeleton />)
+    expect(container.querySelector('[aria-busy="true"]')).toBeInTheDocument()
+  })
+
+  it('has aria-label="Loading"', () => {
+    const { container } = render(<Skeleton />)
+    expect(container.querySelector('[aria-label="Loading"]')).toBeInTheDocument()
+  })
+
+
 })

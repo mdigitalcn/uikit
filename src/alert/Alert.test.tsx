@@ -61,4 +61,32 @@ describe('Alert', () => {
     const { container } = render(<Alert icon={null} title="Test" />)
     expect(container.querySelector('[data-slot="icon"]')).not.toBeInTheDocument()
   })
+
+  it('renders all color variants', () => {
+    const colors = ['default', 'primary', 'success', 'error', 'warning', 'info'] as const
+    colors.forEach((color) => {
+      const { unmount } = render(<Alert color={color} title="Test" />)
+      unmount()
+    })
+  })
+
+  it('renders all style variants', () => {
+    const variants = ['default', 'solid', 'outline', 'soft'] as const
+    variants.forEach((variant) => {
+      const { unmount } = render(<Alert variant={variant} title="Test" />)
+      unmount()
+    })
+  })
+
+  it('has role="alert"', () => {
+    const { container } = render(<Alert title="Warning" />)
+    expect(container.querySelector('[role="alert"]')).toBeInTheDocument()
+  })
+
+  it('renders close button with aria-label', () => {
+    const { container } = render(<Alert title="Test" closable />)
+    expect(container.querySelector('[aria-label="Close alert"]')).toBeInTheDocument()
+  })
+
+
 })

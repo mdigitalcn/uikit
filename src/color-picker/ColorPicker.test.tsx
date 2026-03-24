@@ -60,4 +60,34 @@ describe('ColorInput', () => {
     render(<ColorInput value="#ff5500" />)
     expect(screen.getByText('#ff5500')).toBeInTheDocument()
   })
+
+  it('renders all sizes', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg'] as const
+    sizes.forEach((size) => {
+      const { unmount } = render(<ColorPicker size={size} />)
+      unmount()
+    })
+  })
+
+  it('applies custom className', () => {
+    const { container } = render(<ColorPicker className="custom" />)
+    expect(container.querySelector('.custom')).toBeInTheDocument()
+  })
+
+  it('renders with label', () => {
+    render(<ColorPicker label="Pick color" />)
+    expect(screen.getByText('Pick color')).toBeInTheDocument()
+  })
+
+  it('renders with defaultValue', () => {
+    const { container } = render(<ColorPicker defaultValue="#ff0000" />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('renders with disabled state', () => {
+    const { container } = render(<ColorPicker disabled />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+
 })

@@ -136,4 +136,12 @@ describe('Transfer', () => {
     const disabledCheckboxes = checkboxes.filter(cb => cb.hasAttribute('disabled'))
     expect(disabledCheckboxes.length).toBeGreaterThan(0)
   })
+
+  it('renders listbox role on panels', () => {
+    const { container } = render(<Transfer dataSource={mockDataSource} targetKeys={['1']} />)
+    const listboxes = container.querySelectorAll('[role="listbox"]')
+    expect(listboxes.length).toBeGreaterThanOrEqual(2)
+  })
+
+
 })

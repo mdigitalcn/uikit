@@ -99,6 +99,7 @@ const floatLabelVariants = cva(
 const FloatInput = React.memo<FloatInputProps>(
   ({
     size = "md",
+    color = "primary",
     label,
     error,
     warning,
