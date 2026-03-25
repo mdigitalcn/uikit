@@ -111,6 +111,7 @@ const TransferListBody = React.memo(({
         <div style={{ height: `${virtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}>
           {virtualizer.getVirtualItems().map((vItem) => {
             const item = filteredData[vItem.index]
+            if (!item) return null
             return (
               <div key={item.key} style={{ position: 'absolute', top: 0, left: 0, width: '100%', transform: `translateY(${vItem.start}px)` }}>
                 {renderItem(item)}

@@ -87,6 +87,7 @@ const Divider = React.memo<DividerProps>(
     orientation = 'horizontal',
     variant = 'solid',
     color = 'default',
+    thickness = 'default',
     children,
     textAlign = 'center',
     spacing,
@@ -95,6 +96,8 @@ const Divider = React.memo<DividerProps>(
     ref,
     ...props
   }) => {
+    const hThickness = { thin: 'border-t', default: 'border-t', thick: 'border-t-2' } as const
+    const vThickness = { thin: 'border-l', default: 'border-l', thick: 'border-l-2' } as const
     const hasText = Boolean(children)
 
     /**
@@ -124,7 +127,7 @@ const Divider = React.memo<DividerProps>(
               data-slot="line"
               className={cn(
                 'divider_line',
-                'border-t border-slot',
+                hThickness[thickness] + ' border-slot',
                 dividerVariants({ variant }),
                 textAlignClasses[textAlign].before,
                 classNames?.line,
@@ -144,7 +147,7 @@ const Divider = React.memo<DividerProps>(
               data-slot="line"
               className={cn(
                 'divider_line',
-                'border-t border-slot',
+                hThickness[thickness] + ' border-slot',
                 dividerVariants({ variant }),
                 textAlignClasses[textAlign].after,
                 classNames?.line,
@@ -162,7 +165,7 @@ const Divider = React.memo<DividerProps>(
           data-slot="root"
           className={cn(
             'divider_root',
-            'border-t border-slot',
+            hThickness[thickness] + ' border-slot',
             colorVars[color],
             dividerVariants({ orientation, variant }),
             className,
@@ -187,7 +190,7 @@ const Divider = React.memo<DividerProps>(
         data-slot="root"
         className={cn(
           'divider_root',
-          'inline-block w-px border-l self-stretch border-slot',
+          `inline-block w-px ${vThickness[thickness]} self-stretch border-slot`,
           colorVars[color],
           dividerVariants({ variant }),
           className,

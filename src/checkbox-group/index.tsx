@@ -22,6 +22,8 @@ const CheckboxGroup = React.memo<CheckboxGroupProps>(
     helperText,
     error,
     orientation = 'vertical',
+    size,
+    color,
     className,
     classNames,
     children,
@@ -38,6 +40,7 @@ const CheckboxGroup = React.memo<CheckboxGroupProps>(
         role="group"
         aria-labelledby={labelId}
         aria-describedby={messageId}
+        aria-orientation={orientation}
         className={cn('checkboxGroup_root', 'w-full', className, classNames?.root)}
         data-slot="root"
         {...props}
@@ -60,7 +63,17 @@ const CheckboxGroup = React.memo<CheckboxGroupProps>(
           )}
           data-slot="group"
         >
-          {children}
+          {React.Children.map(children, (child) => {
+            if (React.isValidElement<{ size?: string; color?: string }>(child)) {
+              const overrides: Record<string, unknown> = {}
+              if (size && !child.props.size) overrides.size = size
+              if (color && !child.props.color) overrides.color = color
+              if (Object.keys(overrides).length > 0) {
+                return React.cloneElement(child, overrides)
+              }
+            }
+            return child
+          })}
         </div>
         {(helperText || error) && (
           <p

@@ -174,6 +174,7 @@ const Tabs = React.memo<TabsProps>(
     variant = "default",
     radius = "md",
     onChange,
+    destroyInactivePanel = true,
     className,
     classNames,
   }) => {
@@ -437,20 +438,41 @@ const Tabs = React.memo<TabsProps>(
           })}
         </div>
 
-        {activeItem?.content && (
-          <div
-            id={`panel-${uniqueId}-${activeItem.key}`}
-            role="tabpanel"
-            aria-labelledby={`tab-${uniqueId}-${activeItem.key}`}
-            data-slot="tabs_panel"
-            className={cn(
-              "tabs_panel",
-              "py-4 animate-in fade-in slide-in-from-bottom-2 duration-300",
-              classNames?.panel,
-            )}
-          >
-            {activeItem?.content}
-          </div>
+        {destroyInactivePanel ? (
+          activeItem?.content && (
+            <div
+              key={activeItem.key}
+              id={`panel-${uniqueId}-${activeItem.key}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${uniqueId}-${activeItem.key}`}
+              data-slot="tabs_panel"
+              className={cn(
+                "tabs_panel",
+                "py-4 animate-in fade-in slide-in-from-bottom-2 duration-300",
+                classNames?.panel,
+              )}
+            >
+              {activeItem.content}
+            </div>
+          )
+        ) : (
+          items.map((item) => (
+            <div
+              key={item.key}
+              id={`panel-${uniqueId}-${item.key}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${uniqueId}-${item.key}`}
+              data-slot="tabs_panel"
+              hidden={item.key !== activeKey}
+              className={cn(
+                "tabs_panel",
+                item.key === activeKey && "py-4",
+                classNames?.panel,
+              )}
+            >
+              {item.content}
+            </div>
+          ))
         )}
       </div>
     );

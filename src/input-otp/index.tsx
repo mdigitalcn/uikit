@@ -32,7 +32,7 @@ const InputOTP = React.memo<InputOTPProps>(
   ({
     length = 6,
     size = 'md',
-    value,
+    color = 'primary',    value,
     onChange,
     onComplete,
     error,
@@ -43,6 +43,7 @@ const InputOTP = React.memo<InputOTPProps>(
     disabled = false,
     autoFocus = false,
     type = 'text',
+    mask = false,
     pattern,
     label,
     messagePosition = 'bottom',
@@ -173,7 +174,7 @@ const InputOTP = React.memo<InputOTPProps>(
               <input
                 key={index}
                 ref={(el) => { inputRefs.current[index] = el }}
-                type="text"
+                type={mask ? 'password' : 'text'}
                 inputMode={type === 'number' ? 'numeric' : 'text'}
                 maxLength={1}
                 value={otp[index] || ''}

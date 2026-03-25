@@ -53,6 +53,7 @@ const Tooltip = React.memo<TooltipProps>(
     align = 'center',
     delayDuration = 200,
     disabled = false,
+    showArrow = false,
     className,
     classNames,
     ...props
@@ -79,6 +80,13 @@ const Tooltip = React.memo<TooltipProps>(
             {...props}
           >
             {content}
+            {showArrow && (
+              <TooltipPrimitive.Arrow
+                className={cn('fill-current', classNames?.arrow)}
+                width={8}
+                height={4}
+              />
+            )}
           </TooltipPrimitive.Content>
         </TooltipPrimitive.Portal>
       </TooltipPrimitive.Root>

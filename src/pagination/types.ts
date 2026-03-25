@@ -35,6 +35,11 @@ export interface PaginationProps {
    * Custom function to display total items
    */
   showTotal?: (total: number, range: [number, number]) => React.ReactNode
+  /**
+   * Simple mode — only shows prev/next buttons with current page info
+   * @default false
+   */
+  simple?: boolean
   disabled?: boolean
   className?: string
   classNames?: PaginationClassNames

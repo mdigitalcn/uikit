@@ -172,6 +172,74 @@ const Calendar = React.memo<CalendarProps>(
       }
     }
 
+    const [focusDate, setFocusDate] = React.useState<Date | null>(null)
+    const gridRef = React.useRef<HTMLDivElement>(null)
+
+    const moveFocus = React.useCallback((newDate: Date) => {
+      setFocusDate(newDate)
+      // Navigate month if necessary
+      if (newDate.getMonth() !== monthIdx || newDate.getFullYear() !== year) {
+        const next = new Date(newDate.getFullYear(), newDate.getMonth(), 1)
+        if (controlledMonth === undefined) setInternalMonth(next)
+        onMonthChange?.(next)
+      }
+      // Focus the button after render
+      requestAnimationFrame(() => {
+        if (!gridRef.current) return
+        const buttons = gridRef.current.querySelectorAll<HTMLButtonElement>('button[role="gridcell"]')
+        for (const btn of buttons) {
+          if (btn.textContent === String(newDate.getDate()) && !btn.classList.contains('invisible')) {
+            btn.focus()
+            break
+          }
+        }
+      })
+    }, [monthIdx, year, controlledMonth, onMonthChange])
+
+    const handleGridKeyDown = React.useCallback((e: React.KeyboardEvent) => {
+      const base = focusDate ?? selected ?? today
+      let next: Date | null = null
+
+      switch (e.key) {
+        case 'ArrowRight':
+          next = new Date(base.getFullYear(), base.getMonth(), base.getDate() + 1)
+          break
+        case 'ArrowLeft':
+          next = new Date(base.getFullYear(), base.getMonth(), base.getDate() - 1)
+          break
+        case 'ArrowDown':
+          next = new Date(base.getFullYear(), base.getMonth(), base.getDate() + 7)
+          break
+        case 'ArrowUp':
+          next = new Date(base.getFullYear(), base.getMonth(), base.getDate() - 7)
+          break
+        case 'PageDown':
+          next = new Date(base.getFullYear(), base.getMonth() + (e.shiftKey ? 12 : 1), base.getDate())
+          break
+        case 'PageUp':
+          next = new Date(base.getFullYear(), base.getMonth() - (e.shiftKey ? 12 : 1), base.getDate())
+          break
+        case 'Home':
+          next = new Date(base.getFullYear(), base.getMonth(), 1)
+          break
+        case 'End':
+          next = new Date(base.getFullYear(), base.getMonth() + 1, 0)
+          break
+        case 'Enter':
+        case ' ':
+          e.preventDefault()
+          handleSelect(base)
+          return
+        default:
+          return
+      }
+
+      e.preventDefault()
+      if (next && !isDisabled(next)) {
+        moveFocus(next)
+      }
+    }, [focusDate, selected, today, moveFocus, handleSelect, isDisabled])
+
     return (
       <div
         data-slot="root"
@@ -214,9 +282,11 @@ const Calendar = React.memo<CalendarProps>(
 
         {/* Grid */}
         <div
+          ref={gridRef}
           data-slot="grid"
           className={cn('calendar_grid', 'grid grid-cols-7', classNames?.grid)}
           role="grid"
+          onKeyDown={handleGridKeyDown}
         >
           {dayNames.map((name) => (
             <div
@@ -244,7 +314,14 @@ const Calendar = React.memo<CalendarProps>(
                   type="button"
                   role="gridcell"
                   disabled={disabled}
+                  aria-disabled={disabled || undefined}
                   onClick={() => handleSelect(date)}
+                  onFocus={() => setFocusDate(date)}
+                  tabIndex={
+                    isSameDay(date, focusDate ?? selected ?? today) && !outside
+                      ? 0
+                      : -1
+                  }
                   aria-selected={isSelected}
                   aria-current={isToday ? 'date' : undefined}
                   className={cn(

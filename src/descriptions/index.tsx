@@ -94,6 +94,7 @@ const Descriptions = React.memo<DescriptionsProps>(
     classNames,
     title,
     extra,
+    colon = false,
     ref,
     ...props
   }) => {
@@ -156,7 +157,7 @@ const Descriptions = React.memo<DescriptionsProps>(
                         )}
                         data-slot='label'
                       >
-                        {item.label}
+                        {item.label}{colon && ":"}
                       </th>
                     ))}
                   </tr>
@@ -232,7 +233,7 @@ const Descriptions = React.memo<DescriptionsProps>(
                         )}
                         data-slot='label'
                       >
-                        {item.label}
+                        {item.label}{colon && ":"}
                       </th>
                     ))}
                   </tr>
@@ -297,7 +298,7 @@ const Descriptions = React.memo<DescriptionsProps>(
                         )}
                         data-slot='label'
                       >
-                        {item.label}
+                        {item.label}{colon && ":"}
                       </th>
                       <td
                         colSpan={valueColSpan}
@@ -371,7 +372,7 @@ const Descriptions = React.memo<DescriptionsProps>(
                         )}
                         data-slot='label'
                       >
-                        {item.label}
+                        {item.label}{colon && ":"}
                       </th>
                       <td
                         colSpan={valueColSpan}

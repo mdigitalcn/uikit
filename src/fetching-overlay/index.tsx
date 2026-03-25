@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { Spinner } from '../spinner'
 import { cn } from '../utils'
@@ -14,8 +14,25 @@ const FetchingOverlay = React.memo<FetchingOverlayProps>(({
   className,
   ...rest
 }) => {
+  const overlayRef = useRef<HTMLDivElement>(null)
+
+  // Focus trap: prevent tabbing to content behind overlay
+  useEffect(() => {
+    if (!isFetching) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Tab') {
+        e.preventDefault()
+        overlayRef.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isFetching])
+
   return (
     <div
+      ref={overlayRef}
+      tabIndex={isFetching ? -1 : undefined}
       data-slot="root"
       className={cn(
         'fetchingOverlay_root',

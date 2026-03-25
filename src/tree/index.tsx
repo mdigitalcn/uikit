@@ -487,11 +487,15 @@ const Tree = React.memo<TreeProps>(
       >
         {shouldVirtualize ? (
           <div style={{ height: `${virtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}>
-            {virtualizer.getVirtualItems().map((vItem) => (
-              <div key={flatNodes[vItem.index].node.key} style={{ position: 'absolute', top: 0, left: 0, width: '100%', transform: `translateY(${vItem.start}px)` }}>
-                {renderNode(flatNodes[vItem.index], vItem.index)}
+            {virtualizer.getVirtualItems().map((vItem) => {
+              const fNode = flatNodes[vItem.index]
+              if (!fNode) return null
+              return (
+              <div key={fNode.node.key} style={{ position: 'absolute', top: 0, left: 0, width: '100%', transform: `translateY(${vItem.start}px)` }}>
+                {renderNode(fNode, vItem.index)}
               </div>
-            ))}
+              )
+            })}
           </div>
         ) : (
           flatNodes.map((item, index) => renderNode(item, index))

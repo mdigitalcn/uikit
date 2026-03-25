@@ -39,6 +39,9 @@ const Image = React.memo<ImageProps>(({
   fallbackSrc,
   fetchPriority = 'auto',
   loading,
+  aspectRatio,
+  fit = 'cover',
+  radius = 'md',
   ...props
 }) => {
   const [imageError, setImageError] = useState(false)
@@ -85,6 +88,7 @@ const Image = React.memo<ImageProps>(({
       src={imageError ? fallbackSrc : src}
       className={cn(
         'image_image',
+        imageVariants({ fit, radius }),
         !isLoaded && 'opacity-0',
         isLoaded && 'opacity-100',
         'transition-opacity duration-500 ease-in-out',
@@ -93,6 +97,7 @@ const Image = React.memo<ImageProps>(({
         classNames?.image,
         className,
       )}
+      style={{ ...(aspectRatio ? { aspectRatio } : {}), ...(props.style || {}) }}
       {...props}
       alt={props.alt}
       loading={loadingStrategy}

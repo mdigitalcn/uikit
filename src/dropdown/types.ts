@@ -17,6 +17,8 @@ export interface DropdownItem {
   value?: string | number
   icon?: React.ReactNode
   disabled?: boolean
+  /** Renders item in error/danger color */
+  danger?: boolean
   onClick?: () => void
 }
 

@@ -110,6 +110,7 @@ export const CascaderMenu = ({
               return (
                 <div
                   key={option.value}
+                  id={`cascader-option-${level}-${index}`}
                   role="option"
                   aria-selected={isLeafSelected || (selectionState?.checked ?? false)}
                   aria-disabled={option.disabled}

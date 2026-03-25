@@ -68,6 +68,7 @@ export const ToggleGroup = React.memo<ToggleGroupProps>(
     variant = 'default',
     onChange,
     fullWidth = false,
+    orientation = 'horizontal',
     disabled = false,
     className,
     centered = false,
@@ -125,11 +126,13 @@ export const ToggleGroup = React.memo<ToggleGroupProps>(
         ref={ref}
         role="group"
         aria-label={ariaLabel}
+        aria-orientation={orientation}
         className={cn(
           'toggleGroup_root',
           toggleGroupVariants(),
           baseColor,
           'border-slot-20 bg-background',
+          orientation === 'vertical' && 'flex-col',
           classNames?.root,
           className,
           fullWidth && 'grid w-full',

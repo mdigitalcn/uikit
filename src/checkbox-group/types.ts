@@ -1,3 +1,4 @@
+import type { ComponentColor, ComponentSize } from '../types'
 export interface CheckboxGroupClassNames {
   root?: string
   label?: string
@@ -13,6 +14,10 @@ export interface CheckboxGroupProps extends React.HTMLAttributes<HTMLDivElement>
   helperText?: string
   error?: string
   orientation?: 'vertical' | 'horizontal'
+  /** @default "md" */
+  size?: ComponentSize
+  /** Color passed to child checkboxes @default "primary" */
+  color?: ComponentColor
   className?: string
   classNames?: CheckboxGroupClassNames
   ref?: React.Ref<HTMLDivElement>

@@ -9,7 +9,7 @@ import { cn, iconSizes } from '../utils'
 import type { PasswordInputProps } from './types'
 
 export const PasswordInput = React.memo<PasswordInputProps>(
-  ({ visibilityToggle = true, size = 'md', ref, classNames, ...props }) => {
+  ({ visibilityToggle = true, size = 'md', color = 'primary', ref, classNames, ...props }) => {
     const [showPassword, setShowPassword] = React.useState(false)
 
     const toggleVisibility = React.useCallback(() => {

@@ -105,6 +105,7 @@ const Pagination = React.memo<PaginationProps>(
     showQuickJumper = false,
     showFirstLastButtons = false,
     showTotal,
+    simple = false,
     disabled = false,
     className,
     classNames,
@@ -179,6 +180,40 @@ const Pagination = React.memo<PaginationProps>(
 
     if (totalPages <= 0) {
       return null
+    }
+
+    if (simple) {
+      return (
+        <div
+          data-slot="root"
+          className={cn(
+            'pagination_root',
+            'flex items-center gap-2',
+            classNames?.root,
+            className,
+          )}
+        >
+          <PaginationButton
+            onClick={() => handlePageChange(current - 1)}
+            disabled={disabled || current <= 1}
+            className={cn(paginationItemVariants({ size }), colorVars[color], classNames?.button)}
+            aria-label="Previous page"
+          >
+            <ChevronLeft className={iconSizes[size]} />
+          </PaginationButton>
+          <span className={cn('text-sm text-text-primary tabular-nums', paginationItemVariants({ size }))}>
+            {current} / {totalPages}
+          </span>
+          <PaginationButton
+            onClick={() => handlePageChange(current + 1)}
+            disabled={disabled || current >= totalPages}
+            className={cn(paginationItemVariants({ size }), colorVars[color], classNames?.button)}
+            aria-label="Next page"
+          >
+            <ChevronRight className={iconSizes[size]} />
+          </PaginationButton>
+        </div>
+      )
     }
 
     return (

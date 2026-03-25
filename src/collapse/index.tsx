@@ -72,6 +72,7 @@ const Collapse = React.memo<CollapseProps>(
     defaultOpen = false,
     open: controlledOpen,
     onChange,
+    destroyOnClose = false,
     disabled = false,
     className,
     classNames,
@@ -157,6 +158,7 @@ const Collapse = React.memo<CollapseProps>(
           onClick={handleToggle}
           onPointerEnter={handlePointerEnter}
           disabled={disabled}
+          aria-disabled={disabled || undefined}
           aria-expanded={isOpen}
           aria-controls={contentId}
           className={cn(
@@ -190,16 +192,18 @@ const Collapse = React.memo<CollapseProps>(
           style={{ contain: 'content' }}
         >
           <div ref={contentRef}>
-            <div
-              className={cn(
-                'collapse_content',
-                collapseContentVariants({ size }),
-                classNames?.content,
-              )}
-              data-slot="content"
-            >
-              {children}
-            </div>
+            {(!destroyOnClose || isOpen) && (
+              <div
+                className={cn(
+                  'collapse_content',
+                  collapseContentVariants({ size }),
+                  classNames?.content,
+                )}
+                data-slot="content"
+              >
+                {children}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { cva } from 'class-variance-authority'
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 
 import { cn } from '../utils'
+import { colorVars } from '../variants'
 import type { AnchorItem, AnchorProps } from './types'
 
 const anchorLinkVariants = cva('block transition-colors duration-200 text-text-secondary hover:text-text-primary', {
@@ -144,7 +145,7 @@ const Anchor = React.memo<AnchorProps>(
             anchorLinkVariants({ size }),
             'truncate',
             depth > 0 && (depthPadding[depth] || 'pl-14'),
-            activeId === item.id && 'text-primary font-medium',
+            activeId === item.id && 'text-slot font-medium',
             activeId === item.id && classNames?.activeLink,
             classNames?.link,
           )}
@@ -162,6 +163,7 @@ const Anchor = React.memo<AnchorProps>(
         className={cn(
           'anchor_root',
           'relative',
+          colorVars[color],
           affix && 'sticky',
           classNames?.root,
           className,
@@ -173,7 +175,7 @@ const Anchor = React.memo<AnchorProps>(
           data-slot="indicator"
           className={cn(
             'anchor_indicator',
-            'absolute left-0 rounded-full bg-primary transition-all duration-200',
+            'absolute left-0 rounded-full bg-slot transition-all duration-200',
             indicatorWidths[size],
             classNames?.indicator,
           )}

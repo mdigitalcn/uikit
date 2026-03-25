@@ -87,6 +87,8 @@ const Slider = React.memo<SliderProps>(
     classNames,
     footer = false,
     range = false,
+    marks,
+    showTooltip = false,
   }) => {
     const isVertical = orientation === 'vertical'
     const [internalValue, setInternalValue] = useState<number | number[]>(
@@ -358,8 +360,8 @@ const Slider = React.memo<SliderProps>(
               >
                 <div
                   className={cn(
-                    'absolute bg-text-primary text-background text-xs px-2 py-1 rounded whitespace-nowrap',
-                    hoveredThumb === index ? 'opacity-100' : 'opacity-0 pointer-events-none',
+                    'absolute bg-text-primary text-background text-xs px-2 py-1 rounded whitespace-nowrap transition-opacity',
+                    showTooltip && (hoveredThumb === index || isDraggingState && activeThumb.current === index) ? 'opacity-100' : 'opacity-0 pointer-events-none',
                     isVertical
                       ? 'left-full ml-2 top-1/2 -translate-y-1/2'
                       : '-top-8 left-1/2 -translate-x-1/2',
@@ -371,6 +373,29 @@ const Slider = React.memo<SliderProps>(
             )
           })}
         </div>
+
+        {/* Marks */}
+        {marks && marks.length > 0 && !isVertical && (
+          <div className="relative w-full mt-2">
+            {marks.map((mark) => {
+              const pct = ((mark.value - min) / (max - min)) * 100
+              return (
+                <div
+                  key={mark.value}
+                  className="absolute -translate-x-1/2"
+                  style={{ left: `${pct}%` }}
+                >
+                  <div className="w-0.5 h-1.5 bg-border mx-auto mb-0.5" />
+                  {mark.label && (
+                    <span className="text-xs text-text-secondary whitespace-nowrap">
+                      {mark.label}
+                    </span>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        )}
 
         {/* Footer */}
         {isVertical && footer === true && (

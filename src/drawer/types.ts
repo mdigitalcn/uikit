@@ -1,5 +1,5 @@
 import type React from 'react'
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export type DrawerDirection = "bottom" | "top" | "left" | "right";
 export type DrawerSize = ComponentSize | "full";
@@ -65,6 +65,8 @@ export interface DrawerContentProps {
    * @default 'md'
    */
   size?: DrawerSize;
+  /** Color accent @default "primary" */
+  color?: ComponentColor
   /**
    * Whether to show a close button in the corner
    * @default false
@@ -174,6 +176,11 @@ export interface ComposedDrawerProps {
    */
   hideFooter?: boolean;
   className?: string;
+  /**
+   * Color accent
+   * @default 'primary'
+   */
+  color?: ComponentColor;
   contentClassName?: string;
   classNames?: DrawerClassNames;
 }

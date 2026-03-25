@@ -62,7 +62,7 @@ const Autocomplete = React.memo<AutocompleteProps>(
     helperText,
     error,
     size = 'md',
-    status: statusProp,
+    color = 'primary',    status: statusProp,
     disabled = false,
     loading = false,
     clearable = false,

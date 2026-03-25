@@ -34,6 +34,10 @@ export interface ToggleGroupProps {
   variant?: ToggleGroupVariant
   onChange?: (value: string | string[]) => void
   fullWidth?: boolean
+  /**
+   * @default 'horizontal'
+   */
+  orientation?: 'horizontal' | 'vertical'
   disabled?: boolean
   className?: string
   centered?: boolean

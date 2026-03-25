@@ -38,6 +38,7 @@ const MultiSelect = React.memo<MultiSelectProps>(
     disabled,
     required,
     clearable = false,
+    maxSelectedValues,
     virtualizeThreshold = 50,
     maxDropdownHeight = 300,
     className,
@@ -104,13 +105,17 @@ const MultiSelect = React.memo<MultiSelectProps>(
 
     const handleSelect = React.useCallback(
       (optionValue: string) => {
-        const newValue = (currentValue || []).includes(optionValue)
+        const isRemoving = (currentValue || []).includes(optionValue);
+        if (!isRemoving && maxSelectedValues && (currentValue || []).length >= maxSelectedValues) {
+          return; // At limit, don't add more
+        }
+        const newValue = isRemoving
           ? (currentValue || []).filter((v) => v !== optionValue)
           : [...(currentValue || []), optionValue];
         setCurrentValue(newValue);
         setHighlightedIndex(-1);
       },
-      [currentValue, setCurrentValue, setHighlightedIndex],
+      [currentValue, maxSelectedValues, setCurrentValue, setHighlightedIndex],
     );
 
     handleSelectRef.current = handleSelect;

@@ -25,6 +25,11 @@ export interface TooltipProps {
    */
   delayDuration?: number
   disabled?: boolean
+  /**
+   * Show arrow pointing to trigger
+   * @default false
+   */
+  showArrow?: boolean
   className?: string
   classNames?: TooltipClassNames
 }

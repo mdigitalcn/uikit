@@ -1,5 +1,5 @@
 import type React from 'react'
-import type { ComponentColor } from '../types'
+import type { ComponentSize, ComponentColor } from '../types'
 
 export interface ContextMenuClassNames {
   root?: string
@@ -31,6 +31,8 @@ export interface ContextMenuItem {
 export interface ContextMenuProps {
   children: React.ReactNode
   items: ContextMenuItem[]
+  /** @default "md" */
+  size?: ComponentSize
   className?: string
   classNames?: ContextMenuClassNames
   disabled?: boolean

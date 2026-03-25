@@ -192,6 +192,7 @@ const Rating = React.memo<RatingProps>(
           id={`rating-${uniqueId}`}
           role="radiogroup"
           aria-label={ariaLabel || 'Rating'}
+          aria-valuetext={`${currentValue} out of ${count} stars`}
           tabIndex={isInteractive ? 0 : -1}
           onKeyDown={handleKeyDown}
           onMouseLeave={handleMouseLeave}

@@ -9,6 +9,8 @@ export type DividerOrientation = 'horizontal' | 'vertical'
 
 export type DividerVariant = 'solid' | 'dashed' | 'dotted'
 
+export type DividerThickness = 'thin' | 'default' | 'thick'
+
 export type DividerColor = ComponentColor
 
 export interface DividerClassNames {
@@ -37,6 +39,12 @@ export interface DividerProps
    * @default 'default'
    */
   color?: DividerColor
+
+  /**
+   * Line thickness
+   * @default 'default'
+   */
+  thickness?: DividerThickness
 
   /**
    * Optional label text to display within the divider

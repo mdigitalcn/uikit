@@ -1,3 +1,4 @@
+import type { ComponentSize } from '../types'
 import type React from 'react'
 
 export interface NavigationMenuClassNames {
@@ -36,6 +37,8 @@ export interface NavigationMenuProps {
   orientation?: 'horizontal' | 'vertical'
   /** Delay (ms) before dropdown closes on mouse leave @default 150 */
   closeDelay?: number
+  /** @default "md" */
+  size?: ComponentSize
   className?: string
   classNames?: NavigationMenuClassNames
   ref?: React.Ref<HTMLElement>

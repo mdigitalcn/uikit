@@ -46,6 +46,11 @@ export interface TabsProps {
    */
   radius?: TabsRadius
   onChange?: (key: string) => void
+  /**
+   * Unmount inactive tab panels for performance
+   * @default true
+   */
+  destroyInactivePanel?: boolean
   className?: string
   classNames?: TabsClassNames
 }

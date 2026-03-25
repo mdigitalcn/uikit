@@ -43,18 +43,20 @@ const Alert = React.memo<AlertProps>(
     color = 'default',
     size = 'md',
     closable = false,
+    visible: controlledVisible,
     onClose,
     className,
     classNames,
     children,
     ...props
   }) => {
-    const [visible, setVisible] = React.useState(true)
+    const [internalVisible, setInternalVisible] = React.useState(true)
+    const isVisible = controlledVisible !== undefined ? controlledVisible : internalVisible
 
-    if (!visible) return null
+    if (!isVisible) return null
 
     const handleClose = () => {
-      setVisible(false)
+      setInternalVisible(false)
       onClose?.()
     }
 
@@ -65,6 +67,7 @@ const Alert = React.memo<AlertProps>(
         className={cn(
           'alert_root',
           alertVariants({ variant, color, size }),
+          'animate-in fade-in-0 slide-in-from-top-2 duration-200',
           classNames?.root,
           className,
         )}

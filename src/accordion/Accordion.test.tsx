@@ -288,4 +288,116 @@ describe('Accordion', () => {
     const regions = screen.getAllByRole('region', { hidden: true })
     expect(regions.length).toBeGreaterThan(0)
   })
+
+  describe('keyboard navigation', () => {
+    it('moves focus with ArrowDown', async () => {
+      const user = userEvent.setup()
+      render(<Accordion items={mockItems} />)
+      const buttons = screen.getAllByRole('button')
+
+      buttons[0].focus()
+      await user.keyboard('{ArrowDown}')
+      expect(buttons[1]).toHaveFocus()
+    })
+
+    it('moves focus with ArrowUp', async () => {
+      const user = userEvent.setup()
+      render(<Accordion items={mockItems} />)
+      const buttons = screen.getAllByRole('button')
+
+      buttons[1].focus()
+      await user.keyboard('{ArrowUp}')
+      expect(buttons[0]).toHaveFocus()
+    })
+
+    it('wraps focus from last to first with ArrowDown', async () => {
+      const user = userEvent.setup()
+      render(<Accordion items={mockItems} />)
+      const buttons = screen.getAllByRole('button')
+
+      buttons[2].focus()
+      await user.keyboard('{ArrowDown}')
+      expect(buttons[0]).toHaveFocus()
+    })
+
+    it('wraps focus from first to last with ArrowUp', async () => {
+      const user = userEvent.setup()
+      render(<Accordion items={mockItems} />)
+      const buttons = screen.getAllByRole('button')
+
+      buttons[0].focus()
+      await user.keyboard('{ArrowUp}')
+      expect(buttons[2]).toHaveFocus()
+    })
+
+    it('moves focus to first item with Home', async () => {
+      const user = userEvent.setup()
+      render(<Accordion items={mockItems} />)
+      const buttons = screen.getAllByRole('button')
+
+      buttons[2].focus()
+      await user.keyboard('{Home}')
+      expect(buttons[0]).toHaveFocus()
+    })
+
+    it('moves focus to last item with End', async () => {
+      const user = userEvent.setup()
+      render(<Accordion items={mockItems} />)
+      const buttons = screen.getAllByRole('button')
+
+      buttons[0].focus()
+      await user.keyboard('{End}')
+      expect(buttons[2]).toHaveFocus()
+    })
+
+    it('skips disabled items during keyboard navigation', async () => {
+      const user = userEvent.setup()
+      const itemsWithDisabled: AccordionItem[] = [
+        { key: '1', title: 'First', content: 'C1' },
+        { key: '2', title: 'Disabled', content: 'C2', disabled: true },
+        { key: '3', title: 'Third', content: 'C3' },
+      ]
+      render(<Accordion items={itemsWithDisabled} />)
+      const buttons = screen.getAllByRole('button')
+
+      buttons[0].focus()
+      await user.keyboard('{ArrowDown}')
+      // Should skip disabled item and go to Third
+      expect(buttons[2]).toHaveFocus()
+    })
+  })
+
+  it('sets aria-disabled on disabled items', () => {
+    const itemsWithDisabled: AccordionItem[] = [
+      { key: '1', title: 'Enabled', content: 'C1' },
+      { key: '2', title: 'Disabled', content: 'C2', disabled: true },
+    ]
+    render(<Accordion items={itemsWithDisabled} />)
+    const disabledBtn = screen.getByText('Disabled').closest('button')
+    expect(disabledBtn).toHaveAttribute('aria-disabled', 'true')
+  })
+
+  it('links trigger and panel with aria-labelledby', () => {
+    render(<Accordion items={mockItems} defaultActiveKey="1" />)
+    const buttons = screen.getAllByRole('button')
+    const regions = screen.getAllByRole('region', { hidden: true })
+
+    // Each region should reference its trigger's id
+    regions.forEach((region) => {
+      const labelledBy = region.getAttribute('aria-labelledby')
+      expect(labelledBy).toBeTruthy()
+      const trigger = buttons.find(b => b.id === labelledBy)
+      expect(trigger).toBeTruthy()
+    })
+  })
+
+  it('renders bordered + default color compound variant', () => {
+    const { container } = render(
+      <Accordion items={mockItems} variant="bordered" color="default" />
+    )
+    const root = container.querySelector('.accordion_root')
+    expect(root).toBeInTheDocument()
+    // bordered + default should have divide-border class
+    expect(root?.className).toContain('divide-border')
+  })
 })

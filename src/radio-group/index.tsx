@@ -22,6 +22,8 @@ export const RadioGroup = React.memo<RadioGroupProps>(
     helperText,
     error,
     orientation = 'vertical',
+    size,
+    color,
     className,
     classNames,
     children,
@@ -41,6 +43,7 @@ export const RadioGroup = React.memo<RadioGroupProps>(
         role="radiogroup"
         aria-labelledby={label ? labelId : undefined}
         aria-describedby={hasHelperText ? helperId : undefined}
+        aria-orientation={orientation}
         {...props}
       >
         {label && (
@@ -57,7 +60,17 @@ export const RadioGroup = React.memo<RadioGroupProps>(
             classNames?.group,
           )}
         >
-          {children}
+          {React.Children.map(children, (child) => {
+            if (React.isValidElement<{ size?: string; color?: string }>(child)) {
+              const overrides: Record<string, unknown> = {}
+              if (size && !child.props.size) overrides.size = size
+              if (color && !child.props.color) overrides.color = color
+              if (Object.keys(overrides).length > 0) {
+                return React.cloneElement(child, overrides)
+              }
+            }
+            return child
+          })}
         </div>
         {(helperText || error) && (
           <p

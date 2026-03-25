@@ -29,6 +29,8 @@ export interface AutocompleteProps {
   helperText?: string
   error?: string
   size?: ComponentSize
+  /** Color accent @default "primary" */
+  color?: ComponentColor
   status?: AutocompleteStatus
   disabled?: boolean
   loading?: boolean

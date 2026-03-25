@@ -96,6 +96,7 @@ const Toggle = React.memo<SingleToggleProps>(
         onPointerDown={ripplePointerDown}
         onKeyDown={rippleKeyDown}
         disabled={disabled}
+        aria-disabled={disabled || undefined}
         aria-pressed={pressed}
         aria-label={ariaLabel}
       >

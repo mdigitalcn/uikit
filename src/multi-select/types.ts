@@ -47,6 +47,8 @@ export interface MultiSelectProps
   disabled?: boolean
   required?: boolean
   clearable?: boolean
+  /** Maximum number of items that can be selected. Undefined = no limit. */
+  maxSelectedValues?: number
   virtualizeThreshold?: number
   maxDropdownHeight?: number
   ref?: React.Ref<HTMLDivElement>

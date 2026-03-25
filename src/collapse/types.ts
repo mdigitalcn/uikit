@@ -23,6 +23,11 @@ export interface CollapseProps {
   open?: boolean
   onChange?: (open: boolean) => void
   disabled?: boolean
+  /**
+   * Unmount content when collapsed (for performance)
+   * @default false
+   */
+  destroyOnClose?: boolean
   className?: string
   classNames?: CollapseClassNames
   ref?: React.Ref<HTMLDivElement>

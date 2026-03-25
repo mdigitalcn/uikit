@@ -19,6 +19,8 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   color?: ComponentColor
   size?: ComponentSize
   closable?: boolean
+  /** Controlled visibility. When undefined, uses internal state. */
+  visible?: boolean
   onClose?: () => void
   className?: string
   classNames?: AlertClassNames

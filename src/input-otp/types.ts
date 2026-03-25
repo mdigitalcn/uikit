@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export type InputOTPSize = ComponentSize
 
@@ -15,6 +15,8 @@ export interface InputOTPClassNames {
 export interface InputOTPProps {
   length?: number
   size?: InputOTPSize
+  /** Color accent @default "primary" */
+  color?: ComponentColor
   value?: string
   onChange?: (value: string) => void
   onComplete?: (value: string) => void
@@ -26,6 +28,11 @@ export interface InputOTPProps {
   disabled?: boolean
   autoFocus?: boolean
   type?: 'text' | 'number'
+  /**
+   * Mask input characters (shows dots instead of values)
+   * @default false
+   */
+  mask?: boolean
   pattern?: string
   label?: string
   messagePosition?: 'top' | 'bottom'

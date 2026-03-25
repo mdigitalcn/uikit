@@ -23,5 +23,15 @@ export interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
    * Fallback image src to display on error
    */
   fallbackSrc?: string
+  /** Aspect ratio (e.g., "16/9", "4/3", "1/1") */
+  aspectRatio?: string
+  /** Object fit behavior
+   * @default 'cover'
+   */
+  fit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
+  /** Border radius
+   * @default 'md'
+   */
+  radius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
   classNames?: ImageClassNames
 }

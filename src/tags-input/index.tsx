@@ -186,6 +186,8 @@ const TagsInput = React.memo<TagsInputProps>(
         <div className="relative">
           <div
             data-slot="wrapper"
+            role="list"
+            aria-label={label || 'Tags'}
             className={cn(
               'tagsInput_wrapper',
               wrapperVariants({ size, status: error ? 'error' : 'default' }),
@@ -198,6 +200,7 @@ const TagsInput = React.memo<TagsInputProps>(
               <span
                 key={`${tag}-${idx}`}
                 data-slot="tag"
+                role="listitem"
                 className={cn('tagsInput_tag', tagVariants({ size }), classNames?.tag)}
               >
                 <span className={cn('tagsInput_tagLabel truncate max-w-[150px]', classNames?.tagLabel)}>

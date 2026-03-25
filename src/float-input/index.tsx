@@ -12,10 +12,11 @@ import {
   iconSizes,
   statusMessageVariants,
 } from "../utils";
+import { colorVars } from "../variants";
 import type { FloatInputProps } from "./types";
 
 const floatInputVariants = cva(
-  "peer w-full placeholder:text-transparent rounded-md disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none text-text-primary transition-[border-color] duration-200 border border-border focus-visible:border-primary bg-background",
+  "peer w-full placeholder:text-transparent rounded-md disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none text-text-primary transition-[border-color] duration-200 border border-border focus-visible:border-slot bg-background",
   {
     variants: {
       status: {
@@ -178,10 +179,11 @@ const FloatInput = React.memo<FloatInputProps>(
         cn(
           "float-input_wrapper",
           "relative w-full",
+          status === 'default' && colorVars[color],
           loading && "opacity-50 cursor-not-allowed",
           classNames?.wrapper,
         ),
-      [loading, classNames?.wrapper],
+      [loading, classNames?.wrapper, status, color],
     );
 
     const leftIconClass = useMemo(() => {

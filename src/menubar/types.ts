@@ -1,3 +1,4 @@
+import type { ComponentSize } from '../types'
 import type React from 'react'
 
 export interface MenubarClassNames {
@@ -39,6 +40,8 @@ export interface MenubarMenu {
 
 export interface MenubarProps {
   menus: MenubarMenu[]
+  /** @default "md" */
+  size?: ComponentSize
   className?: string
   classNames?: MenubarClassNames
   ref?: React.Ref<HTMLDivElement>

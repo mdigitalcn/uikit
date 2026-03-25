@@ -15,6 +15,11 @@ export interface SliderClassNames {
   value?: string
 }
 
+export interface SliderMark {
+  value: number
+  label?: React.ReactNode
+}
+
 export interface SliderProps {
   /**
    * Current value (controlled) - single number or array for range
@@ -43,4 +48,13 @@ export interface SliderProps {
    * @default 'horizontal'
    */
   orientation?: SliderOrientation
+  /**
+   * Tick marks with optional labels
+   */
+  marks?: SliderMark[]
+  /**
+   * Show tooltip on thumb during drag
+   * @default false
+   */
+  showTooltip?: boolean
 }

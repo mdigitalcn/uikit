@@ -33,5 +33,10 @@ export interface DescriptionsProps extends Omit<React.HTMLAttributes<HTMLTableEl
   classNames?: DescriptionsClassNames
   title?: React.ReactNode
   extra?: React.ReactNode
+  /**
+   * Show colon after labels
+   * @default false
+   */
+  colon?: boolean
   ref?: React.Ref<HTMLTableElement>
 }

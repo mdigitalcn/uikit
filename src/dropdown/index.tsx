@@ -247,10 +247,15 @@ const Dropdown = React.memo<DropdownProps>(
                           size,
                           disabled: !!item.disabled,
                         }),
-                        !item.disabled && 'hover:bg-slot-10 hover:text-slot focus-visible:bg-slot-10 focus-visible:text-slot',
+                        item.danger && 'text-error',
+                        !item.disabled && !item.danger && 'hover:bg-slot-10 hover:text-slot focus-visible:bg-slot-10 focus-visible:text-slot',
+                        !item.disabled && item.danger && 'hover:bg-error/10 hover:text-error focus-visible:bg-error/10',
                         highlightedIndex === idx &&
-                          !item.disabled &&
+                          !item.disabled && !item.danger &&
                           'bg-slot-10 text-slot',
+                        highlightedIndex === idx &&
+                          !item.disabled && item.danger &&
+                          'bg-error/10 text-error',
                         classNames?.item,
                       )}
                       onClick={() => handleItemClick(item)}

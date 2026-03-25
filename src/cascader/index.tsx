@@ -366,6 +366,7 @@ const Cascader = React.memo<CascaderProps>(
                 aria-expanded={isOpen}
                 aria-haspopup="listbox"
                 aria-disabled={disabled}
+                aria-activedescendant={focusedIndex ? `cascader-option-${focusedIndex.level}-${focusedIndex.index}` : undefined}
                 aria-label={label || placeholder}
                 data-slot="trigger"
               >
