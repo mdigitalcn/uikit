@@ -1,99 +1,82 @@
-import type { Meta, StoryObj } from '@storybook/react'
-
-import Result from './index'
-import Button from '../button'
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+import Result from "./index";
+import Button from "../button";
 
 const meta: Meta<typeof Result> = {
-  title: 'Feedback/Result',
+  title: "Feedback/Result",
   component: Result,
-  tags: ['autodocs'],
-}
+  tags: ["autodocs"],
+  argTypes: {
+    status: { control: "select", options: ["success","error","warning","info","404","403","500"] },
+    size: { control: "select", options: ["xs","sm","md","lg"] },
+  },
+};
+export default meta;
+type Story = StoryObj<typeof Result>;
 
-export default meta
-type Story = StoryObj<typeof Result>
+export const Playground: Story = {
+  args: {
+    status: "success",
+    title: "Payment Successful",
+    subtitle: "Your order #2024-001 has been placed. You'll receive a confirmation email shortly.",
+  },
+};
 
-export const Success: Story = {
+export const Showcase: Story = {
   render: () => (
-    <Result
-      status="success"
-      title="Payment Successful"
-      subtitle="Your transaction has been processed. A confirmation email will be sent shortly."
-      extra={
-        <>
-          <Button>Go to Dashboard</Button>
-          <Button variant="outline">View Receipt</Button>
-        </>
-      }
-    />
-  ),
-}
-
-export const Error: Story = {
-  render: () => (
-    <Result
-      status="error"
-      title="Submission Failed"
-      subtitle="Please check your input and try again. If the problem persists, contact support."
-      extra={<Button color="error">Try Again</Button>}
-    />
-  ),
-}
-
-export const Warning: Story = {
-  render: () => (
-    <Result status="warning" title="Account Suspended" subtitle="Your account has been temporarily suspended. Contact support for more details." />
-  ),
-}
-
-export const Info: Story = {
-  render: () => (
-    <Result status="info" title="Email Verification Sent" subtitle="We've sent a verification link to your email address. Please check your inbox." />
-  ),
-}
-
-export const NotFound: Story = {
-  render: () => (
-    <Result
-      status="404"
-      subtitle="Sorry, the page you visited does not exist."
-      extra={<Button>Back Home</Button>}
-    />
-  ),
-}
-
-export const Forbidden: Story = {
-  render: () => (
-    <Result
-      status="403"
-      subtitle="You don't have permission to access this resource."
-      extra={<Button variant="outline">Request Access</Button>}
-    />
-  ),
-}
-
-export const ServerError: Story = {
-  render: () => (
-    <Result
-      status="500"
-      subtitle="Something went wrong on our end. Please try again later."
-      extra={<Button color="error">Refresh</Button>}
-    />
-  ),
-}
-
-export const WithContent: Story = {
-  render: () => (
-    <Result status="success" title="Order Placed" subtitle="Order #12345 confirmed">
-      <div className="bg-surface rounded-lg p-4 text-left">
-        <h4 className="font-semibold mb-2">Order Summary</h4>
-        <div className="space-y-1 text-sm text-text-secondary">
-          <div className="flex justify-between"><span>Widget Pro × 2</span><span>$59.98</span></div>
-          <div className="flex justify-between"><span>Shipping</span><span>Free</span></div>
-          <div className="flex justify-between font-semibold text-text-primary border-t border-border pt-1 mt-1">
-            <span>Total</span><span>$59.98</span>
-          </div>
+    <div className="space-y-10">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Status Types</h3>
+        <div className="grid grid-cols-2 gap-6">
+          <Result
+            status="success"
+            title="Payment Complete"
+            subtitle="Your transaction was processed successfully."
+            extra={<Button size="sm">View Receipt</Button>}
+          />
+          <Result
+            status="error"
+            title="Payment Failed"
+            subtitle="We could not process your payment. Please try again."
+            extra={<><Button size="sm" color="error">Retry</Button><Button size="sm" variant="ghost">Cancel</Button></>}
+          />
+          <Result
+            status="warning"
+            title="Low Balance"
+            subtitle="Your account balance is below the recommended minimum."
+            extra={<Button size="sm" color="warning">Add Funds</Button>}
+          />
+          <Result
+            status="info"
+            title="Under Review"
+            subtitle="Your account is being verified. This may take 1-2 business days."
+          />
         </div>
-      </div>
-    </Result>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">HTTP Error Pages</h3>
+        <div className="grid grid-cols-3 gap-6">
+          <Result status="404" title="404" subtitle="Page not found." extra={<Button size="sm">Go Home</Button>} />
+          <Result status="403" title="403" subtitle="Access denied." extra={<Button size="sm">Go Back</Button>} />
+          <Result status="500" title="500" subtitle="Server error." extra={<Button size="sm">Try Again</Button>} />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="grid grid-cols-2 gap-6">
+          {(["xs","sm","md","lg"] as const).map(s => (
+            <Result key={s} status="success" title={`Size ${s}`} subtitle="Sub-title description." size={s} />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Title Only</h3>
+        <Result status="success" title="All done!" extra={<Button size="sm">Continue</Button>} />
+      </section>
+    </div>
   ),
-}
+};

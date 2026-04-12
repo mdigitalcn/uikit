@@ -12,11 +12,15 @@ import type { CascaderOption, CascaderProps, CascaderSize } from "./types";
 import { CascaderMenu } from "./CascaderMenu";
 
 const cascaderTriggerVariants = cva(
-  "flex items-center justify-between gap-2 rounded-md border transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+  "flex items-center justify-between gap-2 [--_radius:var(--radius-input)] rounded-slot transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed outline-none",
   {
     variants: {
+      variant: {
+        outline: "bg-background border border-border hover:border-slot-50 focus:border-slot focus:ring-2 focus:ring-slot-30",
+        filled: "bg-surface border border-transparent hover:border-slot-30 focus:border-slot focus:ring-2 focus:ring-slot-30",
+      },
       status: {
-        default: "bg-background border-border hover:border-primary/50",
+        default: "",
         error: "border-error",
         warning: "border-warning",
         info: "border-info",
@@ -30,15 +34,15 @@ const cascaderTriggerVariants = cva(
       },
       fullWidth: { true: "w-full", false: "max-w-full" },
     },
-    defaultVariants: { status: "default", size: "md", fullWidth: true },
+    defaultVariants: { variant: "outline", status: "default", size: "md", fullWidth: true },
   },
 );
 
 const tagSizeClasses: Record<CascaderSize, string> = {
-  xs: "text-[10px] px-1 py-0",
-  sm: "text-xs px-1.5 py-0.5",
-  md: "text-sm px-2 py-0.5",
-  lg: "text-sm px-2.5 py-1",
+  xs: "text-(--tag-font-size-xs) px-(--tag-padding-x-xs) py-0",
+  sm: "text-(--tag-font-size-sm) px-(--tag-padding-x-sm) py-(--tag-padding-y-sm)",
+  md: "text-(--tag-font-size-md) px-(--tag-padding-x-md) py-(--tag-padding-y-sm)",
+  lg: "text-(--tag-font-size-md) px-(--tag-padding-x-lg) py-(--tag-padding-y-sm)",
 };
 
 const Cascader = React.memo<CascaderProps>(
@@ -52,6 +56,7 @@ const Cascader = React.memo<CascaderProps>(
     label,
     helperText,
     messagePosition = "bottom",
+    variant = "outline",
     color = "default",
     size = "md",
     placement = "bottomLeft",
@@ -359,7 +364,7 @@ const Cascader = React.memo<CascaderProps>(
             <PopoverPrimitive.Trigger asChild>
               <div
                 ref={ref}
-                className={cn(cascaderTriggerVariants({ status, size, fullWidth }), colorVars[color], 'focus-visible:ring-slot', disabled && "opacity-50 cursor-not-allowed", loading && "opacity-50 pointer-events-none", "cascader_trigger", classNames?.trigger, className)}
+                className={cn(cascaderTriggerVariants({ variant, status, size, fullWidth }), colorVars[status !== 'default' ? status : color], disabled && "opacity-50 cursor-not-allowed", loading && "opacity-50 pointer-events-none", "cascader_trigger", classNames?.trigger, className)}
                 onKeyDown={handleKeyDown}
                 tabIndex={disabled ? -1 : 0}
                 role="combobox"
@@ -383,7 +388,7 @@ const Cascader = React.memo<CascaderProps>(
                 side={popoverSide}
                 align={popoverAlign}
                 sideOffset={4}
-                className="z-[var(--z-popover)] outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:data-[side=bottom]:slide-out-to-top-2 data-[state=closed]:data-[side=left]:slide-out-to-right-2 data-[state=closed]:data-[side=right]:slide-out-to-left-2 data-[state=closed]:data-[side=top]:slide-out-to-bottom-2 duration-200"
+                className="z-[var(--z-popover)] outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:data-[side=bottom]:slide-out-to-top-2 data-[state=closed]:data-[side=left]:slide-out-to-right-2 data-[state=closed]:data-[side=right]:slide-out-to-left-2 data-[state=closed]:data-[side=top]:slide-out-to-bottom-2 [--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot"
               >
                 <CascaderMenu
                   activeMenus={activeMenus}

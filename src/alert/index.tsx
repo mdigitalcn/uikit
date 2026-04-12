@@ -9,7 +9,7 @@ import { colorVars } from '../variants'
 import type { AlertProps } from './types'
 
 const alertVariants = cva(
-  'relative flex gap-3 rounded-md',
+  'relative flex gap-3 [--_radius:var(--radius-alert)] rounded-slot',
   {
     variants: {
       variant: {
@@ -45,6 +45,8 @@ const Alert = React.memo<AlertProps>(
     closable = false,
     visible: controlledVisible,
     onClose,
+    closeButtonLabel = 'Close alert',
+    action,
     className,
     classNames,
     children,
@@ -52,6 +54,8 @@ const Alert = React.memo<AlertProps>(
   }) => {
     const [internalVisible, setInternalVisible] = React.useState(true)
     const isVisible = controlledVisible !== undefined ? controlledVisible : internalVisible
+    const titleId = React.useId()
+    const descriptionId = React.useId()
 
     if (!isVisible) return null
 
@@ -60,14 +64,19 @@ const Alert = React.memo<AlertProps>(
       onClose?.()
     }
 
+    const hasTitle = title != null
+    const hasDescription = description != null
+
     return (
       <div
         role="alert"
         data-slot="root"
+        aria-labelledby={hasTitle ? titleId : undefined}
+        aria-describedby={hasDescription ? descriptionId : undefined}
         className={cn(
           'alert_root',
           alertVariants({ variant, color, size }),
-          'animate-in fade-in-0 slide-in-from-top-2 duration-200',
+          '[--_duration:var(--duration-enter)] animate-in fade-in-0 slide-in-from-top-2 duration-slot',
           classNames?.root,
           className,
         )}
@@ -86,21 +95,23 @@ const Alert = React.memo<AlertProps>(
           data-slot="content"
           className={cn('alert_content', 'flex-1 min-w-0', classNames?.content)}
         >
-          {title && (
+          {hasTitle && (
             <div
+              id={titleId}
               data-slot="title"
               className={cn('alert_title', 'font-semibold', classNames?.title)}
             >
               {title}
             </div>
           )}
-          {description && (
+          {hasDescription && (
             <div
+              id={descriptionId}
               data-slot="description"
               className={cn(
                 'alert_description',
                 'opacity-90',
-                title && 'mt-1',
+                hasTitle && 'mt-1',
                 classNames?.description,
               )}
             >
@@ -109,6 +120,15 @@ const Alert = React.memo<AlertProps>(
           )}
           {children}
         </div>
+
+        {action && (
+          <div
+            data-slot="action"
+            className={cn('alert_action', 'shrink-0 flex items-center', classNames?.action)}
+          >
+            {action}
+          </div>
+        )}
 
         {closable && (
           <button
@@ -120,7 +140,7 @@ const Alert = React.memo<AlertProps>(
               'shrink-0 rounded-sm opacity-70 hover:opacity-100 transition-opacity cursor-pointer',
               classNames?.closeButton,
             )}
-            aria-label="Close alert"
+            aria-label={closeButtonLabel}
           >
             <X className={iconSizes[size]} />
           </button>

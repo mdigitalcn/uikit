@@ -36,7 +36,7 @@ const Skeleton = React.memo<SkeletonProps>(
 
     if (isLoaded && children) {
       return (
-        <div className="animate-in fade-in duration-300">
+        <div className="[--_duration:var(--duration-slow)] animate-in fade-in duration-slot">
           {children}
         </div>
       );

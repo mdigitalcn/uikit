@@ -1,508 +1,153 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
+import type { Meta, StoryObj } from "@storybook/react";
 import {
-  CheckCircle,
   AlertCircle,
-  Info,
   AlertTriangle,
   Bell,
-  Download,
-  Upload,
-  Mail,
-  Heart,
-  Star,
-  User,
-} from 'lucide-react'
-import Notification from './index'
-import Button from '../button'
+  CheckCircle2,
+  Info,
+  Rocket,
+} from "lucide-react";
+import React from "react";
+
+import Notification from "./index";
 
 const meta: Meta<typeof Notification> = {
-  title: 'Feedback/Notification',
+  title: "Feedback/Notification",
   component: Notification,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: 'select',
-      options: ['default', 'solid', 'outline', 'soft'],
-      description: 'Visual style variant',
+      control: "select",
+      options: ["default", "solid", "outline", "soft"],
     },
     color: {
-      control: 'select',
-      options: ['default', 'primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'],
-      description: 'Color theme',
+      control: "select",
+      options: ["primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
     size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Notification size',
+      control: "select",
+      options: ["xs", "sm", "md", "lg"],
     },
-    closable: {
-      control: 'boolean',
-      description: 'Show close button',
-    },
-    borderLine: {
-      control: 'boolean',
-      description: 'Show left accent border line (outline/soft variants)',
-    },
+    title: { control: "text" },
+    description: { control: "text" },
+    closable: { control: "boolean" },
+    borderLine: { control: "boolean" },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof Notification>
+export default meta;
+type Story = StoryObj<typeof Notification>;
 
-// Basic notification
-export const Default: Story = {
+export const Playground: Story = {
   args: {
-    title: 'Notification',
-    description: 'This is a notification message.',
+    title: "Notification title",
+    description: "This is a notification message with some details.",
+    variant: "soft",
+    color: "info",
+    size: "md",
+    closable: true,
+    borderLine: false,
   },
-}
+};
 
-// Success notifications
-export const SuccessNotifications: Story = {
+export const Showcase: Story = {
   render: () => (
-    <div className="space-y-4">
-      <Notification
-        variant="solid"
-        color="success"
-        title="Success!"
-        description="Your changes have been saved successfully."
-      />
-      <Notification
-        variant="soft"
-        color="success"
-        title="Upload Complete"
-        description="3 files have been uploaded to the cloud."
-      />
-      <Notification
-        variant="outline"
-        color="success"
-        title="Payment Received"
-        description="Payment of $150.00 has been processed."
-      />
-    </div>
-  ),
-}
-
-// Error notifications
-export const ErrorNotifications: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <Notification
-        variant="solid"
-        color="error"
-        title="Error"
-        description="Failed to save changes. Please try again."
-      />
-      <Notification
-        variant="soft"
-        color="error"
-        title="Upload Failed"
-        description="Could not upload file. Check your connection."
-      />
-      <Notification
-        variant="outline"
-        color="error"
-        title="Authentication Error"
-        description="Your session has expired. Please sign in again."
-      />
-    </div>
-  ),
-}
-
-// Warning notifications
-export const WarningNotifications: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <Notification
-        variant="solid"
-        color="warning"
-        title="Warning"
-        description="Your storage is almost full. Upgrade for more space."
-      />
-      <Notification
-        variant="soft"
-        color="warning"
-        title="Unsaved Changes"
-        description="You have unsaved changes that will be lost."
-      />
-      <Notification
-        variant="outline"
-        color="warning"
-        title="Scheduled Maintenance"
-        description="System will be down for maintenance at 2 AM."
-      />
-    </div>
-  ),
-}
-
-// Info notifications
-export const InfoNotifications: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <Notification
-        variant="solid"
-        color="info"
-        title="New Feature"
-        description="Check out our new dark mode in settings!"
-      />
-      <Notification
-        variant="soft"
-        color="info"
-        title="Update Available"
-        description="Version 2.0 is now available for download."
-      />
-      <Notification
-        variant="outline"
-        color="info"
-        title="Pro Tip"
-        description="Use keyboard shortcuts to speed up your workflow."
-      />
-    </div>
-  ),
-}
-
-// With action button
-export const WithAction: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <Notification
-        variant="soft"
-        color="primary"
-        title="New Message"
-        description="You have received a new message from John."
-        action={{
-          label: 'View Message',
-          onClick: () => alert('Opening message...'),
-        }}
-      />
-      <Notification
-        variant="soft"
-        color="success"
-        title="Backup Complete"
-        description="Your data has been backed up successfully."
-        action={{
-          label: 'View Details',
-          onClick: () => alert('Showing details...'),
-        }}
-      />
-      <Notification
-        variant="soft"
-        color="warning"
-        title="Storage Full"
-        description="You have used 95% of your storage space."
-        action={{
-          label: 'Upgrade Now',
-          onClick: () => alert('Redirecting to upgrade...'),
-        }}
-      />
-    </div>
-  ),
-}
-
-// Not closable
-export const NotClosable: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <Notification
-        closable={false}
-        variant="solid"
-        color="info"
-        title="Important Notice"
-        description="This notification cannot be dismissed."
-      />
-      <Notification
-        closable={false}
-        variant="soft"
-        color="warning"
-        title="System Update"
-        description="An update is required to continue."
-      />
-    </div>
-  ),
-}
-
-// Interactive example
-export const InteractiveDemo: Story = {
-  render: () => {
-    const [notifications, setNotifications] = useState<Array<{ id: number; type: string; message: string }>>([])
-
-    const addNotification = (type: 'success' | 'error' | 'warning' | 'info') => {
-      const messages = {
-        success: 'Operation completed successfully!',
-        error: 'An error occurred. Please try again.',
-        warning: 'Please review your input.',
-        info: 'Here is some helpful information.',
-      }
-
-      const id = Date.now()
-      setNotifications((prev) => [...prev, { id, type, message: messages[type] }])
-
-      // Auto-remove after 5 seconds
-      setTimeout(() => {
-        setNotifications((prev) => prev.filter((n) => n.id !== id))
-      }, 5000)
-    }
-
-    return (
-      <div>
-        <div className="flex gap-2 mb-6 flex-wrap">
-          <Button color="success" onClick={() => addNotification('success')}>
-            Show Success
-          </Button>
-          <Button color="error" onClick={() => addNotification('error')}>
-            Show Error
-          </Button>
-          <Button color="warning" onClick={() => addNotification('warning')}>
-            Show Warning
-          </Button>
-          <Button color="info" onClick={() => addNotification('info')}>
-            Show Info
-          </Button>
+    <div className="space-y-10 max-w-lg">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Variants</h3>
+        <div className="space-y-3">
+          <Notification variant="default" color="primary" title="Default variant" description="Uses slot background with border." icon={<Bell className="w-5 h-5" />} />
+          <Notification variant="solid" color="primary" title="Solid variant" description="Filled background with contrasting text." icon={<Bell className="w-5 h-5" />} />
+          <Notification variant="outline" color="primary" title="Outline variant" description="Transparent background with colored border and text." icon={<Bell className="w-5 h-5" />} />
+          <Notification variant="soft" color="primary" title="Soft variant" description="Subtle tinted background with colored text." icon={<Bell className="w-5 h-5" />} />
         </div>
+      </section>
 
-        <div className="fixed top-4 right-4 space-y-2 z-50" style={{ maxWidth: '400px' }}>
-          {notifications.map((notification) => (
-            <Notification
-              key={notification.id}
-              variant="soft"
-              color={notification.type as any}
-              title={notification.type.charAt(0).toUpperCase() + notification.type.slice(1)}
-              description={notification.message}
-              onClose={() => setNotifications((prev) => prev.filter((n) => n.id !== notification.id))}
-            />
-          ))}
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="space-y-3">
+          <Notification color="primary" title="Primary" description="Primary notification." icon={<Info className="w-5 h-5" />} />
+          <Notification color="secondary" title="Secondary" description="Secondary notification." icon={<Info className="w-5 h-5" />} />
+          <Notification color="accent" title="Accent" description="Accent notification." icon={<Info className="w-5 h-5" />} />
+          <Notification color="success" title="Success" description="Operation completed successfully." icon={<CheckCircle2 className="w-5 h-5" />} />
+          <Notification color="error" title="Error" description="Something went wrong." icon={<AlertCircle className="w-5 h-5" />} />
+          <Notification color="warning" title="Warning" description="Proceed with caution." icon={<AlertTriangle className="w-5 h-5" />} />
+          <Notification color="info" title="Info" description="Here is some useful information." icon={<Info className="w-5 h-5" />} />
         </div>
-      </div>
-    )
-  },
-}
+      </section>
 
-// With custom content
-export const CustomContent: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <Notification
-        variant="soft"
-        color="primary"
-        title="Download Ready"
-        description="Your file is ready to download."
-      >
-        <div className="flex items-center gap-2 mt-2">
-          <Button size="sm" leftIcon={<Download />}>
-            Download
-          </Button>
-          <Button size="sm" variant="outline">
-            Preview
-          </Button>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="space-y-3">
+          <Notification size="xs" color="info" icon={<Info className="w-4 h-4" />} title="Extra small" description="Compact notification." />
+          <Notification size="sm" color="info" icon={<Info className="w-4 h-4" />} title="Small" description="Small notification." />
+          <Notification size="md" color="info" icon={<Info className="w-5 h-5" />} title="Medium" description="Default notification size." />
+          <Notification size="lg" color="info" icon={<Info className="w-6 h-6" />} title="Large" description="Large notification for prominence." />
         </div>
-      </Notification>
+      </section>
 
-      <Notification
-        variant="soft"
-        color="info"
-        title="Update Available"
-      >
-        <div className="mt-2">
-          <p className="text-sm text-text-secondary mb-3">
-            Version 2.5.0 includes new features and bug fixes.
-          </p>
-          <ul className="list-disc list-inside text-sm text-text-secondary space-y-1">
-            <li>Improved performance</li>
-            <li>New dark mode</li>
-            <li>Bug fixes</li>
-          </ul>
-          <div className="mt-3">
-            <Button size="sm" color="info">
-              Update Now
-            </Button>
-          </div>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Action</h3>
+        <div className="space-y-3">
+          <Notification
+            color="info"
+            icon={<Rocket className="w-5 h-5" />}
+            title="Update available"
+            description="Version 2.0 is ready to install."
+            closable
+            action={{ label: "Update now", onClick: () => {} }}
+          />
+          <Notification
+            color="warning"
+            icon={<AlertTriangle className="w-5 h-5" />}
+            title="Storage almost full"
+            description="90% of your storage is used."
+            action={{ label: "Upgrade plan", onClick: () => {} }}
+          />
+          <Notification
+            color="success"
+            icon={<CheckCircle2 className="w-5 h-5" />}
+            title="Deployment successful"
+            description="Your app is now live at your domain."
+            action={{ label: "View live site", onClick: () => {} }}
+          />
         </div>
-      </Notification>
+      </section>
 
-      <Notification
-        variant="outline"
-        color="success"
-        title="Welcome!"
-      >
-        <div className="mt-2 space-y-2">
-          <p className="text-sm text-text-secondary">
-            Thanks for signing up! Here's what you can do next:
-          </p>
-          <div className="flex gap-2">
-            <Button size="sm" color="success" leftIcon={<User />}>
-              Complete Profile
-            </Button>
-            <Button size="sm" variant="outline">
-              Skip
-            </Button>
-          </div>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Border Line</h3>
+        <div className="space-y-3">
+          <Notification color="primary" title="Primary border line" description="Left accent border for emphasis." icon={<Info className="w-5 h-5" />} borderLine />
+          <Notification color="success" title="Success border line" description="Operation completed." icon={<CheckCircle2 className="w-5 h-5" />} borderLine />
+          <Notification color="error" title="Error border line" description="Something went wrong." icon={<AlertCircle className="w-5 h-5" />} borderLine />
+          <Notification color="warning" title="Warning border line" description="Please check your settings." icon={<AlertTriangle className="w-5 h-5" />} borderLine />
+          <Notification color="info" title="Info border line" description="Here is some context." icon={<Info className="w-5 h-5" />} borderLine />
         </div>
-      </Notification>
-    </div>
-  ),
-}
+      </section>
 
-// Real-world examples
-export const RealWorldExamples: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <Notification
-        variant="soft"
-        color="primary"
-        size="sm"
-        title="New message from Sarah"
-        description="Hey! Are you available for a quick call?"
-        action={{
-          label: 'Reply',
-          onClick: () => alert('Opening chat...'),
-        }}
-      />
-
-      <Notification
-        variant="soft"
-        color="success"
-        size="sm"
-        title="Upload complete"
-        description="document.pdf (2.4 MB)"
-        action={{
-          label: 'Open',
-          onClick: () => alert('Opening document...'),
-        }}
-      />
-
-      <Notification
-        variant="soft"
-        color="warning"
-        size="sm"
-        title="Connection unstable"
-        description="Your internet connection appears to be slow."
-        action={{
-          label: 'Retry',
-          onClick: () => alert('Retrying connection...'),
-        }}
-      />
-
-      <Notification
-        variant="soft"
-        color="error"
-        size="sm"
-        title="Payment failed"
-        description="Your card was declined. Please update your payment method."
-        action={{
-          label: 'Update',
-          onClick: () => alert('Opening payment settings...'),
-        }}
-      />
-
-      <Notification
-        variant="soft"
-        color="info"
-        size="sm"
-        title="Tip of the day"
-        description="Press Cmd+K to quickly search for anything."
-        closable
-      />
-    </div>
-  ),
-}
-
-// Toast-style notifications (positioned)
-export const ToastStyled: Story = {
-  render: () => {
-    const [toasts, setToasts] = useState<Array<{ id: number; color: string; message: string }>>([])
-
-    const showToast = (color: 'success' | 'error' | 'warning' | 'info') => {
-      const id = Date.now()
-      setToasts((prev) => [...prev, { id, color, message: `${color} toast notification` }])
-
-      setTimeout(() => {
-        setToasts((prev) => prev.filter((t) => t.id !== id))
-      }, 3000)
-    }
-
-    return (
-      <div>
-        <div className="flex gap-2 flex-wrap">
-          <Button color="success" onClick={() => showToast('success')}>
-            Success Toast
-          </Button>
-          <Button color="error" onClick={() => showToast('error')}>
-            Error Toast
-          </Button>
-          <Button color="warning" onClick={() => showToast('warning')}>
-            Warning Toast
-          </Button>
-          <Button color="info" onClick={() => showToast('info')}>
-            Info Toast
-          </Button>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Closable</h3>
+        <div className="space-y-3">
+          <Notification color="info" title="Dismissible notification" description="Click the X to close." icon={<Bell className="w-5 h-5" />} closable />
+          <Notification color="success" title="Auto-dismiss style" description="Mimics a toast-like card." icon={<CheckCircle2 className="w-5 h-5" />} closable variant="soft" />
         </div>
+      </section>
 
-        {/* Toast container */}
-        <div className="fixed bottom-4 right-4 space-y-2 z-50" style={{ maxWidth: '400px' }}>
-          {toasts.map((toast) => (
-            <Notification
-              key={toast.id}
-              variant="solid"
-              color={toast.color as any}
-              size="sm"
-              title={toast.message}
-              onClose={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
-            />
-          ))}
-        </div>
-      </div>
-    )
-  },
-}
-
-// Border Line comparison
-export const BorderLineComparison: Story = {
-  render: () => (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold mb-3">With border line (default)</h3>
-        <div className="space-y-2">
-          <Notification variant="outline" color="info" title="Outline" description="Left accent border visible." />
-          <Notification variant="soft" color="success" title="Soft" description="Left accent border visible." />
-        </div>
-      </div>
-      <div>
-        <h3 className="text-lg font-semibold mb-3">Without border line</h3>
-        <div className="space-y-2">
-          <Notification variant="outline" color="info" title="Outline" description="No left accent border." borderLine={false} />
-          <Notification variant="soft" color="success" title="Soft" description="No left accent border." borderLine={false} />
-        </div>
-      </div>
-    </div>
-  ),
-}
-
-// Color × Variant Matrix
-export const ColorVariantMatrix: Story = {
-  render: () => {
-    const colors = ['default', 'primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'] as const
-    const variants = ['default', 'solid', 'outline', 'soft'] as const
-
-    return (
-      <div className="space-y-8">
-        {variants.map((v) => (
-          <div key={v}>
-            <h3 className="text-lg font-semibold mb-3 capitalize">{v}</h3>
-            <div className="space-y-2">
-              {colors.map((c) => (
-                <Notification
-                  key={c}
-                  color={c}
-                  variant={v}
-                  title={`${c} ${v}`}
-                  description="Description text"
-                />
-              ))}
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Variants x Colors</h3>
+        <div className="space-y-4">
+          {(["default", "solid", "outline", "soft"] as const).map((variant) => (
+            <div key={variant} className="space-y-2">
+              <p className="text-xs text-text-secondary font-medium capitalize">{variant}</p>
+              <div className="space-y-2">
+                {(["success", "error", "warning", "info"] as const).map((color) => (
+                  <Notification key={color} variant={variant} color={color} title={`${variant} / ${color}`} size="sm" />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    )
-  },
-}
+          ))}
+        </div>
+      </section>
+    </div>
+  ),
+};

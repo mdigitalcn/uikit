@@ -4,6 +4,7 @@ import { cva } from "class-variance-authority";
 import React, { memo } from "react";
 
 import { cn } from "../utils";
+import { colorVars } from "../variants";
 import type {
   InputGroupAddonProps,
   InputGroupClassNames,
@@ -13,9 +14,13 @@ import type {
 } from "./types";
 
 const inputGroupVariants = cva(
-  "relative flex items-center w-full bg-background border border-border rounded-md transition-colors focus-within:border-primary",
+  "relative flex items-center w-full [--_radius:var(--radius-input)] rounded-slot transition-colors",
   {
     variants: {
+      variant: {
+        outline: "bg-background border border-border hover:border-slot-50 focus-within:border-slot focus-within:ring-2 focus-within:ring-slot-30",
+        filled: "bg-surface border border-transparent hover:border-slot-30 focus-within:border-slot focus-within:ring-2 focus-within:ring-slot-30",
+      },
       size: {
         xs: "h-(--input-height-xs)",
         sm: "h-(--input-height-sm)",
@@ -24,6 +29,7 @@ const inputGroupVariants = cva(
       },
     },
     defaultVariants: {
+      variant: "outline",
       size: "md",
     },
   },
@@ -64,14 +70,15 @@ const inputGroupAddonVariants = cva(
 );
 
 const InputGroup = memo<InputGroupProps>(
-  ({ children, size = "md", className, classNames, 'aria-label': ariaLabel }) => {
+  ({ children, variant = "outline", size = "md", color = "primary", className, classNames, 'aria-label': ariaLabel }) => {
     return (
       <div
         data-slot="inputGroup_root"
         role="group"
         className={cn(
           "inputGroup_root",
-          inputGroupVariants({ size }),
+          inputGroupVariants({ variant, size }),
+          colorVars[color],
           classNames?.root,
           className,
         )}

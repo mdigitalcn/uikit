@@ -1,4 +1,4 @@
-import type { ComponentColor, ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages } from '../types'
 
 export type MultiSelectSize = ComponentSize
 
@@ -23,19 +23,19 @@ export interface MultiSelectClassNames {
   helper?: string
 }
 
+export type MultiSelectVariant = 'outline' | 'filled'
+
 export interface MultiSelectProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size' | 'onChange'> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size' | 'onChange'>,
+    ValidationMessages {
+  /** @default 'outline' */
+  variant?: MultiSelectVariant
   size?: MultiSelectSize
-  /** Color for focus ring, selected options, and active border
-   * @default 'primary'
-   */
+  /** @default 'bottom' */
+  messagePosition?: 'top' | 'bottom'
+  /** @default 'primary' */
   color?: ComponentColor
   label?: string
-  helperText?: string
-  error?: string | boolean
-  warning?: string | boolean
-  info?: string | boolean
-  success?: string | boolean
   options?: MultiSelectOption[]
   placeholder?: string
   loading?: boolean

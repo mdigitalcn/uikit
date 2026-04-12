@@ -5,7 +5,7 @@
  * To avoid global CSS side-effects, import this explicitly
  * in your app instead of letting the component do it:
  *
- *   import '@fmlj/uikit/carousel/styles'
+ *   import '@mdigitalcn/uikit/carousel/styles'
  */
 import 'swiper/css'
 import 'swiper/css/pagination'

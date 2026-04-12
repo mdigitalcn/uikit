@@ -6,8 +6,6 @@ import React, { useEffect, useId, useRef } from 'react'
 import { cn } from '../utils'
 import type { ScrollAreaProps, ScrollAreaSize } from './types'
 
-const stylesInjected = new Set<string>()
-
 /**
  * Scrollbar thickness by size
  */
@@ -59,11 +57,9 @@ const ScrollArea = React.memo<ScrollAreaProps>(
     }
 
     useEffect(() => {
-      if (!stylesInjected.has(scrollClass)) {
-        const baseOpacity = scrollbarVisibility === 'hover' ? '0' : '1'
-        const hoverOpacity = '1'
+      const baseOpacity = scrollbarVisibility === 'hover' ? '0' : '1'
 
-        const scrollbarStyles = `
+      const scrollbarStyles = `
         .${scrollClass} {
           scrollbar-width: thin;
           scrollbar-color: hsl(var(--color-border)) transparent;
@@ -93,7 +89,7 @@ const ScrollArea = React.memo<ScrollAreaProps>(
         ${
           scrollbarVisibility === 'hover'
             ? `.${scrollClass}:hover::-webkit-scrollbar-thumb {
-          opacity: ${hoverOpacity};
+          opacity: 1;
         }`
             : ''
         }
@@ -103,17 +99,19 @@ const ScrollArea = React.memo<ScrollAreaProps>(
         }
       `
 
+      if (styleElRef.current) {
+        styleElRef.current.textContent = scrollbarStyles
+      } else {
         const styleEl = document.createElement('style')
         styleEl.textContent = scrollbarStyles
         document.head.appendChild(styleEl)
         styleElRef.current = styleEl
-        stylesInjected.add(scrollClass)
       }
 
       return () => {
         if (styleElRef.current) {
           document.head.removeChild(styleElRef.current)
-          stylesInjected.delete(scrollClass)
+          styleElRef.current = null
         }
       }
     }, [scrollClass, direction, thickness, scrollbarVisibility])

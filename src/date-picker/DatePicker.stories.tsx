@@ -1,299 +1,222 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
-import { DatePicker } from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+import { DatePicker, RangePicker, TimePicker } from "./index";
 
 const meta: Meta<typeof DatePicker> = {
-  title: 'Data Entry/DatePicker',
+  title: "Form/DatePicker",
   component: DatePicker,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    variant: {
-      control: 'select',
-      options: ['outline', 'filled'],
-      description: 'Visual style variant',
+    variant: { control: "select", options: ["outline", "filled"] },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    color: {
+      control: "select",
+      options: ["primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'DatePicker size',
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    clearable: {
-      control: 'boolean',
-      description: 'Show clear button',
-    },
-    fullWidth: {
-      control: 'boolean',
-      description: 'Full width picker',
-    },
-    messagePosition: {
-      control: 'select',
-      options: ['top', 'bottom'],
-      description: 'Position of validation messages',
-    },
+    disabled: { control: "boolean" },
+    clearable: { control: "boolean" },
+    fullWidth: { control: "boolean" },
+    required: { control: "boolean" },
+    placeholder: { control: "text" },
+    label: { control: "text" },
+    helperText: { control: "text" },
+    error: { control: "text" },
+    warning: { control: "text" },
+    success: { control: "text" },
+    info: { control: "text" },
+    dateFormat: { control: "text" },
+    messagePosition: { control: "select", options: ["top", "bottom"] },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof DatePicker>
+export default meta;
+type Story = StoryObj<typeof DatePicker>;
 
-export const Primary: Story = {
+export const Playground: Story = {
   args: {
-    placeholder: 'Select date...',
-    variant: 'outline',
-    size: 'md',
+    label: "Select date",
+    placeholder: "MM/dd/yyyy",
+    variant: "outline",
+    size: "md",
+    color: "primary",
+    clearable: true,
+    fullWidth: true,
+    dateFormat: "MM/dd/yyyy",
   },
-}
+};
 
-export const ValidationStates: Story = {
+export const Showcase: Story = {
   render: () => (
-    <div className="flex flex-col gap-4">
-      <DatePicker
-        label="Success"
-        placeholder="Valid date"
-        success="Date is valid!"
-        defaultValue={new Date()}
-      />
-      <DatePicker
-        label="Error"
-        placeholder="Invalid date"
-        error="This field is required"
-      />
-      <DatePicker
-        label="Warning"
-        placeholder="Warning date"
-        warning="This date might be incorrect"
-        defaultValue={new Date()}
-      />
+    <div className="space-y-10 max-w-md">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Variants</h3>
+        <div className="space-y-3">
+          <DatePicker label="Outline" variant="outline" placeholder="MM/dd/yyyy" clearable />
+          <DatePicker label="Filled" variant="filled" placeholder="MM/dd/yyyy" clearable />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="space-y-3">
+          {(["xs", "sm", "md", "lg"] as const).map((size) => (
+            <DatePicker key={size} label={`Size: ${size}`} size={size} placeholder="MM/dd/yyyy" />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="space-y-3">
+          {(["primary", "secondary", "accent", "success", "error", "warning", "info"] as const).map((color) => (
+            <DatePicker key={color} label={color} color={color} placeholder="MM/dd/yyyy" />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Validation States</h3>
+        <div className="space-y-3">
+          <DatePicker
+            label="Error state"
+            error="Please select a valid date"
+          />
+          <DatePicker
+            label="Warning state"
+            warning="Selected date is in the past"
+          />
+          <DatePicker
+            label="Success state"
+            defaultValue={new Date("2025-06-15")}
+            success="Date confirmed"
+          />
+          <DatePicker
+            label="Info state"
+            info="Select a date within the next 30 days"
+          />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Date Constraints</h3>
+        <div className="space-y-3">
+          <DatePicker
+            label="Min date (today)"
+            minDate={new Date()}
+            helperText="Cannot select past dates"
+            clearable
+          />
+          <DatePicker
+            label="Max date (today)"
+            maxDate={new Date()}
+            helperText="Cannot select future dates"
+            clearable
+          />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Date Formats</h3>
+        <div className="space-y-3">
+          <DatePicker
+            label="MM/dd/yyyy"
+            dateFormat="MM/dd/yyyy"
+            defaultValue={new Date("2025-06-15")}
+          />
+          <DatePicker
+            label="dd/MM/yyyy"
+            dateFormat="dd/MM/yyyy"
+            defaultValue={new Date("2025-06-15")}
+          />
+          <DatePicker
+            label="yyyy-MM-dd"
+            dateFormat="yyyy-MM-dd"
+            defaultValue={new Date("2025-06-15")}
+          />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Range Picker</h3>
+        <div className="space-y-3">
+          <RangePicker
+            label="Date range"
+            placeholder="Select range..."
+            clearable
+          />
+          <RangePicker
+            label="Filled range picker"
+            variant="filled"
+            placeholder="Select range..."
+            clearable
+          />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Time Picker</h3>
+        <div className="space-y-3">
+          <TimePicker
+            label="Select time"
+            placeholder="HH:mm"
+            clearable
+          />
+          <TimePicker
+            label="30-minute intervals"
+            placeholder="HH:mm"
+            timeIntervals={30}
+            clearable
+          />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">States</h3>
+        <div className="space-y-3">
+          <DatePicker
+            label="Disabled"
+            defaultValue={new Date("2025-06-15")}
+            disabled
+          />
+          <DatePicker
+            label="Required"
+            required
+            placeholder="Required field"
+          />
+        </div>
+      </section>
     </div>
   ),
-}
+};
 
-export const DateConstraints: Story = {
-  name: 'Min/Max Date Constraints',
-  render: () => {
-    const today = new Date()
-    const minDate = new Date()
-    minDate.setDate(today.getDate() - 7)
-    const maxDate = new Date()
-    maxDate.setDate(today.getDate() + 30)
-
-    return (
-      <div className="flex flex-col gap-4">
-        <DatePicker
-          label="Future Dates Only"
-          placeholder="Select future date"
-          minDate={today}
-          helperText="Only dates from today onwards"
-        />
-        <DatePicker
-          label="Date Range (Last 7 Days to Next 30 Days)"
-          placeholder="Select date in range"
-          minDate={minDate}
-          maxDate={maxDate}
-          helperText="Between last week and next month"
-        />
-      </div>
-    )
-  },
-}
-
-export const AllSizes: Story = {
-  name: 'All Sizes (Icon Alignment)',
+export const RangePickerStory: Story = {
+  name: "Range Picker",
   render: () => (
-    <div className="flex flex-col gap-4">
-      <DatePicker size="xs" label="Extra Small" placeholder="xs" clearable defaultValue={new Date()} />
-      <DatePicker size="sm" label="Small" placeholder="sm" clearable defaultValue={new Date()} />
-      <DatePicker size="md" label="Medium" placeholder="md" clearable defaultValue={new Date()} />
-      <DatePicker size="lg" label="Large" placeholder="lg" clearable defaultValue={new Date()} />
+    <div className="space-y-4 max-w-md">
+      <RangePicker label="Default range" clearable placeholder="Select range..." />
+      <RangePicker
+        label="With pre-selected range"
+        defaultStartDate={new Date("2025-06-01")}
+        defaultEndDate={new Date("2025-06-30")}
+        clearable
+      />
+      <RangePicker label="Filled variant" variant="filled" clearable placeholder="Select range..." />
+      <RangePicker label="Error state" error="End date must be after start date" />
+      <RangePicker label="Disabled" disabled defaultStartDate={new Date("2025-06-01")} defaultEndDate={new Date("2025-06-30")} />
     </div>
   ),
-}
+};
 
-export const Disabled: Story = {
+export const TimePickerStory: Story = {
+  name: "Time Picker",
   render: () => (
-    <DatePicker
-      disabled
-      label="Disabled with label"
-      placeholder="Cannot interact"
-      defaultValue={new Date()}
-    />
+    <div className="space-y-4 max-w-md">
+      <TimePicker label="Default time" clearable placeholder="HH:mm" />
+      <TimePicker label="15-minute intervals" timeIntervals={15} clearable placeholder="HH:mm" />
+      <TimePicker label="30-minute intervals" timeIntervals={30} clearable placeholder="HH:mm" />
+      <TimePicker label="Filled variant" variant="filled" clearable placeholder="HH:mm" />
+      <TimePicker label="Error state" error="Please select a valid time" />
+      <TimePicker label="Disabled" disabled defaultValue={new Date()} />
+    </div>
   ),
-}
-
-export const ControlledExample: Story = {
-  render: () => {
-    const [date, setDate] = useState<Date | null>(null)
-
-    return (
-      <div className="flex flex-col gap-4">
-        <DatePicker
-          label="Controlled Date Picker"
-          placeholder="Select date"
-          value={date}
-          onChange={setDate}
-          clearable
-        />
-        <div className="text-sm text-text-muted">
-          Selected date: {date ? date.toLocaleDateString() : 'None'}
-        </div>
-        <button
-          onClick={() => setDate(new Date())}
-          className="px-4 py-2 bg-primary text-background rounded-md hover:bg-primary/90 transition-colors"
-        >
-          Set to Today
-        </button>
-      </div>
-    )
-  },
-}
-
-export const ComplexExample: Story = {
-  render: () => {
-    const [startDate, setStartDate] = useState<Date | null>(null)
-    const [endDate, setEndDate] = useState<Date | null>(null)
-
-    const today = new Date()
-    const maxDate = new Date()
-    maxDate.setDate(today.getDate() + 365)
-
-    return (
-      <div className="flex flex-col gap-4 max-w-md">
-        <DatePicker
-          label="Start Date"
-          placeholder="Select start date"
-          value={startDate}
-          onChange={(date) => {
-            setStartDate(date)
-            if (endDate && date && endDate < date) {
-              setEndDate(null)
-            }
-          }}
-          minDate={today}
-          maxDate={maxDate}
-          clearable
-          helperText="Select a start date for your event"
-          required
-        />
-        <DatePicker
-          label="End Date"
-          placeholder="Select end date"
-          value={endDate}
-          onChange={setEndDate}
-          minDate={startDate || today}
-          maxDate={maxDate}
-          clearable
-          disabled={!startDate}
-          helperText={
-            !startDate ? 'Please select a start date first' : 'Must be after start date'
-          }
-          required
-        />
-      </div>
-    )
-  },
-}
-
-// RangePicker Stories
-export const RangePickerBasic: Story = {
-  name: 'RangePicker - Basic',
-  render: () => (
-    <DatePicker.RangePicker
-      label="Date Range"
-      placeholder="Choose start and end dates"
-    />
-  ),
-}
-
-export const RangePickerControlled: Story = {
-  name: 'RangePicker - Controlled',
-  render: () => {
-    const [dates, setDates] = useState<[Date | null, Date | null]>([null, null])
-
-    const getDaysBetween = () => {
-      if (dates[0] && dates[1]) {
-        const diffTime = Math.abs(dates[1].getTime() - dates[0].getTime())
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-        return diffDays
-      }
-      return 0
-    }
-
-    return (
-      <div className="flex flex-col gap-4">
-        <DatePicker.RangePicker
-          label="Controlled Range Picker"
-          placeholder="Select date range"
-          startDate={dates[0]}
-          endDate={dates[1]}
-          onChange={setDates}
-          clearable
-        />
-        <div className="text-sm text-text-muted">
-          {dates[0] && dates[1] ? (
-            <>
-              <div>Start: {dates[0].toLocaleDateString()}</div>
-              <div>End: {dates[1].toLocaleDateString()}</div>
-              <div>Days between: {getDaysBetween()}</div>
-            </>
-          ) : (
-            'No range selected'
-          )}
-        </div>
-        <button
-          onClick={() => {
-            const today = new Date()
-            const nextWeek = new Date(today)
-            nextWeek.setDate(today.getDate() + 7)
-            setDates([today, nextWeek])
-          }}
-          className="px-4 py-2 bg-primary text-background rounded-md hover:bg-primary/90 transition-colors"
-        >
-          Set to This Week
-        </button>
-      </div>
-    )
-  },
-}
-
-// TimePicker Stories
-export const TimePickerBasic: Story = {
-  name: 'TimePicker - Basic',
-  render: () => (
-    <DatePicker.TimePicker
-      label="Meeting Time"
-      placeholder="Choose time"
-    />
-  ),
-}
-
-export const TimePickerControlled: Story = {
-  name: 'TimePicker - Controlled',
-  render: () => {
-    const [time, setTime] = useState<Date | null>(null)
-
-    return (
-      <div className="flex flex-col gap-4">
-        <DatePicker.TimePicker
-          label="Controlled Time Picker"
-          placeholder="Select time"
-          value={time}
-          onChange={setTime}
-          clearable
-        />
-        <div className="text-sm text-text-muted">
-          Selected time: {time ? time.toLocaleTimeString() : 'None'}
-        </div>
-        <button
-          onClick={() => setTime(new Date())}
-          className="px-4 py-2 bg-primary text-background rounded-md hover:bg-primary/90 transition-colors"
-        >
-          Set to Current Time
-        </button>
-      </div>
-    )
-  },
-}
+};

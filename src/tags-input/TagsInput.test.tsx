@@ -39,7 +39,7 @@ describe('TagsInput', () => {
   it('removes last tag on Backspace when input empty', () => {
     const onChange = vi.fn()
     render(<TagsInput defaultValue={['React', 'Vue']} onChange={onChange} />)
-    const input = screen.getByRole('textbox')
+    const input = screen.getByRole('combobox')
     fireEvent.keyDown(input, { key: 'Backspace' })
     expect(onChange).toHaveBeenCalledWith(['React'])
   })
@@ -47,7 +47,7 @@ describe('TagsInput', () => {
   it('prevents duplicates by default', () => {
     const onChange = vi.fn()
     render(<TagsInput defaultValue={['React']} onChange={onChange} />)
-    const input = screen.getByRole('textbox')
+    const input = screen.getByRole('combobox')
     fireEvent.change(input, { target: { value: 'React' } })
     fireEvent.keyDown(input, { key: 'Enter' })
     expect(onChange).not.toHaveBeenCalled()

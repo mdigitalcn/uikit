@@ -10,7 +10,7 @@ import { colorVars } from '../variants'
 import type { NotificationProps } from './types'
 
 const notificationVariants = cva(
-  'relative flex gap-3 rounded-md transition-colors',
+  'relative flex gap-3 [--_radius:var(--radius-alert)] rounded-slot transition-colors',
   {
     variants: {
       variant: {

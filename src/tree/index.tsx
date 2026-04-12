@@ -7,10 +7,11 @@ import React from 'react'
 import { Check, ChevronRight, Minus } from 'lucide-react'
 
 import { cn, iconSizes } from '../utils'
+import { colorVars } from '../variants'
 import type { TreeNode, TreeProps } from './types'
 
 const treeItemVariants = cva(
-  'flex items-center gap-2 px-2 rounded cursor-pointer select-none transition-colors duration-200 ease-out',
+  'flex items-center gap-2 px-2 rounded cursor-pointer select-none transition-colors duration-slot ease-out',
   {
     variants: {
       size: {
@@ -24,7 +25,7 @@ const treeItemVariants = cva(
         false: 'hover:bg-surface',
       },
       selected: {
-        true: 'bg-primary/10 text-primary',
+        true: 'bg-slot-10 text-slot',
         false: 'text-text-primary',
       },
     },
@@ -66,6 +67,7 @@ const Tree = React.memo<TreeProps>(
     defaultSelectedKeys = [],
     onSelect,
     disabled = false,
+    color = 'primary',
     size = 'md',
     showLine = false,
     showIcon = true,
@@ -325,7 +327,7 @@ const Tree = React.memo<TreeProps>(
             aria-disabled={!!node.disabled || undefined}
             className={cn(
               'tree_node',
-              'relative animate-in fade-in slide-in-from-top-1 duration-200',
+              'relative animate-in fade-in slide-in-from-top-1 duration-slot',
               classNames?.node,
             )}
           >
@@ -337,7 +339,6 @@ const Tree = React.memo<TreeProps>(
                   disabled: !!node.disabled,
                   selected: checkable ? false : isSelected,
                 }),
-                className,
                 classNames?.nodeContent,
               )}
             >
@@ -371,7 +372,7 @@ const Tree = React.memo<TreeProps>(
                   }}
                   className={cn(
                     'tree_expandIcon',
-                    'shrink-0 hover:text-primary transition-colors duration-200',
+                    'shrink-0 hover:text-slot transition-colors duration-slot',
                     classNames?.expandIcon,
                   )}
                   disabled={disabled || node.disabled}
@@ -379,7 +380,7 @@ const Tree = React.memo<TreeProps>(
                   <ChevronRight
                     className={cn(
                       iconSizes[size],
-                      'transition-transform duration-300 ease-out',
+                      '[--_duration:var(--duration-slow)] transition-transform duration-slot ease-out',
                       isExpanded && 'rotate-90',
                     )}
                   />
@@ -406,20 +407,20 @@ const Tree = React.memo<TreeProps>(
                     }
                   }}
                   className={cn(
-                    'w-4 h-4 border rounded flex items-center justify-center shrink-0 cursor-pointer transition-[colors,transform] duration-200',
-                    'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1',
+                    'w-4 h-4 border rounded flex items-center justify-center shrink-0 cursor-pointer transition-[colors,transform] duration-slot',
+                    'focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-1',
                     checkState?.checked
-                      ? 'bg-primary border-primary'
+                      ? 'bg-slot border-slot'
                       : 'border-border',
                     (disabled || node.disabled) &&
                       'opacity-50 cursor-not-allowed',
                   )}
                 >
                   {checkState?.checked && (
-                    <Check className="h-3 w-3 text-background animate-in zoom-in-50 duration-200" />
+                    <Check className="h-3 w-3 text-background animate-in zoom-in-50 duration-slot" />
                   )}
                   {checkState?.indeterminate && !checkState?.checked && (
-                    <Minus className="h-3 w-3 text-primary animate-in zoom-in-50 duration-200" />
+                    <Minus className="h-3 w-3 text-slot animate-in zoom-in-50 duration-slot" />
                   )}
                 </div>
               )}
@@ -482,7 +483,7 @@ const Tree = React.memo<TreeProps>(
       <div
         ref={shouldVirtualize ? scrollRef : undefined}
         data-slot="root"
-        className={cn('tree_root', 'w-full', shouldVirtualize && 'overflow-auto', className, classNames?.root)}
+        className={cn('tree_root', 'w-full', colorVars[color], shouldVirtualize && 'overflow-auto', className, classNames?.root)}
         style={shouldVirtualize ? { maxHeight: '400px' } : undefined}
       >
         {shouldVirtualize ? (

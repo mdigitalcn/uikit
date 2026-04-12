@@ -68,9 +68,12 @@ const MenuItems = React.memo<MenuItemsProps>(
 
     // Document-level keyboard listener (content is in a portal)
     useEffect(() => {
+      const HANDLED = new Set(["ArrowDown", "ArrowUp", "Home", "End", "Enter", " ", "Escape", "Tab"]);
       const listener = (e: KeyboardEvent) => {
-        handleKeyDown(e);
-        e.stopImmediatePropagation();
+        if (HANDLED.has(e.key)) {
+          handleKeyDown(e);
+          e.stopImmediatePropagation();
+        }
       };
       document.addEventListener("keydown", listener);
       return () => document.removeEventListener("keydown", listener);
@@ -156,7 +159,7 @@ const MenuItems = React.memo<MenuItemsProps>(
                   align="start"
                   data-slot="submenu"
                   className={cn(
-                    "menubar_submenu min-w-[200px] w-auto p-1 rounded-md",
+                    "menubar_submenu min-w-(--dropdown-min-width) w-auto p-1 [--_radius:var(--radius-dropdown)] rounded-slot",
                     classNames?.submenu,
                   )}
                   onOpenAutoFocus={(e) => e.preventDefault()}
@@ -377,7 +380,7 @@ const Menubar = React.memo<MenubarProps>(
               sideOffset={4}
               data-slot="content"
               className={cn(
-                "menubar_content min-w-[200px] w-auto p-1 rounded-md",
+                "menubar_content min-w-(--dropdown-min-width) w-auto p-1 [--_radius:var(--radius-dropdown)] rounded-slot",
                 classNames?.content,
               )}
               onOpenAutoFocus={(e) => e.preventDefault()}

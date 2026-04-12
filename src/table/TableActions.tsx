@@ -67,7 +67,7 @@ export function TableActions({
           <Button
             variant="outline"
             size="sm"
-            leftIcon={<Columns3 className={iconSizes[size]} />}
+            startSection={<Columns3 className={iconSizes[size]} />}
           >
             Columns
           </Button>

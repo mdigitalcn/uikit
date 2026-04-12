@@ -5,19 +5,20 @@ import { Pagination } from 'swiper/modules'
 import { Swiper } from 'swiper/react'
 import { PaginationOptions, Swiper as SwiperType } from 'swiper/types'
 
-// Swiper styles — also available as separate import: '@fmlj/uikit/carousel/styles'
+// Swiper styles — also available as separate import: '@mdigitalcn/uikit/carousel/styles'
 import './styles'
 
 import { cn } from '../utils'
+import { colorVars } from '../variants'
 import { CarouselNavigation } from './carousel-navigation'
 import type { CarouselProps } from './types'
 
 const pagination: PaginationOptions = {
   clickable: true,
   horizontalClass: 'pagination',
-  bulletActiveClass: 'bg-text-primary',
+  bulletActiveClass: 'bg-slot',
   bulletClass:
-    'inline-flex w-2.5 h-2.5 mx-1 rounded-full bg-border opacity-70 transition-[opacity,colors] duration-300 cursor-pointer hover:opacity-100',
+    '[--_duration:var(--duration-slow)] inline-flex w-2.5 h-2.5 mx-1 rounded-full bg-border opacity-70 transition-[opacity,colors] duration-slot cursor-pointer hover:opacity-100',
 }
 
 const Carousel = React.memo<CarouselProps>(
@@ -26,6 +27,7 @@ const Carousel = React.memo<CarouselProps>(
     withPagination = false,
     children,
     loop = false,
+    color = 'primary',
     className,
     classNames,
     modules,
@@ -40,6 +42,7 @@ const Carousel = React.memo<CarouselProps>(
         className={cn(
           'carousel_root',
           'relative h-full group',
+          colorVars[color],
           classNames?.root,
           className
         )}
@@ -50,7 +53,7 @@ const Carousel = React.memo<CarouselProps>(
         {withArrows && (
           <div className={cn(
             'carousel_navigation',
-            'absolute -translate-y-1/2 top-1/2 left-0 flex px-1 z-10 opacity-0 group-hover:opacity-100 transition-[opacity,colors] duration-200',
+            'absolute -translate-y-1/2 top-1/2 left-0 flex px-1 z-10 opacity-0 group-hover:opacity-100 transition-[opacity,colors] duration-slot',
             classNames?.navigation
           )}>
             <CarouselNavigation
@@ -77,7 +80,7 @@ const Carousel = React.memo<CarouselProps>(
         {withArrows && (
           <div className={cn(
             'carousel_navigation',
-            'absolute -translate-y-1/2 top-1/2 right-0 flex px-1 z-10 opacity-0 group-hover:opacity-100 transition-[opacity,colors] duration-200',
+            'absolute -translate-y-1/2 top-1/2 right-0 flex px-1 z-10 opacity-0 group-hover:opacity-100 transition-[opacity,colors] duration-slot',
             classNames?.navigation
           )}>
             <CarouselNavigation

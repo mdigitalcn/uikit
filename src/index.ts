@@ -1,5 +1,5 @@
 /**
- * @fmlj/uikit - Main Exports
+ * @mdigitalcn/uikit - Main Exports
  * Modern React component library built with Tailwind CSS v4
  */
 

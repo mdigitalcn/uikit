@@ -211,7 +211,7 @@ const Dropdown = React.memo<DropdownProps>(
           </PopoverTrigger>
 
           <PopoverContent
-            className="p-0 min-w-[140px]"
+            className="p-0 min-w-(--dropdown-min-width)"
             align={position === "left" ? "start" : "end"}
             sideOffset={4}
             color={color}

@@ -1,18 +1,18 @@
 <div align="center">
 
-# @fmlj/uikit
+# @mdigitalcn/uikit
 
 **A modern React component library built for speed.**
 
 76 components · Tailwind CSS v4 · Slot-based theming · Tree-shakeable
 
-[![CI](https://github.com/fmlj/uikit/actions/workflows/ci.yml/badge.svg)](https://github.com/fmlj/uikit/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/@fmlj/uikit?color=blue)](https://www.npmjs.com/package/@fmlj/uikit)
-[![downloads](https://img.shields.io/npm/dm/@fmlj/uikit?color=green)](https://www.npmjs.com/package/@fmlj/uikit)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/@fmlj/uikit)](https://bundlephobia.com/package/@fmlj/uikit)
-[![license](https://img.shields.io/github/license/fmlj/uikit)](https://github.com/fmlj/uikit/blob/main/LICENSE)
+[![CI](https://github.com/mdigitalcn/uikit/actions/workflows/ci.yml/badge.svg)](https://github.com/mdigitalcn/uikit/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@mdigitalcn/uikit?color=blue)](https://www.npmjs.com/package/@mdigitalcn/uikit)
+[![downloads](https://img.shields.io/npm/dm/@mdigitalcn/uikit?color=green)](https://www.npmjs.com/package/@mdigitalcn/uikit)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@mdigitalcn/uikit)](https://bundlephobia.com/package/@mdigitalcn/uikit)
+[![license](https://img.shields.io/github/license/mdigitalcn/uikit)](https://github.com/mdigitalcn/uikit/blob/main/LICENSE)
 
-[Changelog](https://github.com/fmlj/uikit/releases) · [Report Bug](https://github.com/fmlj/uikit/issues/new?template=bug_report.md) · [Request Feature](https://github.com/fmlj/uikit/issues/new?template=feature_request.md)
+[Changelog](https://github.com/mdigitalcn/uikit/releases) · [Report Bug](https://github.com/mdigitalcn/uikit/issues/new?template=bug_report.md) · [Request Feature](https://github.com/mdigitalcn/uikit/issues/new?template=feature_request.md)
 
 </div>
 
@@ -20,7 +20,7 @@
 
 ## Why This Library?
 
-| | @fmlj/uikit | shadcn/ui | Ant Design | Chakra UI |
+| | @mdigitalcn/uikit | shadcn/ui | Ant Design | Chakra UI |
 |---|---|---|---|---|
 | **Theming** | Slot-based color system — 1 prop themes everything | Copy-paste, manual | Token config object | colorScheme prop |
 | **Tailwind** | v4 native (`@theme`, `@source`) | v3 with config | No Tailwind | No Tailwind |
@@ -57,9 +57,9 @@ Not "works with Tailwind" — **built on v4's architecture**:
 Every component is its own entry point. Import what you use, ship only what you use:
 
 ```tsx
-import Button from '@fmlj/uikit/button'     // just Button
-import Table from '@fmlj/uikit/table'        // just Table
-import { useTheme } from '@fmlj/uikit/theme' // just the hook
+import Button from '@mdigitalcn/uikit/button'     // just Button
+import Table from '@mdigitalcn/uikit/table'        // just Table
+import { useTheme } from '@mdigitalcn/uikit/theme' // just the hook
 ```
 
 ---
@@ -67,7 +67,7 @@ import { useTheme } from '@fmlj/uikit/theme' // just the hook
 ## Quick Start
 
 ```bash
-npm install @fmlj/uikit
+npm install @mdigitalcn/uikit
 ```
 
 > **Peer deps:** `react` ≥18, `react-dom` ≥18, `lucide-react` ≥0.400, `tailwindcss` ≥4.0
@@ -78,7 +78,7 @@ Your project needs Tailwind CSS v4 with `@tailwindcss/vite` or `@tailwindcss/pos
 
 ```css
 @import "tailwindcss";
-@import "@fmlj/uikit/styles/global.css";
+@import "@mdigitalcn/uikit/styles/global.css";
 ```
 
 That's it. One import. Tokens, dark mode, utilities, component styles — all included.
@@ -86,9 +86,9 @@ That's it. One import. Tokens, dark mode, utilities, component styles — all in
 ### Use It
 
 ```tsx
-import Button from '@fmlj/uikit/button'
-import Input from '@fmlj/uikit/input'
-import Select from '@fmlj/uikit/select'
+import Button from '@mdigitalcn/uikit/button'
+import Input from '@mdigitalcn/uikit/input'
+import Select from '@mdigitalcn/uikit/select'
 
 function App() {
   return (
@@ -106,7 +106,7 @@ function App() {
 ## Dark Mode
 
 ```tsx
-import { ThemeProvider, useTheme } from '@fmlj/uikit/theme'
+import { ThemeProvider, useTheme } from '@mdigitalcn/uikit/theme'
 
 <ThemeProvider defaultTheme="system">
   <App />
@@ -120,7 +120,7 @@ setTheme('dark') // 'light' | 'dark' | 'system'
 SSR flash prevention — add to `<head>`:
 
 ```tsx
-import { getThemeScript } from '@fmlj/uikit/theme'
+import { getThemeScript } from '@mdigitalcn/uikit/theme'
 
 <script dangerouslySetInnerHTML={{ __html: getThemeScript() }} />
 ```
@@ -130,8 +130,8 @@ All components use CSS custom properties. Dark mode swaps values at `:root`. Zer
 ## Theme Presets
 
 ```css
-@import "@fmlj/uikit/styles/global.css";
-@import "@fmlj/uikit/styles/themes/presets/corporate.css";
+@import "@mdigitalcn/uikit/styles/global.css";
+@import "@mdigitalcn/uikit/styles/themes/presets/corporate.css";
 ```
 
 ```html
@@ -146,7 +146,7 @@ Override after our import — no `!important` needed:
 
 ```css
 @import "tailwindcss";
-@import "@fmlj/uikit/styles/global.css";
+@import "@mdigitalcn/uikit/styles/global.css";
 
 /* Your overrides — just plain :root, wins by source order */
 :root {
@@ -223,33 +223,33 @@ Per-component:
 
 | Component | Import |
 |-----------|--------|
-| Input | `@fmlj/uikit/input` |
-| FloatInput | `@fmlj/uikit/float-input` |
-| InputPassword | `@fmlj/uikit/input-password` |
-| InputOTP | `@fmlj/uikit/input-otp` |
-| InputGroup | `@fmlj/uikit/input-group` |
-| NumberInput | `@fmlj/uikit/number-input` |
-| Textarea | `@fmlj/uikit/textarea` |
-| Select | `@fmlj/uikit/select` |
-| MultiSelect | `@fmlj/uikit/multi-select` |
-| Cascader | `@fmlj/uikit/cascader` |
-| TreeSelect | `@fmlj/uikit/tree-select` |
-| DatePicker | `@fmlj/uikit/date-picker` |
-| ColorPicker | `@fmlj/uikit/color-picker` |
-| Autocomplete | `@fmlj/uikit/autocomplete` |
-| Mentions | `@fmlj/uikit/mentions` |
-| Checkbox | `@fmlj/uikit/checkbox` |
-| CheckboxGroup | `@fmlj/uikit/checkbox-group` |
-| Radio | `@fmlj/uikit/radio` |
-| RadioGroup | `@fmlj/uikit/radio-group` |
-| Switch | `@fmlj/uikit/switch` |
-| Slider | `@fmlj/uikit/slider` |
-| Rating | `@fmlj/uikit/rating` |
-| Toggle | `@fmlj/uikit/toggle` |
-| ToggleGroup | `@fmlj/uikit/toggle-group` |
-| Upload | `@fmlj/uikit/upload` |
-| Clipboard | `@fmlj/uikit/clipboard` |
-| TagsInput | `@fmlj/uikit/tags-input` |
+| Input | `@mdigitalcn/uikit/input` |
+| FloatInput | `@mdigitalcn/uikit/float-input` |
+| InputPassword | `@mdigitalcn/uikit/input-password` |
+| InputOTP | `@mdigitalcn/uikit/input-otp` |
+| InputGroup | `@mdigitalcn/uikit/input-group` |
+| NumberInput | `@mdigitalcn/uikit/number-input` |
+| Textarea | `@mdigitalcn/uikit/textarea` |
+| Select | `@mdigitalcn/uikit/select` |
+| MultiSelect | `@mdigitalcn/uikit/multi-select` |
+| Cascader | `@mdigitalcn/uikit/cascader` |
+| TreeSelect | `@mdigitalcn/uikit/tree-select` |
+| DatePicker | `@mdigitalcn/uikit/date-picker` |
+| ColorPicker | `@mdigitalcn/uikit/color-picker` |
+| Autocomplete | `@mdigitalcn/uikit/autocomplete` |
+| Mentions | `@mdigitalcn/uikit/mentions` |
+| Checkbox | `@mdigitalcn/uikit/checkbox` |
+| CheckboxGroup | `@mdigitalcn/uikit/checkbox-group` |
+| Radio | `@mdigitalcn/uikit/radio` |
+| RadioGroup | `@mdigitalcn/uikit/radio-group` |
+| Switch | `@mdigitalcn/uikit/switch` |
+| Slider | `@mdigitalcn/uikit/slider` |
+| Rating | `@mdigitalcn/uikit/rating` |
+| Toggle | `@mdigitalcn/uikit/toggle` |
+| ToggleGroup | `@mdigitalcn/uikit/toggle-group` |
+| Upload | `@mdigitalcn/uikit/upload` |
+| Clipboard | `@mdigitalcn/uikit/clipboard` |
+| TagsInput | `@mdigitalcn/uikit/tags-input` |
 
 </details>
 
@@ -258,15 +258,15 @@ Per-component:
 
 | Component | Import |
 |-----------|--------|
-| Button | `@fmlj/uikit/button` |
-| ButtonGroup | `@fmlj/uikit/button-group` |
-| Card | `@fmlj/uikit/card` |
-| Grid | `@fmlj/uikit/grid` |
-| Divider | `@fmlj/uikit/divider` |
-| Collapse | `@fmlj/uikit/collapse` |
-| Accordion | `@fmlj/uikit/accordion` |
-| ScrollArea | `@fmlj/uikit/scroll-area` |
-| Resizable | `@fmlj/uikit/resizable` |
+| Button | `@mdigitalcn/uikit/button` |
+| ButtonGroup | `@mdigitalcn/uikit/button-group` |
+| Card | `@mdigitalcn/uikit/card` |
+| Grid | `@mdigitalcn/uikit/grid` |
+| Divider | `@mdigitalcn/uikit/divider` |
+| Collapse | `@mdigitalcn/uikit/collapse` |
+| Accordion | `@mdigitalcn/uikit/accordion` |
+| ScrollArea | `@mdigitalcn/uikit/scroll-area` |
+| Resizable | `@mdigitalcn/uikit/resizable` |
 
 </details>
 
@@ -275,18 +275,18 @@ Per-component:
 
 | Component | Import |
 |-----------|--------|
-| Tabs | `@fmlj/uikit/tabs` |
-| Breadcrumbs | `@fmlj/uikit/breadcrumbs` |
-| Pagination | `@fmlj/uikit/pagination` |
-| Stepper | `@fmlj/uikit/stepper` |
-| Dropdown | `@fmlj/uikit/dropdown` |
-| ContextMenu | `@fmlj/uikit/context-menu` |
-| Menubar | `@fmlj/uikit/menubar` |
-| NavigationMenu | `@fmlj/uikit/navigation-menu` |
-| Command | `@fmlj/uikit/command` |
-| Anchor | `@fmlj/uikit/anchor` |
-| Link | `@fmlj/uikit/link` |
-| FloatButton | `@fmlj/uikit/float-button` |
+| Tabs | `@mdigitalcn/uikit/tabs` |
+| Breadcrumbs | `@mdigitalcn/uikit/breadcrumbs` |
+| Pagination | `@mdigitalcn/uikit/pagination` |
+| Stepper | `@mdigitalcn/uikit/stepper` |
+| Dropdown | `@mdigitalcn/uikit/dropdown` |
+| ContextMenu | `@mdigitalcn/uikit/context-menu` |
+| Menubar | `@mdigitalcn/uikit/menubar` |
+| NavigationMenu | `@mdigitalcn/uikit/navigation-menu` |
+| Command | `@mdigitalcn/uikit/command` |
+| Anchor | `@mdigitalcn/uikit/anchor` |
+| Link | `@mdigitalcn/uikit/link` |
+| FloatButton | `@mdigitalcn/uikit/float-button` |
 
 </details>
 
@@ -295,11 +295,11 @@ Per-component:
 
 | Component | Import |
 |-----------|--------|
-| Modal | `@fmlj/uikit/modal` |
-| Drawer | `@fmlj/uikit/drawer` |
-| Tooltip | `@fmlj/uikit/tooltip` |
-| Popover | `@fmlj/uikit/popover` |
-| Tour | `@fmlj/uikit/tour` |
+| Modal | `@mdigitalcn/uikit/modal` |
+| Drawer | `@mdigitalcn/uikit/drawer` |
+| Tooltip | `@mdigitalcn/uikit/tooltip` |
+| Popover | `@mdigitalcn/uikit/popover` |
+| Tour | `@mdigitalcn/uikit/tour` |
 
 </details>
 
@@ -308,14 +308,14 @@ Per-component:
 
 | Component | Import |
 |-----------|--------|
-| Notification | `@fmlj/uikit/notification` |
-| Alert | `@fmlj/uikit/alert` |
-| Toast | `@fmlj/uikit/toast` |
-| Progress | `@fmlj/uikit/progress` |
-| Spinner | `@fmlj/uikit/spinner` |
-| Skeleton | `@fmlj/uikit/skeleton` |
-| Result | `@fmlj/uikit/result` |
-| FetchingOverlay | `@fmlj/uikit/fetching-overlay` |
+| Notification | `@mdigitalcn/uikit/notification` |
+| Alert | `@mdigitalcn/uikit/alert` |
+| Toast | `@mdigitalcn/uikit/toast` |
+| Progress | `@mdigitalcn/uikit/progress` |
+| Spinner | `@mdigitalcn/uikit/spinner` |
+| Skeleton | `@mdigitalcn/uikit/skeleton` |
+| Result | `@mdigitalcn/uikit/result` |
+| FetchingOverlay | `@mdigitalcn/uikit/fetching-overlay` |
 
 </details>
 
@@ -324,15 +324,15 @@ Per-component:
 
 | Component | Import |
 |-----------|--------|
-| Table | `@fmlj/uikit/table` |
-| Tree | `@fmlj/uikit/tree` |
-| Calendar | `@fmlj/uikit/calendar` |
-| Descriptions | `@fmlj/uikit/descriptions` |
-| Timeline | `@fmlj/uikit/timeline` |
-| Transfer | `@fmlj/uikit/transfer` |
-| Carousel | `@fmlj/uikit/carousel` |
-| Image | `@fmlj/uikit/image` |
-| QRCode | `@fmlj/uikit/qr-code` |
+| Table | `@mdigitalcn/uikit/table` |
+| Tree | `@mdigitalcn/uikit/tree` |
+| Calendar | `@mdigitalcn/uikit/calendar` |
+| Descriptions | `@mdigitalcn/uikit/descriptions` |
+| Timeline | `@mdigitalcn/uikit/timeline` |
+| Transfer | `@mdigitalcn/uikit/transfer` |
+| Carousel | `@mdigitalcn/uikit/carousel` |
+| Image | `@mdigitalcn/uikit/image` |
+| QRCode | `@mdigitalcn/uikit/qr-code` |
 
 </details>
 
@@ -341,12 +341,12 @@ Per-component:
 
 | Component | Import |
 |-----------|--------|
-| Badge | `@fmlj/uikit/badge` |
-| Tag | `@fmlj/uikit/tag` |
-| Avatar | `@fmlj/uikit/avatar` |
-| Kbd | `@fmlj/uikit/kbd` |
-| Typography | `@fmlj/uikit/typography` |
-| Watermark | `@fmlj/uikit/watermark` |
+| Badge | `@mdigitalcn/uikit/badge` |
+| Tag | `@mdigitalcn/uikit/tag` |
+| Avatar | `@mdigitalcn/uikit/avatar` |
+| Kbd | `@mdigitalcn/uikit/kbd` |
+| Typography | `@mdigitalcn/uikit/typography` |
+| Watermark | `@mdigitalcn/uikit/watermark` |
 
 </details>
 
@@ -355,12 +355,12 @@ Per-component:
 
 | Export | Import |
 |--------|--------|
-| ThemeProvider, useTheme, getThemeScript | `@fmlj/uikit/theme` |
-| useControllable | `@fmlj/uikit/hooks/useControllable` |
-| useDebounce | `@fmlj/uikit/hooks/useDebounce` |
-| useThrottle | `@fmlj/uikit/hooks/useThrottle` |
-| useMediaQuery | `@fmlj/uikit/hooks/useMediaQuery` |
-| useRipple | `@fmlj/uikit/hooks/useRipple` |
+| ThemeProvider, useTheme, getThemeScript | `@mdigitalcn/uikit/theme` |
+| useControllable | `@mdigitalcn/uikit/hooks/useControllable` |
+| useDebounce | `@mdigitalcn/uikit/hooks/useDebounce` |
+| useThrottle | `@mdigitalcn/uikit/hooks/useThrottle` |
+| useMediaQuery | `@mdigitalcn/uikit/hooks/useMediaQuery` |
+| useRipple | `@mdigitalcn/uikit/hooks/useRipple` |
 
 </details>
 
@@ -432,7 +432,7 @@ Per-component:
 Full type coverage. Every prop, variant, and callback is typed:
 
 ```tsx
-import type { ButtonProps, SelectOption, TableColumn } from '@fmlj/uikit'
+import type { ButtonProps, SelectOption, TableColumn } from '@mdigitalcn/uikit'
 ```
 
 ## Browser Support

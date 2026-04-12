@@ -36,7 +36,7 @@ const FetchingOverlay = React.memo<FetchingOverlayProps>(({
       data-slot="root"
       className={cn(
         'fetchingOverlay_root',
-        'absolute inset-0 flex items-center justify-center transition-opacity duration-300',
+        '[--_duration:var(--duration-slow)] absolute inset-0 flex items-center justify-center transition-opacity duration-slot',
         fullscreen && 'fixed w-full h-screen z-[var(--z-overlay)]',
         isFetching ? 'opacity-100' : 'opacity-0 pointer-events-none',
         className,

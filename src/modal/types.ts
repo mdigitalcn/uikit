@@ -39,7 +39,10 @@ export interface ComposedModalProps {
    * Prevent closing on escape key
    */
   onEscapeKeyDown?: (e: KeyboardEvent) => void
+  /** Applied to the modal content container (same as contentClassName) */
   className?: string
   contentClassName?: string
+  /** Applied to the modal header */
+  headerClassName?: string
   classNames?: ModalClassNames
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@fmlj/uikit",
+  "name": "@mdigitalcn/uikit",
   "version": "1.0.11",
   "description": "Modern React component library built with Tailwind CSS v4",
   "type": "module",
@@ -330,17 +330,17 @@
       "import": "./dist/theme/index.js"
     },
     "./styles/global.css": "./styles/global.css",
-    "./styles/themes/light.css": "./styles/themes/light.css",
-    "./styles/themes/dark.css": "./styles/themes/dark.css",
     "./styles/themes/presets/corporate.css": "./styles/themes/presets/corporate.css",
     "./styles/themes/presets/vibrant.css": "./styles/themes/presets/vibrant.css",
     "./styles/themes/presets/minimal.css": "./styles/themes/presets/minimal.css",
+    "./styles/themes/presets/warm.css": "./styles/themes/presets/warm.css",
+    "./styles/themes/presets/ocean.css": "./styles/themes/presets/ocean.css",
     "./styles/datepicker.css": "./styles/datepicker.css",
     "./package.json": "./package.json"
   },
   "scripts": {
     "build": "tsup && tsc -p tsconfig.dts.json && npm run build:css",
-    "build:css": "mkdir -p styles/themes/presets && node scripts/build-css.js && cp src/styles/datepicker.css styles/datepicker.css && cp src/styles/themes/light.css styles/themes/light.css && cp src/styles/themes/dark.css styles/themes/dark.css && cp src/styles/themes/presets/corporate.css styles/themes/presets/corporate.css && cp src/styles/themes/presets/vibrant.css styles/themes/presets/vibrant.css && cp src/styles/themes/presets/minimal.css styles/themes/presets/minimal.css",
+    "build:css": "mkdir -p styles/themes/presets && node scripts/build-css.js && cp src/styles/datepicker.css styles/datepicker.css && cp src/styles/themes/presets/corporate.css styles/themes/presets/corporate.css && cp src/styles/themes/presets/vibrant.css styles/themes/presets/vibrant.css && cp src/styles/themes/presets/minimal.css styles/themes/presets/minimal.css && cp src/styles/themes/presets/warm.css styles/themes/presets/warm.css && cp src/styles/themes/presets/ocean.css styles/themes/presets/ocean.css",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
@@ -450,7 +450,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fmlj/uikit.git"
+    "url": "git+https://github.com/mdigitalcn/uikit.git"
   },
   "license": "MIT",
   "publishConfig": {

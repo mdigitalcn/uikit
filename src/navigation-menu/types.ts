@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 import type React from 'react'
 
 export interface NavigationMenuClassNames {
@@ -39,6 +39,8 @@ export interface NavigationMenuProps {
   closeDelay?: number
   /** @default "md" */
   size?: ComponentSize
+  /** @default 'primary' */
+  color?: ComponentColor
   className?: string
   classNames?: NavigationMenuClassNames
   ref?: React.Ref<HTMLElement>

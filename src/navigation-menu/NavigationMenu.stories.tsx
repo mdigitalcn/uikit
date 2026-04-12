@@ -1,462 +1,160 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import {
-  Home,
-  Settings,
-  Users,
-  FileText,
-  BarChart,
-  Package,
-  ShoppingCart,
-  CreditCard,
-  BookOpen,
-  HelpCircle,
-  Building,
-  Mail,
-  Phone,
-  Globe,
-  Code,
-  Database,
-  Cloud,
-  Layers,
-  Zap,
-  Shield
-} from 'lucide-react'
-import { NavigationMenu } from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import { BookOpen, Home, LayoutDashboard, Settings, Star, Users, Zap } from "lucide-react";
+import React from "react";
+import NavigationMenu from "./index";
 
 const meta: Meta<typeof NavigationMenu> = {
-  title: 'Navigation/NavigationMenu',
+  title: "Navigation/NavigationMenu",
   component: NavigationMenu,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    items: {
-      description: 'Array of navigation menu items',
-    },
-    orientation: {
-      control: 'select',
-      options: ['horizontal', 'vertical'],
-      description: 'Menu orientation',
-    },
-    className: {
-      control: 'text',
-      description: 'Additional CSS classes',
-    },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    color: { control: "select", options: ["primary", "secondary", "accent", "success", "error", "warning", "info"] },
+    orientation: { control: "select", options: ["horizontal", "vertical"] },
+    closeDelay: { control: "number" },
   },
-}
+};
+export default meta;
+type Story = StoryObj<typeof NavigationMenu>;
 
-export default meta
-type Story = StoryObj<typeof NavigationMenu>
+const simpleItems = [
+  { key: "home", label: "Home", href: "#", icon: <Home className="w-4 h-4" /> },
+  { key: "dashboard", label: "Dashboard", href: "#", icon: <LayoutDashboard className="w-4 h-4" /> },
+  { key: "settings", label: "Settings", href: "#", icon: <Settings className="w-4 h-4" /> },
+];
 
-export const Default: Story = {
-  args: {
-    items: [
-      {
-        key: 'home',
-        label: 'Home',
-        href: '/',
-      },
-      {
-        key: 'products',
-        label: 'Products',
-        children: [
-          {
-            key: 'analytics',
-            label: 'Analytics',
-            description: 'Get insights into your data with powerful analytics tools',
-            icon: <BarChart className="w-5 h-5" />,
-            href: '/products/analytics',
-          },
-          {
-            key: 'commerce',
-            label: 'E-Commerce',
-            description: 'Build and manage your online store with ease',
-            icon: <ShoppingCart className="w-5 h-5" />,
-            href: '/products/commerce',
-          },
-          {
-            key: 'payments',
-            label: 'Payments',
-            description: 'Accept payments securely from customers worldwide',
-            icon: <CreditCard className="w-5 h-5" />,
-            href: '/products/payments',
-          },
-        ],
-      },
-      {
-        key: 'resources',
-        label: 'Resources',
-        children: [
-          {
-            key: 'documentation',
-            label: 'Documentation',
-            description: 'Comprehensive guides and API references',
-            icon: <BookOpen className="w-5 h-5" />,
-            href: '/resources/docs',
-          },
-          {
-            key: 'support',
-            label: 'Support',
-            description: 'Get help from our support team',
-            icon: <HelpCircle className="w-5 h-5" />,
-            href: '/resources/support',
-          },
-        ],
-      },
-      {
-        key: 'about',
-        label: 'About',
-        href: '/about',
-      },
+const navItems = [
+  { key: "home", label: "Home", href: "#" },
+  {
+    key: "products",
+    label: "Products",
+    children: [
+      { key: "ui-kit", label: "UI Kit", description: "76+ production-ready React components", href: "#" },
+      { key: "widgets", label: "Widgets", description: "Composed widget patterns for common use cases", href: "#" },
+      { key: "templates", label: "Templates", description: "Full project starter templates", href: "#" },
     ],
   },
-}
-
-export const WithIcons: Story = {
-  args: {
-    items: [
-      {
-        key: 'home',
-        label: 'Home',
-        icon: <Home className="w-4 h-4" />,
-        href: '/',
-      },
-      {
-        key: 'products',
-        label: 'Products',
-        icon: <Package className="w-4 h-4" />,
-        children: [
-          {
-            key: 'analytics',
-            label: 'Analytics Platform',
-            description: 'Real-time data analysis and visualization',
-            icon: <BarChart className="w-5 h-5" />,
-            href: '/products/analytics',
-          },
-          {
-            key: 'database',
-            label: 'Database Solutions',
-            description: 'Scalable cloud database infrastructure',
-            icon: <Database className="w-5 h-5" />,
-            href: '/products/database',
-          },
-          {
-            key: 'cloud',
-            label: 'Cloud Services',
-            description: 'Deploy and scale your applications globally',
-            icon: <Cloud className="w-5 h-5" />,
-            href: '/products/cloud',
-          },
-        ],
-      },
-      {
-        key: 'developers',
-        label: 'Developers',
-        icon: <Code className="w-4 h-4" />,
-        children: [
-          {
-            key: 'api',
-            label: 'API Reference',
-            description: 'Complete API documentation and examples',
-            icon: <FileText className="w-5 h-5" />,
-            href: '/developers/api',
-          },
-          {
-            key: 'sdk',
-            label: 'SDK & Libraries',
-            description: 'Official SDKs for popular languages',
-            icon: <Layers className="w-5 h-5" />,
-            href: '/developers/sdk',
-          },
-        ],
-      },
-      {
-        key: 'settings',
-        label: 'Settings',
-        icon: <Settings className="w-4 h-4" />,
-        href: '/settings',
-      },
+  {
+    key: "docs",
+    label: "Documentation",
+    children: [
+      { key: "getting-started", label: "Getting Started", description: "Install and configure the design system", href: "#" },
+      { key: "components", label: "Components", description: "Browse all available components", href: "#" },
+      { key: "theming", label: "Theming", description: "Customize colors, sizes, and shapes", href: "#" },
+      { key: "changelog", label: "Changelog", description: "Recent updates and version history", href: "#" },
     ],
   },
-}
+  { key: "pricing", label: "Pricing", href: "#" },
+];
 
-export const Vertical: Story = {
+export const Playground: Story = {
   args: {
-    orientation: 'vertical',
-    items: [
-      {
-        key: 'home',
-        label: 'Home',
-        icon: <Home className="w-4 h-4" />,
-        href: '/',
-      },
-      {
-        key: 'team',
-        label: 'Team',
-        icon: <Users className="w-4 h-4" />,
-        children: [
-          {
-            key: 'members',
-            label: 'Team Members',
-            description: 'Manage your team and permissions',
-            icon: <Users className="w-5 h-5" />,
-            href: '/team/members',
-          },
-          {
-            key: 'roles',
-            label: 'Roles & Permissions',
-            description: 'Configure access control and roles',
-            icon: <Shield className="w-5 h-5" />,
-            href: '/team/roles',
-          },
-        ],
-      },
-      {
-        key: 'reports',
-        label: 'Reports',
-        icon: <BarChart className="w-4 h-4" />,
-        children: [
-          {
-            key: 'analytics',
-            label: 'Analytics',
-            description: 'View detailed analytics and metrics',
-            icon: <BarChart className="w-5 h-5" />,
-            href: '/reports/analytics',
-          },
-          {
-            key: 'performance',
-            label: 'Performance',
-            description: 'Monitor system performance',
-            icon: <Zap className="w-5 h-5" />,
-            href: '/reports/performance',
-          },
-        ],
-      },
-      {
-        key: 'settings',
-        label: 'Settings',
-        icon: <Settings className="w-4 h-4" />,
-        href: '/settings',
-      },
-    ],
+    items: navItems,
+    size: "md",
+    color: "primary",
+    orientation: "horizontal",
   },
-}
+};
 
-export const DisabledItems: Story = {
-  args: {
-    items: [
-      {
-        key: 'home',
-        label: 'Home',
-        icon: <Home className="w-4 h-4" />,
-        href: '/',
-      },
-      {
-        key: 'products',
-        label: 'Products',
-        icon: <Package className="w-4 h-4" />,
-        children: [
-          {
-            key: 'analytics',
-            label: 'Analytics',
-            description: 'Get insights into your data',
-            icon: <BarChart className="w-5 h-5" />,
-            href: '/products/analytics',
-          },
-          {
-            key: 'beta',
-            label: 'Beta Features',
-            description: 'Coming soon - Early access features',
-            icon: <Zap className="w-5 h-5" />,
-            disabled: true,
-          },
-        ],
-      },
-      {
-        key: 'enterprise',
-        label: 'Enterprise',
-        icon: <Building className="w-4 h-4" />,
-        disabled: true,
-      },
-      {
-        key: 'settings',
-        label: 'Settings',
-        icon: <Settings className="w-4 h-4" />,
-        href: '/settings',
-      },
-    ],
-  },
-}
+export const Showcase: Story = {
+  render: () => (
+    <div className="space-y-10">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Simple Links</h3>
+        <NavigationMenu items={simpleItems} />
+      </section>
 
-export const LinksOnly: Story = {
-  args: {
-    items: [
-      {
-        key: 'home',
-        label: 'Home',
-        href: '/',
-      },
-      {
-        key: 'about',
-        label: 'About',
-        href: '/about',
-      },
-      {
-        key: 'services',
-        label: 'Services',
-        href: '/services',
-      },
-      {
-        key: 'portfolio',
-        label: 'Portfolio',
-        href: '/portfolio',
-      },
-      {
-        key: 'blog',
-        label: 'Blog',
-        href: '/blog',
-      },
-      {
-        key: 'contact',
-        label: 'Contact',
-        href: '/contact',
-      },
-    ],
-  },
-}
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Dropdowns (Hover)</h3>
+        <NavigationMenu items={navItems} />
+      </section>
 
-export const Complex: Story = {
-  args: {
-    items: [
-      {
-        key: 'home',
-        label: 'Home',
-        icon: <Home className="w-4 h-4" />,
-        href: '/',
-      },
-      {
-        key: 'products',
-        label: 'Products',
-        icon: <Package className="w-4 h-4" />,
-        children: [
-          {
-            key: 'analytics',
-            label: 'Analytics Platform',
-            description: 'Real-time data analysis and business intelligence',
-            icon: <BarChart className="w-5 h-5" />,
-            href: '/products/analytics',
-          },
-          {
-            key: 'ecommerce',
-            label: 'E-Commerce Suite',
-            description: 'Complete solution for online stores',
-            icon: <ShoppingCart className="w-5 h-5" />,
-            href: '/products/ecommerce',
-          },
-          {
-            key: 'payments',
-            label: 'Payment Gateway',
-            description: 'Secure payment processing worldwide',
-            icon: <CreditCard className="w-5 h-5" />,
-            href: '/products/payments',
-          },
-          {
-            key: 'cloud',
-            label: 'Cloud Infrastructure',
-            description: 'Scalable hosting and deployment',
-            icon: <Cloud className="w-5 h-5" />,
-            href: '/products/cloud',
-          },
-          {
-            key: 'beta',
-            label: 'Beta Program',
-            description: 'Early access to new features (Coming Soon)',
-            icon: <Zap className="w-5 h-5" />,
-            disabled: true,
-          },
-        ],
-      },
-      {
-        key: 'developers',
-        label: 'Developers',
-        icon: <Code className="w-4 h-4" />,
-        children: [
-          {
-            key: 'documentation',
-            label: 'Documentation',
-            description: 'Comprehensive guides and tutorials',
-            icon: <BookOpen className="w-5 h-5" />,
-            href: '/developers/docs',
-          },
-          {
-            key: 'api',
-            label: 'API Reference',
-            description: 'Complete API documentation',
-            icon: <FileText className="w-5 h-5" />,
-            href: '/developers/api',
-          },
-          {
-            key: 'sdk',
-            label: 'SDKs & Libraries',
-            description: 'Official libraries for all platforms',
-            icon: <Layers className="w-5 h-5" />,
-            href: '/developers/sdk',
-          },
-          {
-            key: 'graphql',
-            label: 'GraphQL API',
-            description: 'Flexible GraphQL endpoint (Beta)',
-            icon: <Database className="w-5 h-5" />,
-            href: '/developers/graphql',
-            disabled: true,
-          },
-        ],
-      },
-      {
-        key: 'company',
-        label: 'Company',
-        icon: <Building className="w-4 h-4" />,
-        children: [
-          {
-            key: 'about',
-            label: 'About Us',
-            description: 'Learn about our mission and values',
-            icon: <Building className="w-5 h-5" />,
-            href: '/company/about',
-          },
-          {
-            key: 'blog',
-            label: 'Blog',
-            description: 'Latest news and updates',
-            icon: <Globe className="w-5 h-5" />,
-            href: '/company/blog',
-          },
-          {
-            key: 'contact',
-            label: 'Contact',
-            description: 'Get in touch with our team',
-            icon: <Mail className="w-5 h-5" />,
-            href: '/company/contact',
-          },
-          {
-            key: 'careers',
-            label: 'Careers',
-            description: 'Join our growing team',
-            icon: <Users className="w-5 h-5" />,
-            href: '/company/careers',
-          },
-        ],
-      },
-      {
-        key: 'enterprise',
-        label: 'Enterprise',
-        icon: <Shield className="w-4 h-4" />,
-        disabled: true,
-      },
-      {
-        key: 'support',
-        label: 'Support',
-        icon: <HelpCircle className="w-4 h-4" />,
-        href: '/support',
-      },
-    ],
-  },
-}
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="space-y-4">
+          {(["xs", "sm", "md", "lg"] as const).map((size) => (
+            <div key={size} className="flex items-center gap-4">
+              <span className="text-xs text-text-secondary w-6">{size}</span>
+              <NavigationMenu items={simpleItems} size={size} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="space-y-4">
+          {(["primary", "secondary", "accent", "info"] as const).map((color) => (
+            <div key={color} className="flex items-center gap-4">
+              <span className="text-xs text-text-secondary w-20 capitalize">{color}</span>
+              <NavigationMenu items={simpleItems} color={color} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Vertical Orientation</h3>
+        <div className="w-48">
+          <NavigationMenu
+            items={[
+              { key: "home", label: "Home", href: "#", icon: <Home className="w-4 h-4" /> },
+              {
+                key: "features",
+                label: "Features",
+                children: [
+                  { key: "analytics", label: "Analytics", href: "#" },
+                  { key: "automation", label: "Automation", href: "#" },
+                ],
+              },
+              { key: "pricing", label: "Pricing", href: "#", icon: <Star className="w-4 h-4" /> },
+              { key: "team", label: "Team", href: "#", icon: <Users className="w-4 h-4" /> },
+            ]}
+            orientation="vertical"
+          />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">App Navigation (Realistic)</h3>
+        <div className="border border-border rounded-lg px-4 py-2">
+          <NavigationMenu
+            items={[
+              { key: "dashboard", label: "Dashboard", href: "#", icon: <LayoutDashboard className="w-4 h-4" /> },
+              {
+                key: "components",
+                label: "Components",
+                children: [
+                  { key: "buttons", label: "Buttons", description: "All button variants", href: "#", icon: <Zap className="w-4 h-4" /> },
+                  { key: "forms", label: "Forms", description: "Input, select, checkbox and more", href: "#", icon: <BookOpen className="w-4 h-4" /> },
+                  { key: "overlays", label: "Overlays", description: "Modal, drawer, popover", href: "#" },
+                ],
+              },
+              {
+                key: "resources",
+                label: "Resources",
+                children: [
+                  { key: "docs", label: "Documentation", description: "Full API reference", href: "#" },
+                  { key: "examples", label: "Examples", description: "Live code examples", href: "#" },
+                ],
+              },
+              { key: "settings", label: "Settings", href: "#", icon: <Settings className="w-4 h-4" /> },
+            ]}
+          />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Disabled Items</h3>
+        <NavigationMenu
+          items={[
+            { key: "home", label: "Home", href: "#" },
+            { key: "active", label: "Active", href: "#" },
+            { key: "disabled", label: "Disabled", href: "#", disabled: true },
+            { key: "beta", label: "Beta (disabled)", href: "#", disabled: true },
+          ]}
+        />
+      </section>
+    </div>
+  ),
+};

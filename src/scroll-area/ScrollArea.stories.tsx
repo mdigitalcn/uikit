@@ -1,224 +1,204 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import ScrollArea from './index'
-import Card, { CardContent, CardHeader, CardTitle, CardDescription } from '../card'
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+import ScrollArea from "./index";
 
 const meta: Meta<typeof ScrollArea> = {
-  title: 'Layout/ScrollArea',
+  title: "Layout/ScrollArea",
   component: ScrollArea,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    direction: {
-      control: 'select',
-      options: ['vertical', 'horizontal', 'both'],
-      description: 'Scrollbar direction',
-    },
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Scrollbar thickness',
-    },
-    scrollbarVisibility: {
-      control: 'select',
-      options: ['auto', 'always', 'hover'],
-      description: 'Scrollbar visibility behavior',
-    },
-    maxHeight: {
-      control: 'text',
-      description: 'Maximum height (px or CSS string)',
-    },
-    maxWidth: {
-      control: 'text',
-      description: 'Maximum width (px or CSS string)',
-    },
+    direction: { control: "select", options: ["vertical", "horizontal", "both"] },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    scrollbarVisibility: { control: "select", options: ["auto", "always", "hover"] },
   },
-}
+};
+export default meta;
+type Story = StoryObj<typeof ScrollArea>;
 
-export default meta
-type Story = StoryObj<typeof ScrollArea>
+const loremRows = Array.from({ length: 30 }, (_, i) => `Row ${i + 1} — Lorem ipsum dolor sit amet, consectetur adipiscing elit.`);
+const users = Array.from({ length: 20 }, (_, i) => ({
+  id: i + 1,
+  name: `User ${i + 1}`,
+  role: ["Admin", "Editor", "Viewer"][i % 3],
+  status: i % 4 === 3 ? "Inactive" : "Active",
+}));
 
-// Basic Examples
-
-export const Primary: Story = {
-  args: {
-    direction: 'vertical',
-    size: 'md',
-    scrollbarVisibility: 'auto',
-    maxHeight: 300,
-  },
-  render: (args) => (
-    <ScrollArea {...args}>
-      <div className="p-4">
-        <h3 className="text-lg font-semibold mb-4">Long Content</h3>
-        <p className="mb-4">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+export const Playground: Story = {
+  render: () => (
+    <ScrollArea className="h-48 rounded-lg border border-border p-4">
+      {loremRows.map((row, i) => (
+        <p key={i} className="py-1 text-sm text-text-secondary border-b border-border/40 last:border-0">
+          {row}
         </p>
-        <p className="mb-4">
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-        <p className="mb-4">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-          eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-        </p>
-        <p className="mb-4">
-          Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui
-          ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.
-        </p>
-        <p className="mb-4">
-          At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti
-          quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.
-        </p>
-        <p>
-          Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis
-          est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit.
-        </p>
-      </div>
+      ))}
     </ScrollArea>
   ),
-}
+};
 
-export const Horizontal: Story = {
-  args: {
-    direction: 'horizontal',
-    size: 'md',
-    scrollbarVisibility: 'auto',
-    maxWidth: 400,
-  },
-  render: (args) => (
-    <ScrollArea {...args}>
-      <div className="p-4 flex gap-4" style={{ width: '800px' }}>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex-shrink-0 w-32 h-32 bg-primary/10 border border-primary rounded-lg flex items-center justify-center"
-          >
-            Item {i + 1}
+export const Showcase: Story = {
+  render: () => (
+    <div className="space-y-10 p-6 max-w-2xl">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Vertical Scroll</h3>
+        <ScrollArea maxHeight={200} className="rounded-lg border border-border p-4">
+          {users.map(({ id, name, role, status }) => (
+            <div key={id} className="flex items-center justify-between py-2 border-b border-border/40 last:border-0">
+              <div className="flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary font-semibold shrink-0">
+                  {id}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-text-primary">{name}</p>
+                  <p className="text-xs text-text-secondary">{role}</p>
+                </div>
+              </div>
+              <span
+                className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                  status === "Active"
+                    ? "bg-success/10 text-success"
+                    : "bg-border text-text-secondary"
+                }`}
+              >
+                {status}
+              </span>
+            </div>
+          ))}
+        </ScrollArea>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Horizontal Scroll</h3>
+        <ScrollArea direction="horizontal" className="rounded-lg border border-border p-4">
+          <div className="flex gap-3 min-w-max">
+            {Array.from({ length: 14 }, (_, i) => (
+              <div
+                key={i}
+                className="flex flex-col items-center justify-center w-28 h-24 bg-surface rounded-lg border border-border shrink-0"
+              >
+                <div className="text-base font-bold text-text-primary">{i + 1}</div>
+                <div className="text-xs text-text-secondary mt-1">Card {i + 1}</div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </ScrollArea>
-  ),
-}
+        </ScrollArea>
+      </section>
 
-export const BothDirections: Story = {
-  args: {
-    direction: 'both',
-    size: 'md',
-    scrollbarVisibility: 'auto',
-    maxHeight: 300,
-    maxWidth: 400,
-  },
-  render: (args) => (
-    <ScrollArea {...args}>
-      <div className="p-4" style={{ width: '800px', minHeight: '600px' }}>
-        <h3 className="text-lg font-semibold mb-4">Scroll Both Directions</h3>
-        <div className="grid grid-cols-4 gap-4">
-          {Array.from({ length: 32 }).map((_, i) => (
-            <div
-              key={i}
-              className="w-full h-24 bg-accent/10 border border-accent rounded-lg flex items-center justify-center"
-            >
-              Cell {i + 1}
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Both Directions</h3>
+        <ScrollArea direction="both" maxHeight={200} className="rounded-lg border border-border p-4">
+          <div className="min-w-[700px]">
+            <div className="grid grid-cols-5 gap-4 pb-2 border-b border-border mb-2 text-xs font-semibold text-text-secondary">
+              <span>#</span>
+              <span>Name</span>
+              <span>Role</span>
+              <span>Status</span>
+              <span>Revenue</span>
             </div>
-          ))}
-        </div>
-      </div>
-    </ScrollArea>
-  ),
-}
-
-// Sizes
-
-// Real-World Examples
-
-export const WithMaxHeight: Story = {
-  render: () => (
-    <div className="border border-border rounded-lg">
-      <div className="p-4 border-b border-border">
-        <h3 className="font-semibold">Activity Feed</h3>
-        <p className="text-sm text-text-secondary">Recent activities in your workspace</p>
-      </div>
-      <ScrollArea maxHeight={300}>
-        <div className="divide-y divide-border">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div key={i} className="p-4 hover:bg-surface-hover transition-colors">
-              <div className="flex items-start gap-3">
-                <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <span className="text-xs font-medium text-primary">U{i + 1}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">User {i + 1} performed an action</p>
-                  <p className="text-xs text-text-secondary mt-1">2 minutes ago</p>
-                </div>
+            {users.map(({ id, name, role, status }) => (
+              <div
+                key={id}
+                className="grid grid-cols-5 gap-4 py-2 border-b border-border/40 last:border-0 text-sm text-text-secondary"
+              >
+                <span>{id}</span>
+                <span className="text-text-primary font-medium">{name}</span>
+                <span>{role}</span>
+                <span>{status}</span>
+                <span className="text-success">${(id * 127.5).toFixed(2)}</span>
               </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Scrollbar Sizes</h3>
+        <div className="space-y-4">
+          {(["xs", "sm", "md", "lg"] as const).map((s) => (
+            <div key={s}>
+              <p className="text-xs text-text-secondary mb-2">size: {s}</p>
+              <ScrollArea
+                direction="vertical"
+                size={s}
+                maxHeight={80}
+                scrollbarVisibility="always"
+                className="rounded-lg border border-border p-3"
+              >
+                {loremRows.slice(0, 8).map((row, i) => (
+                  <p key={i} className="text-xs text-text-secondary py-0.5">
+                    {row}
+                  </p>
+                ))}
+              </ScrollArea>
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Scrollbar Visibility</h3>
+        <div className="space-y-4">
+          {(["auto", "always", "hover"] as const).map((vis) => (
+            <div key={vis}>
+              <p className="text-xs text-text-secondary mb-2">scrollbarVisibility: {vis}</p>
+              <ScrollArea
+                direction="vertical"
+                scrollbarVisibility={vis}
+                maxHeight={80}
+                className="rounded-lg border border-border p-3"
+              >
+                {loremRows.slice(0, 8).map((row, i) => (
+                  <p key={i} className="text-xs text-text-secondary py-0.5">
+                    {row}
+                  </p>
+                ))}
+              </ScrollArea>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Code Block</h3>
+        <ScrollArea direction="both" maxHeight={160} className="rounded-lg border border-border bg-[#1e1e2e]">
+          <pre className="p-4 text-sm font-mono text-[#cdd6f4] min-w-max leading-relaxed">
+{`import { useState, useCallback } from "react";
+
+interface CounterProps {
+  initialCount?: number;
+  step?: number;
+  min?: number;
+  max?: number;
+}
+
+export function Counter({
+  initialCount = 0,
+  step = 1,
+  min = -Infinity,
+  max = Infinity,
+}: CounterProps) {
+  const [count, setCount] = useState(initialCount);
+
+  const increment = useCallback(
+    () => setCount((c) => Math.min(c + step, max)),
+    [step, max],
+  );
+
+  const decrement = useCallback(
+    () => setCount((c) => Math.max(c - step, min)),
+    [step, min],
+  );
+
+  return (
+    <div>
+      <button onClick={decrement}>-</button>
+      <span>{count}</span>
+      <button onClick={increment}>+</button>
+    </div>
+  );
+}`}
+          </pre>
+        </ScrollArea>
+      </section>
     </div>
   ),
-}
-
-export const WithCards: Story = {
-  render: () => (
-    <ScrollArea maxHeight={400} className="border border-border rounded-lg p-4">
-      <div className="space-y-4">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <Card key={i}>
-            <CardHeader>
-              <CardTitle>Card {i + 1}</CardTitle>
-              <CardDescription>This is a card inside a scroll area</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </ScrollArea>
-  ),
-}
-
-export const ChatMessages: Story = {
-  render: () => (
-    <div className="w-full max-w-md border border-border rounded-lg">
-      <div className="p-4 border-b border-border bg-surface">
-        <h3 className="font-semibold">Chat Messages</h3>
-      </div>
-      <ScrollArea maxHeight={400} size="sm" scrollbarVisibility="hover">
-        <div className="p-4 space-y-4">
-          {[
-            { user: 'Alice', message: 'Hey! How are you?', time: '10:30 AM' },
-            { user: 'You', message: 'I\'m good, thanks! How about you?', time: '10:32 AM', isOwn: true },
-            { user: 'Alice', message: 'Doing great! Working on the new project.', time: '10:33 AM' },
-            { user: 'You', message: 'Nice! How\'s it going?', time: '10:35 AM', isOwn: true },
-            { user: 'Alice', message: 'Pretty well! Should be done by Friday.', time: '10:36 AM' },
-            { user: 'You', message: 'Awesome! Let me know if you need any help.', time: '10:38 AM', isOwn: true },
-          ].map((msg, i) => (
-            <div key={i} className={`flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[70%] ${msg.isOwn ? 'order-2' : 'order-1'}`}>
-                <div className={`rounded-lg p-3 ${msg.isOwn ? 'bg-primary text-white' : 'bg-surface border border-border'}`}>
-                  <p className="text-sm">{msg.message}</p>
-                </div>
-                <p className={`text-xs text-text-secondary mt-1 ${msg.isOwn ? 'text-right' : 'text-left'}`}>
-                  {msg.time}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
-      <div className="p-4 border-t border-border">
-        <input
-          type="text"
-          placeholder="Type a message..."
-          className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-      </div>
-    </div>
-  ),
-}
+};

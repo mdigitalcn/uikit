@@ -18,11 +18,15 @@ import {
 import type { TreeSelectProps } from './types'
 
 const treeSelectTriggerVariants = cva(
-  'w-full flex items-center justify-between rounded-md bg-background text-text-primary border outline-none cursor-pointer transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-disabled:opacity-50 aria-disabled:cursor-not-allowed',
+  'w-full flex items-center justify-between [--_radius:var(--radius-input)] rounded-slot text-text-primary outline-none cursor-pointer transition-colors aria-disabled:opacity-50 aria-disabled:cursor-not-allowed',
   {
     variants: {
+      variant: {
+        outline: 'bg-background border border-border hover:border-slot-50 focus:border-slot focus:ring-2 focus:ring-slot-30',
+        filled: 'bg-surface border border-transparent hover:border-slot-30 focus:border-slot focus:ring-2 focus:ring-slot-30',
+      },
       status: {
-        default: 'border-border hover:border-primary/50',
+        default: '',
         error: 'border-error',
         warning: 'border-warning',
         info: 'border-info',
@@ -30,9 +34,9 @@ const treeSelectTriggerVariants = cva(
       },
       size: {
         xs: 'min-h-(--select-height-xs) px-(--select-padding-x-xs) py-1 text-xs gap-1.5',
-        sm: 'min-h-(--input-height-sm) px-1 py-1 text-sm gap-2',
-        md: 'min-h-(--input-height-md) px-2 py-1 text-base gap-2',
-        lg: 'min-h-(--input-height-lg) px-3 py-1.5 text-lg gap-3',
+        sm: 'min-h-(--select-height-sm) px-(--select-padding-x-sm) py-1 text-sm gap-2',
+        md: 'min-h-(--select-height-md) px-(--select-padding-x-md) py-1 text-base gap-2',
+        lg: 'min-h-(--select-height-lg) px-(--select-padding-x-lg) py-1.5 text-lg gap-3',
       },
       fullWidth: {
         true: 'w-full',
@@ -40,6 +44,7 @@ const treeSelectTriggerVariants = cva(
       },
     },
     defaultVariants: {
+      variant: 'outline',
       status: 'default',
       size: 'md',
       fullWidth: true,
@@ -49,6 +54,7 @@ const treeSelectTriggerVariants = cva(
 
 const TreeSelect = React.memo<TreeSelectProps>(
   ({
+    variant = 'outline',
     size = 'md',
     color = 'primary',
     label,
@@ -417,7 +423,7 @@ const TreeSelect = React.memo<TreeSelectProps>(
         className={cn(
           'treeSelect_root',
           'relative group',
-          colorVars.primary,
+          colorVars[status !== 'default' ? status : color],
           fullWidth ? 'w-full' : 'inline-block',
           classNames?.root,
         )}
@@ -438,7 +444,7 @@ const TreeSelect = React.memo<TreeSelectProps>(
               tabIndex={disabled || loading ? -1 : 0}
               className={cn(
                 'treeSelect_trigger',
-                treeSelectTriggerVariants({ status, size, fullWidth }),
+                treeSelectTriggerVariants({ variant, status, size, fullWidth }),
                 loading && 'opacity-50',
                 className,
                 classNames?.trigger,
@@ -537,7 +543,7 @@ const TreeSelect = React.memo<TreeSelectProps>(
                   <ChevronDown
                     className={cn(
                       iconSizes[size],
-                      'transition-transform duration-200',
+                      'transition-transform duration-slot',
                       isOpen && 'rotate-180',
                     )}
                   />

@@ -37,7 +37,7 @@ export interface EditableCellProps {
 }
 
 /**
- * Extended column definition with fmlj-specific properties.
+ * Extended column definition with mdigitalcn-specific properties.
  * Adds `pin` (column pinning) and `editable` (inline editing) to TanStack's ColumnDef.
  */
 export type ExtendedColumnDef<TData, TValue = unknown> =
@@ -137,6 +137,8 @@ export interface TableProps<TData> {
   pageSizeOptions?: number[]
   onRowClick?: (row: TData) => void
   onSelectionChange?: (selectedRows: TData[]) => void
+  /** Called with the raw selection map when user changes selection in controlled mode */
+  onRowSelectionChange?: (selection: Record<string, boolean>) => void
   onCellEdit?: (event: CellEditEvent<TData>) => void
   pinnedRowIds?: string[]
   onPinnedRowsChange?: (pinnedRowIds: string[]) => void

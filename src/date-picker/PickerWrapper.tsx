@@ -6,10 +6,11 @@ import type { DatePickerClassNames } from "./types";
 
 interface PickerWrapperProps {
   label?: string;
-  error?: string;
-  warning?: string;
-  info?: string;
-  success?: string;
+  triggerId?: string;
+  error?: string | boolean;
+  warning?: string | boolean;
+  info?: string | boolean;
+  success?: string | boolean;
   helperText?: string;
   messagePosition?: "top" | "bottom";
   required?: boolean;
@@ -20,6 +21,7 @@ interface PickerWrapperProps {
 
 export const PickerWrapper = ({
   label,
+  triggerId,
   error,
   warning,
   info,
@@ -51,6 +53,7 @@ export const PickerWrapper = ({
       <div className="flex gap-2 items-center relative">
         {label && (
           <label
+            htmlFor={triggerId}
             className={cn(
               "datePicker_label mb-0.5",
               "text-sm font-medium text-text-secondary",

@@ -1,4 +1,4 @@
-import type { ComponentColor, ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages } from '../types'
 
 export type CascaderSize = ComponentSize
 
@@ -31,7 +31,11 @@ export interface CascaderOption {
   loading?: boolean
 }
 
-export interface CascaderProps {
+export type CascaderVariant = 'outline' | 'filled'
+
+export interface CascaderProps extends ValidationMessages {
+  /** @default 'outline' */
+  variant?: CascaderVariant
   options: CascaderOption[]
   /**
    * Current value (controlled) - single path or array of paths for multiple
@@ -57,10 +61,7 @@ export interface CascaderProps {
    */
   placeholder?: string
   label?: string
-  helperText?: string
-  /**
-   * @default 'bottom'
-   */
+  /** @default 'bottom' */
   messagePosition?: 'top' | 'bottom'
   /**
    * @default 'default'
@@ -82,10 +83,8 @@ export interface CascaderProps {
    * @default false
    */
   loading?: boolean
-  error?: string
-  warning?: string
-  info?: string
-  success?: string
+
+
   /**
    * @default true
    */

@@ -15,11 +15,15 @@ import { cn, iconSizes, statusMessageVariants } from "../utils";
 import type { SelectOption, SelectProps } from "./types";
 
 const selectTriggerVariants = cva(
-  "w-full flex items-center justify-between rounded-md bg-background text-text-primary border focus:border-primary outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors",
+  "w-full flex items-center justify-between [--_radius:var(--radius-input)] rounded-slot text-text-primary outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors",
   {
     variants: {
+      variant: {
+        outline: "bg-background border border-border hover:border-slot-50 focus:border-slot focus:ring-2 focus:ring-slot-30",
+        filled: "bg-surface border border-transparent hover:border-slot-30 focus:border-slot focus:ring-2 focus:ring-slot-30",
+      },
       status: {
-        default: "border-border hover:border-primary/50",
+        default: "",
         error: "border-error",
         warning: "border-warning",
         info: "border-info",
@@ -37,6 +41,7 @@ const selectTriggerVariants = cva(
       },
     },
     defaultVariants: {
+      variant: "outline",
       status: "default",
       size: "md",
       fullWidth: true,
@@ -70,6 +75,7 @@ const selectGroupVariants = cva(
 
 const Select = React.memo<SelectProps>(
   ({
+    variant = "outline",
     size = "md",
     color = "primary",
     label,
@@ -185,7 +191,7 @@ const Select = React.memo<SelectProps>(
           {/* Top scroll indicator */}
           <div className="flex items-center justify-center h-4">
             {showTopArrow && (
-              <ChevronUp className="size-4 text-text-primary animate-in fade-in duration-150" />
+              <ChevronUp className="size-4 text-text-primary [--_duration:var(--duration-exit)] animate-in fade-in duration-slot" />
             )}
           </div>
 
@@ -297,7 +303,7 @@ const Select = React.memo<SelectProps>(
                         <span className="absolute right-3 top-1/2 -translate-y-1/2">
                           <Check
                             className={cn(
-                              "text-slot animate-in zoom-in-75 duration-150",
+                              "text-slot [--_duration:var(--duration-exit)] animate-in zoom-in-75 duration-slot",
                               iconSizes[size],
                             )}
                           />
@@ -369,7 +375,7 @@ const Select = React.memo<SelectProps>(
                         <span className="absolute right-3 top-1/2 -translate-y-1/2">
                           <Check
                             className={cn(
-                              "text-slot animate-in zoom-in-75 duration-150",
+                              "text-slot [--_duration:var(--duration-exit)] animate-in zoom-in-75 duration-slot",
                               iconSizes[size],
                             )}
                           />
@@ -385,7 +391,7 @@ const Select = React.memo<SelectProps>(
           {/* Bottom scroll indicator */}
           <div className="flex items-center justify-center h-4">
             {showBottomArrow && (
-              <ChevronDown className="size-4 text-text-primary animate-in fade-in duration-150" />
+              <ChevronDown className="size-4 text-text-primary [--_duration:var(--duration-exit)] animate-in fade-in duration-slot" />
             )}
           </div>
         </div>
@@ -399,7 +405,7 @@ const Select = React.memo<SelectProps>(
         data-slot="trigger"
         className={cn(
           "select_trigger",
-          selectTriggerVariants({ status, size, fullWidth }),
+          selectTriggerVariants({ variant, status, size, fullWidth }),
           loading && "opacity-50",
           className,
           classNames?.trigger,
@@ -481,7 +487,7 @@ const Select = React.memo<SelectProps>(
         className={cn(
           "select_root",
           "relative group",
-          colorVars[color],
+          colorVars[status !== 'default' ? status : color],
           fullWidth ? "w-full" : "inline-block",
           classNames?.root,
         )}

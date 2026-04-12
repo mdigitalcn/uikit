@@ -51,6 +51,7 @@ function getColPin<TData>(col: ExtendedColumnDef<TData, unknown>) {
 function isColEditable<TData>(col: ExtendedColumnDef<TData, unknown>) {
   return col.editable === true
 }
+import { colorVars } from '../variants'
 import { cellVariants } from './variants'
 
 function TableComponent<TData>({
@@ -91,6 +92,7 @@ function TableComponent<TData>({
   pageSizeOptions = [5, 10, 20, 50],
   onRowClick,
   onSelectionChange,
+  onRowSelectionChange,
   onCellEdit,
   pinnedRowIds = [],
   onPinnedRowsChange,
@@ -129,9 +131,15 @@ function TableComponent<TData>({
   const controlledRowSelectionRef = useRef(controlledRowSelection)
   controlledRowSelectionRef.current = controlledRowSelection
 
+  const onRowSelectionChangeRef = useRef(onRowSelectionChange)
+  onRowSelectionChangeRef.current = onRowSelectionChange
+
   const setRowSelection = React.useCallback(
     (updater: Record<string, boolean> | ((prev: Record<string, boolean>) => Record<string, boolean>)) => {
-      if (!controlledRowSelectionRef.current) {
+      if (controlledRowSelectionRef.current) {
+        const next = typeof updater === 'function' ? updater(controlledRowSelectionRef.current) : updater
+        onRowSelectionChangeRef.current?.(next)
+      } else {
         setInternalRowSelection((prev) => {
           return typeof updater === 'function' ? updater(prev) : updater
         })
@@ -169,16 +177,15 @@ function TableComponent<TData>({
   }, [data, enableRowPinning])
 
   useEffect(() => {
-    if (autoPinnedIds.length > 0) {
-      const combinedPinnedIds = [
-        ...new Set([...pinnedRowIds, ...autoPinnedIds]),
-      ]
-
-      const autoPinnedIdsStr = autoPinnedIds.sort().join(',')
-      if (autoPinnedIdsStr !== prevAutoPinnedIdsRef.current) {
-        prevAutoPinnedIdsRef.current = autoPinnedIdsStr
-        setPinnedRows(combinedPinnedIds)
-      }
+    const combined = [...new Set([...pinnedRowIds, ...autoPinnedIds])]
+    const combinedStr = combined.sort().join(',')
+    const autoPinnedIdsStr = autoPinnedIds.sort().join(',')
+    if (
+      autoPinnedIdsStr !== prevAutoPinnedIdsRef.current ||
+      combinedStr !== pinnedRowsRef.current.slice().sort().join(',')
+    ) {
+      prevAutoPinnedIdsRef.current = autoPinnedIdsStr
+      setPinnedRows(combined)
     }
   }, [autoPinnedIds, pinnedRowIds])
 
@@ -296,7 +303,7 @@ function TableComponent<TData>({
                     }}
                     className={cn(
                       'text-text-secondary hover:text-text-primary transition-colors',
-                      isPinned && 'text-primary',
+                      isPinned && 'text-slot',
                     )}
                     aria-label={isPinned ? 'Unpin row' : 'Pin row'}
                     aria-pressed={isPinned}
@@ -430,9 +437,12 @@ function TableComponent<TData>({
     },
   })
 
+  const tableRef = useRef(table)
+  tableRef.current = table
+
   useEffect(() => {
     if (onSelectionChange) {
-      const selectedRows = table
+      const selectedRows = tableRef.current
         .getSelectedRowModel()
         .rows.map((row) => row.original)
       const selectionKey = Object.keys(rowSelection).sort().join(',')
@@ -617,7 +627,7 @@ function TableComponent<TData>({
                               e.stopPropagation()
                               row.toggleExpanded()
                             }}
-                            className="text-text-secondary hover:text-text-primary"
+                            className="text-text-secondary hover:text-text-primary rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-1"
                             aria-label={row.getIsExpanded() ? 'Collapse group' : 'Expand group'}
                             aria-expanded={row.getIsExpanded()}
                           >
@@ -794,7 +804,7 @@ function TableComponent<TData>({
   }
 
   return (
-    <div data-slot="root" className={cn('table_root w-full space-y-4', classNames?.root)}>
+    <div data-slot="root" className={cn('table_root w-full space-y-4', colorVars[color], classNames?.root)}>
       {enableActions && (
         <TableActions
           searchValue={searchValue}
@@ -814,7 +824,7 @@ function TableComponent<TData>({
       <div
         ref={tableContainerRef}
         className={cn(
-          'table_wrapper overflow-auto rounded-md',
+          'table_wrapper overflow-auto [--_radius:var(--radius-card)] rounded-slot',
           enableVirtualization && 'max-h-[500px]',
           variant === 'outline' && 'border border-border',
           classNames?.wrapper,

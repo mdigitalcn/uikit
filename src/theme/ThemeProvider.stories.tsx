@@ -164,7 +164,7 @@ export const Setup: Story = {
           1. Wrap your app
         </h4>
         <pre className="bg-surface border border-border rounded-lg p-4 text-xs overflow-x-auto">
-          {`import { ThemeProvider } from '@fmlj/uikit'
+          {`import { ThemeProvider } from '@mdigitalcn/uikit'
 
 export default function App({ children }) {
   return (
@@ -181,7 +181,7 @@ export default function App({ children }) {
           2. Add the theme script (prevents flash)
         </h4>
         <pre className="bg-surface border border-border rounded-lg p-4 text-xs overflow-x-auto">
-          {`import { getThemeScript } from '@fmlj/uikit'
+          {`import { getThemeScript } from '@mdigitalcn/uikit'
 
 // In your HTML <head>:
 <script dangerouslySetInnerHTML={{ __html: getThemeScript() }} />
@@ -201,7 +201,7 @@ export default function App({ children }) {
           3. Use the hook anywhere
         </h4>
         <pre className="bg-surface border border-border rounded-lg p-4 text-xs overflow-x-auto">
-          {`import { useTheme } from '@fmlj/uikit'
+          {`import { useTheme } from '@mdigitalcn/uikit'
 
 function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme()

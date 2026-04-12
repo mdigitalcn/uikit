@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 import React, { useState, useId, useCallback } from "react";
 
 import { cn } from "../utils";
-import { colorVars } from "../variants";
+import { buttonColorVars } from "../variants";
 import type { SwitchProps, SwitchSize } from "./types";
 
 const switchTrackVariants = cva(
@@ -16,7 +16,7 @@ const switchTrackVariants = cva(
   ],
   {
     variants: {
-      color: colorVars,
+      color: buttonColorVars,
       size: {
         xs: "w-(--switch-width-xs) h-(--switch-height-xs)",
         sm: "w-(--switch-width-sm) h-(--switch-height-sm)",
@@ -37,7 +37,7 @@ const switchTrackVariants = cva(
 );
 
 const switchThumbVariants = cva(
-  "absolute top-0.5 left-0.5 bg-background rounded-full shadow-sm transition-transform duration-200 ease-in-out flex items-center justify-center",
+  "absolute top-0.5 left-0.5 bg-background rounded-full [--_shadow:var(--shadow-sm)] shadow-size-slot transition-transform duration-slot ease-in-out flex items-center justify-center",
   {
     variants: {
       size: {
@@ -202,7 +202,7 @@ const Switch = React.memo<SwitchProps>(
                   "peer-disabled:opacity-50 peer-disabled:cursor-not-allowed",
                   "peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background",
                   trackHeightClasses[size],
-                  colorVars[color],
+                  buttonColorVars[color],
                   "bg-border peer-checked:bg-slot peer-focus-visible:ring-slot",
                   error &&
                     "bg-error/30 peer-checked:bg-error peer-focus-visible:ring-error",
@@ -212,6 +212,7 @@ const Switch = React.memo<SwitchProps>(
             classNames?.track,
             className,
           )}
+          data-slot="track"
         >
           {/* Auto-width sizing grid (invisible, determines track width) */}
           {hasInnerText && (
@@ -276,10 +277,11 @@ const Switch = React.memo<SwitchProps>(
 
         {/* Thumb */}
         <span
+          data-slot="thumb"
           className={cn(
             hasInnerText
               ? cn(
-                  "absolute top-0.5 bg-background rounded-full shadow-sm transition-[left] duration-200 ease-in-out flex items-center justify-center",
+                  "absolute top-0.5 bg-background rounded-full [--_shadow:var(--shadow-sm)] shadow-size-slot transition-[left] duration-slot ease-in-out flex items-center justify-center",
                   thumbSizeOnlyClasses[size],
                 )
               : switchThumbVariants({ size }),

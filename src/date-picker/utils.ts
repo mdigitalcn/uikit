@@ -8,8 +8,8 @@ export const pickerInputVariants = cva(
   {
     variants: {
       variant: {
-        outline: 'bg-background border rounded-md',
-        filled: 'bg-surface border border-transparent rounded-md',
+        outline: 'bg-background border [--_radius:var(--radius-input)] rounded-slot hover:border-slot-50',
+        filled: 'bg-surface border border-transparent [--_radius:var(--radius-input)] rounded-slot hover:border-slot-30',
       },
       status: {
         default: 'border-border',
@@ -72,7 +72,8 @@ const datePickerBaseStyles = `
   [&_.react-datepicker__day]:!h-10
   [&_.react-datepicker__day]:!leading-10
   [&_.react-datepicker__day]:!text-center
-  [&_.react-datepicker__day]:!rounded-md
+  [&_.react-datepicker__day]:[--_radius:var(--radius-button)]
+  [&_.react-datepicker__day]:!rounded-slot
   [&_.react-datepicker__day]:!text-text-primary
   [&_.react-datepicker__day]:!text-sm
   [&_.react-datepicker__day]:!m-0

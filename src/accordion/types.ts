@@ -9,9 +9,12 @@ export type AccordionVariant =
 
 export type AccordionSize = ComponentSize;
 
+export type AccordionHeadingLevel = 2 | 3 | 4 | 5 | 6;
+
 export interface AccordionClassNames {
   root?: string;
   item?: string;
+  heading?: string;
   trigger?: string;
   content?: string;
   icon?: string;
@@ -103,6 +106,14 @@ export interface AccordionProps {
    * @default true
    */
   showDivider?: boolean;
+
+  /**
+   * Heading level for accordion item headers (WAI-ARIA requirement).
+   * Each trigger is wrapped in a heading element of this level.
+   * Choose a level appropriate for your page's information hierarchy.
+   * @default 3
+   */
+  headingLevel?: AccordionHeadingLevel;
 
   className?: string;
   itemClassName?: string;

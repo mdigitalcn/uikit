@@ -41,3 +41,44 @@ export const buttonColorVars: Record<ButtonColor, string> = {
   warning: colorVars.warning,
   info: colorVars.info,
 } as const;
+
+// Radius Slot System
+//
+// Sets --_radius on a component root so all children can use rounded-slot.
+// The radius type (button, input, card, …) is determined by the component,
+// not by a user prop — inline the matching entry in the CVA base string.
+//
+// Usage:
+//   cva('[--_radius:var(--radius-button)] rounded-slot ...', { ... })
+export const radiusVars = {
+  none:     '[--_radius:0px]',
+  full:     '[--_radius:var(--radius-full)]',
+  button:   '[--_radius:var(--radius-button)]',
+  input:    '[--_radius:var(--radius-input)]',
+  tag:      '[--_radius:var(--radius-tag)]',
+  badge:    '[--_radius:var(--radius-badge)]',
+  card:     '[--_radius:var(--radius-card)]',
+  alert:    '[--_radius:var(--radius-alert)]',
+  tooltip:  '[--_radius:var(--radius-tooltip)]',
+  dropdown: '[--_radius:var(--radius-dropdown)]',
+  popover:  '[--_radius:var(--radius-popover)]',
+  modal:    '[--_radius:var(--radius-modal)]',
+  drawer:   '[--_radius:var(--radius-drawer)]',
+} as const;
+
+// Shadow Slot System
+//
+// Sets --_shadow on an element. Use shadow-size-slot to consume.
+// Apply shadowVars[size] on the element that should cast the shadow.
+//
+// Usage:
+//   className={cn(shadowVars.md, 'shadow-size-slot ...')}
+export const shadowVars = {
+  none: '[--_shadow:none]',
+  xs:   '[--_shadow:var(--shadow-xs)]',
+  sm:   '[--_shadow:var(--shadow-sm)]',
+  md:   '[--_shadow:var(--shadow-md)]',
+  lg:   '[--_shadow:var(--shadow-lg)]',
+  xl:   '[--_shadow:var(--shadow-xl)]',
+  '2xl':'[--_shadow:var(--shadow-2xl)]',
+} as const;

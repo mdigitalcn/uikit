@@ -1,18 +1,22 @@
 'use client'
 
 import { cva } from 'class-variance-authority'
-import React, { useState, useRef, useCallback, useMemo } from 'react'
+import React, { useState, useRef, useCallback, useMemo, useId } from 'react'
 
 import { X } from 'lucide-react'
 import { useControllable } from '../hooks/useControllable'
-import { cn, statusMessageVariants } from '../utils'
+import { cn, getValidationStatus, statusMessageVariants } from '../utils'
 import { colorVars } from '../variants'
 import type { TagsInputProps } from './types'
 
 const wrapperVariants = cva(
-  'flex flex-wrap items-center gap-1 rounded-md border bg-background text-text-primary transition-colors cursor-text',
+  'flex flex-wrap items-center gap-1 [--_radius:var(--radius-input)] rounded-slot text-text-primary transition-colors cursor-text',
   {
     variants: {
+      variant: {
+        outline: 'bg-background border border-border hover:border-slot-50 focus-within:border-slot focus-within:ring-2 focus-within:ring-slot-30',
+        filled: 'bg-surface border border-transparent hover:border-slot-30 focus-within:border-slot focus-within:ring-2 focus-within:ring-slot-30',
+      },
       size: {
         xs: 'min-h-(--input-height-xs) px-(--input-padding-x-xs) py-0.5 text-xs',
         sm: 'min-h-(--input-height-sm) px-(--input-padding-x-sm) py-1 text-sm',
@@ -20,23 +24,26 @@ const wrapperVariants = cva(
         lg: 'min-h-(--input-height-lg) px-(--input-padding-x-lg) py-1.5 text-base',
       },
       status: {
-        default: 'border-border focus-within:border-primary',
-        error: 'border-error focus-within:border-error',
+        default: '',
+        error: 'border-error',
+        warning: 'border-warning',
+        info: 'border-info',
+        success: 'border-success',
       },
     },
-    defaultVariants: { size: 'md', status: 'default' },
+    defaultVariants: { variant: 'outline', size: 'md', status: 'default' },
   },
 )
 
 const tagVariants = cva(
-  'inline-flex items-center gap-0.5 rounded-md font-medium transition-colors bg-slot-10 text-slot',
+  'inline-flex items-center gap-0.5 [--_radius:var(--radius-tag)] rounded-slot font-medium transition-colors bg-slot-10 text-slot',
   {
     variants: {
       size: {
-        xs: 'h-4 px-1 text-[10px]',
-        sm: 'h-5 px-1.5 text-xs',
-        md: 'h-6 px-2 text-xs',
-        lg: 'h-7 px-2.5 text-sm',
+        xs: 'h-(--tag-height-xs) px-(--tag-padding-x-xs) text-(--tag-font-size-xs)',
+        sm: 'h-(--tag-height-sm) px-(--tag-padding-x-sm) text-(--tag-font-size-sm)',
+        md: 'h-(--tag-height-md) px-(--tag-padding-x-md) text-(--tag-font-size-md)',
+        lg: 'h-(--tag-height-lg) px-(--tag-padding-x-lg) text-(--tag-font-size-lg)',
       },
     },
     defaultVariants: { size: 'md' },
@@ -58,12 +65,16 @@ const TagsInput = React.memo<TagsInputProps>(
     validate,
     onTagAdd,
     onTagRemove,
+    variant = 'outline',
     size = 'md',
     color = 'primary',
     disabled = false,
     readOnly = false,
     label,
     error,
+    warning,
+    info,
+    success,
     helperText,
     clearable = false,
     fullWidth = true,
@@ -71,10 +82,12 @@ const TagsInput = React.memo<TagsInputProps>(
     classNames,
   }) => {
     const [tags, setTags] = useControllable({ value, defaultValue, onChange })
+    const { status, message: statusMessage } = getValidationStatus({ error, warning, info, success, helperText })
     const [inputValue, setInputValue] = useState('')
     const [showSuggestions, setShowSuggestions] = useState(false)
     const [highlightedIdx, setHighlightedIdx] = useState(-1)
     const inputRef = useRef<HTMLInputElement>(null)
+    const listboxId = useId()
 
     const separators = useMemo(
       () => (Array.isArray(separator) ? separator : [separator]),
@@ -172,13 +185,13 @@ const TagsInput = React.memo<TagsInputProps>(
           'tagsInput_root',
           'flex flex-col gap-1.5',
           fullWidth ? 'w-full' : 'inline-flex',
-          colorVars[color],
+          colorVars[status !== 'default' ? status : color],
           classNames?.root,
           className,
         )}
       >
         {label && (
-          <label data-slot="label" className="text-sm font-medium text-text-primary">
+          <label data-slot="label" className="text-sm font-medium text-text-secondary">
             {label}
           </label>
         )}
@@ -190,8 +203,8 @@ const TagsInput = React.memo<TagsInputProps>(
             aria-label={label || 'Tags'}
             className={cn(
               'tagsInput_wrapper',
-              wrapperVariants({ size, status: error ? 'error' : 'default' }),
-              disabled && 'opacity-50 cursor-not-allowed',
+              wrapperVariants({ variant, size, status }),
+              disabled && 'opacity-50 pointer-events-none cursor-not-allowed',
               classNames?.wrapper,
             )}
             onClick={() => !disabled && !readOnly && inputRef.current?.focus()}
@@ -214,7 +227,7 @@ const TagsInput = React.memo<TagsInputProps>(
                     aria-label={`Remove ${tag}`}
                     tabIndex={-1}
                   >
-                    <X className="w-3 h-3" />
+                    <X className="size-(--tag-icon-size-sm)" />
                   </button>
                 )}
               </span>
@@ -224,6 +237,14 @@ const TagsInput = React.memo<TagsInputProps>(
               <input
                 ref={inputRef}
                 type="text"
+                role="combobox"
+                aria-expanded={showSuggestions && filteredSuggestions.length > 0}
+                aria-haspopup="listbox"
+                aria-autocomplete="list"
+                aria-controls={listboxId}
+                aria-activedescendant={
+                  highlightedIdx >= 0 ? `${listboxId}-option-${highlightedIdx}` : undefined
+                }
                 value={inputValue}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
@@ -256,10 +277,18 @@ const TagsInput = React.memo<TagsInputProps>(
           </div>
 
           {showSuggestions && filteredSuggestions.length > 0 && (
-            <div className="absolute z-[var(--z-popover)] mt-1 w-full rounded-md border border-border bg-background shadow-md max-h-[200px] overflow-auto">
+            <div
+              id={listboxId}
+              role="listbox"
+              aria-label={label || 'Suggestions'}
+              className="absolute z-[var(--z-popover)] mt-1 w-full [--_radius:var(--radius-dropdown)] rounded-slot border border-border bg-background shadow-(--dropdown-shadow) max-h-(--dropdown-max-height) overflow-auto"
+            >
               {filteredSuggestions.map((s, idx) => (
                 <div
                   key={s}
+                  id={`${listboxId}-option-${idx}`}
+                  role="option"
+                  aria-selected={idx === highlightedIdx}
                   onMouseDown={(e) => {
                     e.preventDefault()
                     addTag(s)
@@ -279,9 +308,9 @@ const TagsInput = React.memo<TagsInputProps>(
           )}
         </div>
 
-        {(error || helperText) && (
-          <p data-slot="message" className={cn('text-xs', error ? statusMessageVariants({ status: 'error' }) : 'text-text-secondary')}>
-            {error || helperText}
+        {statusMessage && (
+          <p data-slot="message" className={cn('text-xs', statusMessageVariants({ status }))}>
+            {typeof statusMessage === 'boolean' ? undefined : statusMessage}
           </p>
         )}
       </div>

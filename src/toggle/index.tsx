@@ -1,8 +1,9 @@
 'use client'
 
 import { cva } from 'class-variance-authority'
-import React, { useState } from 'react'
+import React from 'react'
 
+import { useControllable } from '../hooks/useControllable'
 import { useRipple, RippleContainer } from '../hooks/useRipple'
 import { cn } from '../utils'
 import { colorVars } from '../variants'
@@ -30,14 +31,14 @@ const getToggleClasses = (
 }
 
 const singleToggleVariants = cva(
-  'inline-flex items-center gap-2 font-medium transition-colors cursor-pointer border rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+  'inline-flex items-center gap-2 font-medium transition-colors cursor-pointer border [--_radius:var(--radius-button)] rounded-slot focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slot focus-visible:ring-offset-background',
   {
     variants: {
       size: {
-        xs: 'text-xs px-2 py-1',
-        sm: 'text-sm px-3 py-1.5',
-        md: 'text-base px-4 py-2',
-        lg: 'text-lg px-5 py-2.5',
+        xs: 'text-xs h-(--toggle-height-xs) px-(--toggle-padding-x-xs)',
+        sm: 'text-sm h-(--toggle-height-sm) px-(--toggle-padding-x-sm)',
+        md: 'text-base h-(--toggle-height-md) px-(--toggle-padding-x-md)',
+        lg: 'text-lg h-(--toggle-height-lg) px-(--toggle-padding-x-lg)',
       },
     },
     defaultVariants: {
@@ -62,20 +63,12 @@ const Toggle = React.memo<SingleToggleProps>(
     classNames,
     ref,
   }) => {
-    const [internalPressed, setInternalPressed] = useState(defaultPressed)
+    const [pressed, setPressed] = useControllable({ value: controlledPressed, defaultValue: defaultPressed ?? false, onChange })
     const { ripples, onPointerDown: ripplePointerDown, onKeyDown: rippleKeyDown, onAnimationEnd: rippleAnimationEnd } = useRipple(!disabled)
-
-    const pressed =
-      controlledPressed !== undefined ? controlledPressed : internalPressed
 
     const handleClick = () => {
       if (disabled) return
-
-      const newPressed = !pressed
-      if (controlledPressed === undefined) {
-        setInternalPressed(newPressed)
-      }
-      onChange?.(newPressed)
+      setPressed(!pressed)
     }
 
     return (

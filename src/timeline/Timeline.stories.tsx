@@ -1,280 +1,204 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { CheckCircle, Clock, AlertCircle, Package, Truck, Home, XCircle } from 'lucide-react'
-import Timeline from './index'
-import type { TimelineProps } from './types'
+import type { Meta, StoryObj } from "@storybook/react";
+import { Check, Clock, Home, Package, Truck, X } from "lucide-react";
+import React from "react";
 
-const meta = {
-  title: 'Data Display/Timeline',
+import Timeline from "./index";
+
+const meta: Meta<typeof Timeline> = {
+  title: "Data Display/Timeline",
   component: Timeline,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    mode: {
-      control: 'select',
-      options: ['left', 'right', 'center'],
-      description: 'Layout mode for the timeline',
-    },
-    orientation: {
-      control: 'select',
-      options: ['vertical', 'horizontal'],
-      description: 'Timeline orientation',
+    color: {
+      control: "select",
+      options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
     size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Size of timeline elements',
+      control: "select",
+      options: ["xs", "sm", "md", "lg"],
     },
-    color: {
-      control: 'select',
-      options: ['default', 'primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'],
-      description: 'Default color for timeline items',
+    orientation: {
+      control: "select",
+      options: ["vertical", "horizontal"],
     },
-    pending: {
-      control: 'boolean',
-      description: 'Show pending indicator at the end',
+    mode: {
+      control: "select",
+      options: ["left", "right", "center"],
     },
-    reverse: {
-      control: 'boolean',
-      description: 'Reverse the order of items',
-    },
+    pending: { control: "boolean" },
+    reverse: { control: "boolean" },
   },
-} satisfies Meta<typeof Timeline>
+};
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof Timeline>;
 
-const basicItems: TimelineProps['items'] = [
+const orderItems = [
   {
-    title: 'Project Created',
-    description: 'Initial project setup and repository creation',
-    timestamp: '2024-01-15',
+    key: "placed",
+    title: "Order Placed",
+    description: "Your order has been confirmed.",
+    timestamp: "Jan 1, 09:00",
+    color: "success" as const,
   },
   {
-    title: 'Design Phase',
-    description: 'Completed UI/UX design and wireframes',
-    timestamp: '2024-01-20',
+    key: "processing",
+    title: "Processing",
+    description: "We are preparing your order.",
+    timestamp: "Jan 2, 10:30",
+    color: "success" as const,
   },
   {
-    title: 'Development Started',
-    description: 'Backend API and database schema implementation',
-    timestamp: '2024-01-25',
+    key: "shipped",
+    title: "Shipped",
+    description: "Package is on its way.",
+    timestamp: "Jan 3, 14:00",
+    color: "primary" as const,
   },
   {
-    title: 'Beta Release',
-    description: 'Released beta version to selected users',
-    timestamp: '2024-02-01',
+    key: "delivered",
+    title: "Delivered",
+    description: "Package will arrive soon.",
+    timestamp: "Est. Jan 5",
+    color: "default" as const,
   },
-]
+];
 
-export const Primary: Story = {
+const iconItems = [
+  {
+    key: "order",
+    title: "Order Received",
+    description: "We received your order.",
+    icon: <Package className="w-3.5 h-3.5" />,
+    color: "success" as const,
+  },
+  {
+    key: "ship",
+    title: "Dispatched",
+    description: "Your package has been sent.",
+    icon: <Truck className="w-3.5 h-3.5" />,
+    color: "success" as const,
+  },
+  {
+    key: "transit",
+    title: "In Transit",
+    description: "En route to your location.",
+    icon: <Clock className="w-3.5 h-3.5" />,
+    color: "primary" as const,
+  },
+  {
+    key: "home",
+    title: "Delivered",
+    description: "Awaiting delivery.",
+    icon: <Home className="w-3.5 h-3.5" />,
+    color: "default" as const,
+  },
+];
+
+const mixedColorItems = [
+  {
+    key: "success",
+    title: "Deployment Succeeded",
+    description: "All checks passed.",
+    icon: <Check className="w-3.5 h-3.5" />,
+    color: "success" as const,
+  },
+  {
+    key: "warn",
+    title: "High Latency Detected",
+    description: "Response time above threshold.",
+    icon: <Clock className="w-3.5 h-3.5" />,
+    color: "warning" as const,
+  },
+  {
+    key: "error",
+    title: "Service Outage",
+    description: "Database connection failed.",
+    icon: <X className="w-3.5 h-3.5" />,
+    color: "error" as const,
+  },
+  {
+    key: "info",
+    title: "Rollback Initiated",
+    description: "Rolling back to previous version.",
+    color: "info" as const,
+  },
+];
+
+export const Playground: Story = {
   args: {
-    items: basicItems,
-    size: 'md',
-    color: 'primary',
+    items: orderItems,
+    size: "md",
+    color: "primary",
+    orientation: "vertical",
+    mode: "left",
   },
-}
+};
 
-export const WithIcons: Story = {
-  args: {
-    size: 'md',
-    items: [
-      {
-        title: 'Order Confirmed',
-        description: 'Your order has been confirmed and is being prepared',
-        timestamp: '10:30 AM',
-        icon: <CheckCircle className="w-full h-full text-white" />,
-        color: 'success',
-      },
-      {
-        title: 'Processing',
-        description: 'Your order is being processed',
-        timestamp: '11:00 AM',
-        icon: <Clock className="w-full h-full text-white" />,
-        color: 'info',
-      },
-      {
-        title: 'Shipped',
-        description: 'Your order has been shipped',
-        timestamp: '2:30 PM',
-        icon: <Package className="w-full h-full text-white" />,
-        color: 'primary',
-      },
-      {
-        title: 'Out for Delivery',
-        description: 'Your order is out for delivery',
-        timestamp: '4:00 PM',
-        icon: <Truck className="w-full h-full text-white" />,
-        color: 'warning',
-      },
-    ],
-  },
-}
-
-
-export const Horizontal: Story = {
-  parameters: { layout: 'padded' },
-  args: {
-    orientation: 'horizontal',
-    size: 'md',
-    color: 'primary',
-    items: basicItems,
-  },
-}
-
-export const HorizontalWithIcons: Story = {
-  parameters: { layout: 'padded' },
-  args: {
-    orientation: 'horizontal',
-    size: 'md',
-    items: [
-      {
-        title: 'Order Placed',
-        timestamp: 'Jan 28',
-        icon: <CheckCircle className="w-full h-full text-white" />,
-        color: 'success',
-      },
-      {
-        title: 'Processing',
-        timestamp: 'Jan 29',
-        icon: <Clock className="w-full h-full text-white" />,
-        color: 'info',
-      },
-      {
-        title: 'Shipped',
-        timestamp: 'Jan 30',
-        icon: <Package className="w-full h-full text-white" />,
-        color: 'primary',
-      },
-      {
-        title: 'Delivered',
-        timestamp: 'Feb 1',
-        icon: <Home className="w-full h-full text-white" />,
-        color: 'success',
-      },
-    ],
-  },
-}
-
-export const HorizontalPending: Story = {
-  parameters: { layout: 'padded' },
-  args: {
-    orientation: 'horizontal',
-    size: 'md',
-    pending: true,
-    pendingText: 'In Transit',
-    items: [
-      {
-        title: 'Ordered',
-        timestamp: 'Mon',
-        icon: <CheckCircle className="w-full h-full text-white" />,
-        color: 'success',
-      },
-      {
-        title: 'Packed',
-        timestamp: 'Tue',
-        icon: <Package className="w-full h-full text-white" />,
-        color: 'success',
-      },
-    ],
-  },
-}
-
-
-export const ComplexExample: Story = {
+export const Showcase: Story = {
   render: () => (
-    <div className="max-w-2xl">
-      <h2 className="text-2xl font-bold mb-6">Order Tracking</h2>
-      <Timeline
-        mode="left"
-        size="md"
-        items={[
-          {
-            title: 'Order Placed',
-            description: 'Your order has been successfully placed',
-            timestamp: 'Jan 28, 2024 - 10:30 AM',
-            icon: <CheckCircle className="w-full h-full text-white" />,
-            color: 'success',
-          },
-          {
-            title: 'Payment Confirmed',
-            description: 'Payment received and verified',
-            timestamp: 'Jan 28, 2024 - 10:31 AM',
-            icon: <CheckCircle className="w-full h-full text-white" />,
-            color: 'success',
-          },
-          {
-            title: 'Processing Order',
-            description: 'Your items are being prepared for shipment',
-            timestamp: 'Jan 28, 2024 - 11:00 AM',
-            icon: <Package className="w-full h-full text-white" />,
-            color: 'info',
-          },
-          {
-            title: 'Shipped',
-            description: (
-              <div>
-                <p>Your package has been shipped</p>
-                <p className="text-xs mt-1 font-mono">Tracking: #TRK123456789</p>
-              </div>
-            ),
-            timestamp: 'Jan 29, 2024 - 2:30 PM',
-            icon: <Truck className="w-full h-full text-white" />,
-            color: 'primary',
-          },
-          {
-            title: 'Out for Delivery',
-            description: 'Package is out for delivery to your address',
-            timestamp: 'Jan 30, 2024 - 8:00 AM',
-            icon: <Truck className="w-full h-full text-white" />,
-            color: 'warning',
-          },
-          {
-            title: 'Delivered',
-            description: 'Package delivered successfully',
-            timestamp: 'Expected: Jan 30, 2024 - 5:00 PM',
-            icon: <Home className="w-full h-full text-white" />,
-            color: 'default',
-          },
-        ]}
-      />
+    <div className="space-y-10">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Basic with Timestamps</h3>
+        <Timeline items={orderItems} />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Icons</h3>
+        <Timeline items={iconItems} color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Mixed Item Colors</h3>
+        <Timeline items={mixedColorItems} />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Pending Indicator</h3>
+        <Timeline items={orderItems.slice(0, 3)} pending pendingText="Awaiting delivery..." color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Reversed</h3>
+        <Timeline items={orderItems} reverse color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Horizontal Orientation</h3>
+        <Timeline items={orderItems} orientation="horizontal" color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        {(["xs", "sm", "md", "lg"] as const).map((s) => (
+          <div key={s} className="mb-6">
+            <p className="text-xs text-text-secondary mb-2">size: {s}</p>
+            <Timeline items={orderItems.slice(0, 3)} size={s} color="primary" />
+          </div>
+        ))}
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="grid grid-cols-2 gap-6">
+          {(["primary", "accent", "success", "error", "warning", "info"] as const).map((c) => (
+            <div key={c}>
+              <p className="text-xs text-text-secondary mb-2">{c}</p>
+              <Timeline items={orderItems.slice(0, 2)} color={c} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Mode — Right</h3>
+        <Timeline items={orderItems} mode="right" color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Mode — Center (Alternating)</h3>
+        <Timeline items={orderItems} mode="center" color="primary" />
+      </section>
     </div>
   ),
-}
-
-export const WithFailedStep: Story = {
-  args: {
-    size: 'md',
-    items: [
-      {
-        title: 'Build Started',
-        description: 'Starting build process',
-        icon: <Clock className="w-full h-full text-white" />,
-        color: 'info',
-        timestamp: '10:00:00',
-      },
-      {
-        title: 'Dependencies Installed',
-        description: 'All packages installed successfully',
-        icon: <CheckCircle className="w-full h-full text-white" />,
-        color: 'success',
-        timestamp: '10:02:15',
-      },
-      {
-        title: 'Build Failed',
-        description: 'TypeScript compilation error in src/components/Header.tsx',
-        icon: <XCircle className="w-full h-full text-white" />,
-        color: 'error',
-        timestamp: '10:05:42',
-      },
-      {
-        title: 'Retry Build',
-        description: 'Attempting to rebuild after fixing errors',
-        icon: <AlertCircle className="w-full h-full text-white" />,
-        color: 'warning',
-        timestamp: '10:08:00',
-      },
-    ],
-  },
-}
+};

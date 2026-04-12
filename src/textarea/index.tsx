@@ -8,19 +8,19 @@ import { colorVars } from "../variants";
 import type { TextareaProps } from "./types";
 
 const textareaVariants = cva(
-  "w-full rounded-md focus:border-primary transition-colors text-text-primary placeholder:text-text-secondary/50 disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none",
+  "w-full [--_radius:var(--radius-input)] rounded-slot transition-colors text-text-primary placeholder:text-text-secondary/50 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none",
   {
     variants: {
       variant: {
-        outline: "bg-background border border-border",
-        filled: "bg-surface border border-transparent",
+        outline: "bg-background border border-border hover:border-slot-50 focus:border-slot focus:ring-2 focus:ring-slot-30",
+        filled: "bg-surface border border-transparent hover:border-slot-30 focus:border-slot focus:ring-2 focus:ring-slot-30",
       },
       status: {
         default: "",
-        error: "border-error focus:border-error",
-        warning: "border-warning focus:border-warning",
-        info: "border-info focus:border-info",
-        success: "border-success focus:border-success",
+        error: "border-error",
+        warning: "border-warning",
+        info: "border-info",
+        success: "border-success",
       },
       size: {
         xs: "min-h-(--textarea-min-height-xs) p-(--textarea-padding-xs) text-xs",
@@ -158,7 +158,7 @@ const Textarea = React.memo<TextareaProps>(
         className={cn(
           "textarea_root",
           "w-full flex flex-col relative",
-          color !== "primary" && colorVars[color],
+          colorVars[status !== 'default' ? status : color],
           !fullWidth && "inline-block",
           classNames?.root,
         )}

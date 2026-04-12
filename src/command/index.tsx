@@ -20,7 +20,7 @@ import { ComponentColor } from '../types'
 import { cn, iconSizes } from '../utils'
 
 const commandVariants = cva(
-  'flex h-full w-full flex-col overflow-hidden rounded-md bg-background text-text-primary',
+  'flex h-full w-full flex-col overflow-hidden [--_radius:var(--radius-input)] rounded-slot bg-background text-text-primary',
   {
     variants: {
       size: {
@@ -117,9 +117,9 @@ const commandInputWrapperVariants = cva(
     variants: {
       size: {
         xs: 'h-6',
-        sm: 'h-8',
-        md: 'h-10',
-        lg: 'h-12',
+        sm: 'h-(--input-height-sm)',
+        md: 'h-(--input-height-md)',
+        lg: 'h-(--input-height-lg)',
       },
     },
     defaultVariants: {
@@ -162,10 +162,10 @@ const commandListVariants = cva(
   {
     variants: {
       size: {
-        xs: 'max-h-[150px]',
-        sm: 'max-h-[200px]',
-        md: 'max-h-[300px]',
-        lg: 'max-h-[400px]',
+        xs: 'max-h-(--dropdown-max-height)',
+        sm: 'max-h-(--dropdown-max-height)',
+        md: 'max-h-(--dropdown-max-height)',
+        lg: 'max-h-(--dropdown-max-height)',
       },
     },
     defaultVariants: {

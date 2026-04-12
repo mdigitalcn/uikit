@@ -1,7 +1,9 @@
 'use client'
 
 import { cva } from 'class-variance-authority'
-import React, { useCallback, useLayoutEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 import { useControllable } from '../hooks/useControllable'
 
@@ -11,7 +13,7 @@ import { cn, iconSizes } from '../utils'
 import { colorVars } from '../variants'
 import type { CollapseProps } from './types'
 
-const collapseVariants = 'w-full border rounded-md overflow-hidden'
+const collapseVariants = 'w-full border [--_radius:var(--radius-input)] rounded-slot overflow-clip'
 
 const collapseHeaderVariants = cva(
   'w-full flex items-center justify-between cursor-pointer touch-manipulation font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm',
@@ -94,14 +96,14 @@ const Collapse = React.memo<CollapseProps>(
       }
     }, [])
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
       if (panelRef.current) {
         panelRef.current.style.height = isOpen ? 'auto' : '0'
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
       const panel = panelRef.current
       const content = contentRef.current
       if (!panel || !content) return
@@ -175,7 +177,7 @@ const Collapse = React.memo<CollapseProps>(
             className={cn(
               'collapse_icon',
               iconSizes[size],
-              'transition-transform duration-300 ease-out flex-shrink-0',
+              '[--_duration:var(--duration-slow)] transition-transform duration-slot ease-out flex-shrink-0',
               isOpen && 'rotate-180',
               classNames?.icon,
             )}

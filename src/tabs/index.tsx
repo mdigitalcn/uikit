@@ -2,7 +2,6 @@
 
 import { cva } from "class-variance-authority";
 import React, {
-  useState,
   useId,
   useCallback,
   useRef,
@@ -10,6 +9,7 @@ import React, {
   useEffect,
 } from "react";
 
+import { useControllable } from "../hooks/useControllable";
 import { cn } from "../utils";
 import { colorVars } from "../variants";
 import type { TabsColor, TabsProps, TabsRadius } from "./types";
@@ -66,7 +66,7 @@ const indicatorRadiusMap: Record<TabsRadius, string> = {
 };
 
 const tabItemVariants = cva(
-  "relative z-[var(--z-tab)] font-medium transition-colors duration-200 ease-out cursor-pointer flex items-center gap-2 whitespace-nowrap shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-slot/50 focus-visible:rounded-sm",
+  "relative z-[var(--z-tab)] font-medium transition-colors duration-slot ease-out cursor-pointer flex items-center gap-2 whitespace-nowrap shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-1 focus-visible:ring-offset-background focus-visible:rounded-sm",
   {
     variants: {
       size: {
@@ -178,23 +178,20 @@ const Tabs = React.memo<TabsProps>(
     className,
     classNames,
   }) => {
-    const [internalActiveKey, setInternalActiveKey] = useState(
-      defaultActiveKey || items[0]?.key || "",
-    );
+    const [activeKey, setActiveKey] = useControllable({
+      value: controlledActiveKey,
+      defaultValue: defaultActiveKey || items[0]?.key || '',
+      onChange,
+    });
     const tabListRef = useRef<HTMLDivElement>(null);
     const tabRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
-    const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>(
+    const [indicatorStyle, setIndicatorStyle] = React.useState<React.CSSProperties>(
       {},
     );
-    const [hasInitialized, setHasInitialized] = useState(false);
+    const [hasInitialized, setHasInitialized] = React.useState(false);
 
     // Generate unique IDs for accessibility
     const uniqueId = useId();
-
-    const activeKey =
-      controlledActiveKey !== undefined
-        ? controlledActiveKey
-        : internalActiveKey;
 
     // Measure and position the sliding indicator
     const updateIndicatorPosition = useCallback(() => {
@@ -241,11 +238,26 @@ const Tabs = React.memo<TabsProps>(
       updateIndicatorPosition();
     }, [updateIndicatorPosition, items, size]);
 
-    // Scroll the active tab into view when it changes
+    // Scroll the active tab into view within the tab list — horizontal only.
+    // Never use scrollIntoView: it propagates up the scroll chain and moves the page.
     useEffect(() => {
       const activeTab = tabRefs.current.get(activeKey);
-      if (activeTab?.scrollIntoView) {
-        activeTab.scrollIntoView({ block: "nearest", inline: "nearest", behavior: hasInitialized ? "smooth" : "auto" });
+      const tabList = tabListRef.current;
+      if (!activeTab || !tabList) return;
+
+      const tabLeft = activeTab.offsetLeft;
+      const tabRight = tabLeft + activeTab.offsetWidth;
+      const listScrollLeft = tabList.scrollLeft;
+      const listWidth = tabList.clientWidth;
+
+      if (!tabList.scrollTo) return; // guard for jsdom / old browsers
+
+      if (tabLeft < listScrollLeft) {
+        // Tab is cut off on the left
+        tabList.scrollTo({ left: tabLeft, behavior: hasInitialized ? "smooth" : "auto" });
+      } else if (tabRight > listScrollLeft + listWidth) {
+        // Tab is cut off on the right
+        tabList.scrollTo({ left: tabRight - listWidth, behavior: hasInitialized ? "smooth" : "auto" });
       }
     }, [activeKey, hasInitialized]);
 
@@ -290,10 +302,7 @@ const Tabs = React.memo<TabsProps>(
       (key: string, disabled?: boolean) => {
         if (disabled) return;
 
-        if (controlledActiveKey === undefined) {
-          setInternalActiveKey(key);
-        }
-        onChange?.(key);
+        setActiveKey(key);
 
         // Focus the newly active tab
         requestAnimationFrame(() => {
@@ -301,7 +310,7 @@ const Tabs = React.memo<TabsProps>(
           btn?.focus();
         });
       },
-      [controlledActiveKey, onChange],
+      [setActiveKey],
     );
 
     // Handle keyboard navigation (arrow keys, Home, End)
@@ -372,7 +381,7 @@ const Tabs = React.memo<TabsProps>(
           aria-orientation="horizontal"
           data-slot="tabs_list"
           className={cn(
-            "tabs_list overflow-x-auto",
+            "tabs_list overflow-x-auto overflow-y-hidden",
             tabListVariants({ size, variant, radius }),
             variant !== "pill" && "border-border",
             classNames?.list,
@@ -384,10 +393,10 @@ const Tabs = React.memo<TabsProps>(
             className={cn(
               "tabs_indicator absolute pointer-events-none",
               isPill
-                ? cn(indicatorRadiusMap[radius], "shadow-sm top-0.5", "bg-slot")
+                ? cn(indicatorRadiusMap[radius], "[--_shadow:var(--shadow-sm)] shadow-size-slot top-0.5", "bg-slot")
                 : cn("bottom-0 h-0.5 rounded-full", "bg-slot"),
               hasInitialized
-                ? "transition-[transform,width] duration-300 ease-out"
+                ? "[--_duration:var(--duration-slow)] transition-[transform,width] duration-slot ease-out"
                 : "",
               classNames?.indicator,
             )}
@@ -448,7 +457,7 @@ const Tabs = React.memo<TabsProps>(
               data-slot="tabs_panel"
               className={cn(
                 "tabs_panel",
-                "py-4 animate-in fade-in slide-in-from-bottom-2 duration-300",
+                "[--_duration:var(--duration-slow)] py-4 animate-in fade-in slide-in-from-bottom-2 duration-slot",
                 classNames?.panel,
               )}
             >

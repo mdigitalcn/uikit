@@ -13,7 +13,7 @@ import type { TagProps } from './types';
  * Class variance authority configuration for the Tag component
  * Defines style variants for color, variant, and size
  */
-const tagVariants = cva('inline-flex items-center gap-1.5 whitespace-nowrap rounded font-medium transition-colors', {
+const tagVariants = cva('inline-flex items-center gap-1.5 whitespace-nowrap [--_radius:var(--radius-tag)] rounded-slot font-medium transition-colors', {
   variants: {
     variant: {
       default: 'bg-slot border border-slot text-slot-fg',
@@ -23,10 +23,10 @@ const tagVariants = cva('inline-flex items-center gap-1.5 whitespace-nowrap roun
     },
     color: colorVars,
     size: {
-      xs: 'text-[10px] px-1.5 py-0.5',
-      sm: 'text-xs px-2 py-1',
-      md: 'text-sm px-2.5 py-1',
-      lg: 'text-base px-3 py-1.5',
+      xs: 'text-(--tag-font-size-xs) px-(--tag-padding-x-xs) py-(--tag-padding-y-xs)',
+      sm: 'text-(--tag-font-size-sm) px-(--tag-padding-x-sm) py-(--tag-padding-y-sm)',
+      md: 'text-(--tag-font-size-md) px-(--tag-padding-x-md) py-(--tag-padding-y-md)',
+      lg: 'text-(--tag-font-size-lg) px-(--tag-padding-x-lg) py-(--tag-padding-y-lg)',
     },
   },
   defaultVariants: {
@@ -40,10 +40,10 @@ const tagVariants = cva('inline-flex items-center gap-1.5 whitespace-nowrap roun
  * Icon and close button size variants for different tag sizes
  */
 const iconSizeClasses = {
-  xs: 'size-2.5',
-  sm: 'size-3',
-  md: 'size-3.5',
-  lg: 'size-4',
+  xs: 'size-(--tag-icon-size-xs)',
+  sm: 'size-(--tag-icon-size-sm)',
+  md: 'size-(--tag-icon-size-md)',
+  lg: 'size-(--tag-icon-size-lg)',
 };
 
 /**
@@ -160,7 +160,7 @@ const Tag = React.memo<TagProps>(({
           tagVariants({ variant, color, size }),
           (onClick || closable) && 'cursor-pointer',
           (onClick || (!disableKeyboardRemoval && closable)) &&
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary ring-offset-background',
+            'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slot ring-offset-background',
           classNames?.root,
           className
         )}

@@ -1,4 +1,4 @@
-import type { ComponentColor, ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages } from '../types'
 
 export type TextareaVariant = 'outline' | 'filled'
 
@@ -20,20 +20,15 @@ export interface TextareaProps
   extends Omit<
     React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     'size' | 'ref'
-  > {
+  >,
+    ValidationMessages {
   variant?: TextareaVariant
   size?: TextareaSize
-  /** Color for focus ring and active border
-   * @default 'primary'
-   */
+  /** @default 'primary' */
   color?: ComponentColor
   label?: string
-  helperText?: string
+  /** @default 'bottom' */
   messagePosition?: 'top' | 'bottom'
-  error?: string
-  warning?: string
-  info?: string
-  success?: string
   resize?: TextareaResize
   showCount?: boolean
   maxLength?: number

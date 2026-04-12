@@ -9,12 +9,11 @@
 @source "../../dist";
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Color token registration — @theme reference registers utilities
- * (bg-primary, text-error, etc.) without setting values on :root.
- * Actual default values are in the :root block below.
- * Consumers can override colors with plain :root or theme preset CSS.
- */
+/* ============================================
+   COLOR TOKEN REGISTRATION
+   Registers names so Tailwind generates bg-primary, text-error, etc.
+   Actual values are set below via auto-derivation.
+   ============================================ */
 @theme reference {
   /* Brand */
   --color-primary: ;
@@ -50,6 +49,7 @@
   --color-background: ;
   --color-background-secondary: ;
   --color-surface: ;
+  --color-surface-hover: ;
   --color-card: ;
   --color-card-foreground: ;
   /* Borders */
@@ -62,20 +62,12 @@
   --color-text-secondary: ;
   --color-text-muted: ;
   --color-text-disabled: ;
-  /* Focus & Disabled */
-  --color-focus: ;
+  /* Misc */
+  --color-overlay: ;
   --color-focus-ring: ;
   --color-disabled: ;
   --color-disabled-text: ;
-  --color-overlay: ;
-  /* Input */
-  --color-input-border: ;
-  --color-input-border-focus: ;
-  --color-input-border-error: ;
-  --color-input-bg: ;
-  --color-input-text: ;
-  --color-input-placeholder: ;
-  /* Shadows (themeable) */
+  /* Shadows */
   --shadow-xs: ;
   --shadow-sm: ;
   --shadow-md: ;
@@ -84,273 +76,386 @@
   --shadow-2xl: ;
 }
 
-/*
- * Default color values (light mode) — plain :root, easily overridable.
- */
+/* ============================================
+   USER CONTROL VARIABLES
+   --brand is the only required variable.
+   Everything else is optional with sensible defaults.
+   ============================================ */
 :root {
-  /* === GRAY SCALE (same in light & dark — defined once) === */
-  --color-gray-50: oklch(98% 0 0);
-  --color-gray-100: oklch(96% 0 0);
-  --color-gray-200: oklch(92% 0 0);
-  --color-gray-300: oklch(87% 0 0);
-  --color-gray-400: oklch(71% 0 0);
-  --color-gray-500: oklch(55% 0 0);
-  --color-gray-600: oklch(45% 0 0);
-  --color-gray-700: oklch(35% 0 0);
-  --color-gray-800: oklch(25% 0 0);
-  --color-gray-900: oklch(15% 0 0);
-  --color-gray-950: oklch(10% 0 0);
+  /* REQUIRED — your brand color. Everything derives from this automatically.
+     Surfaces, borders, and neutral text are all hue-matched to this color.
+     Examples: oklch(55% 0.22 260) = blue  |  oklch(55% 0.20 30) = orange
+               oklch(52% 0.18 200) = teal  |  oklch(58% 0.28 350) = pink   */
+  --brand: oklch(55% 0.22 260);
 
-  /* === BRAND COLORS === */
-  --color-primary: oklch(60.29% 0.15 239.2065);
-  --color-primary-hover: oklch(50.29% 0.2 239.2065);
-  --color-primary-active: oklch(45.29% 0.2 239.2065);
-  --color-primary-foreground: oklch(100% 0 0);
+  /* OPTIONAL — second brand color for secondary/accent actions.
+     Defaults to --brand rotated 60° (harmonious by design).
+     Override when your brand has a specific secondary color:
+     --accent: oklch(55% 0.20 330);                                          */
+  --accent: oklch(from var(--brand) l calc(c * 0.8) calc(h + 60));
 
-  --color-secondary: oklch(50% 0.05 240);
-  --color-secondary-hover: oklch(45% 0.06 240);
-  --color-secondary-active: oklch(40% 0.07 240);
-  --color-secondary-foreground: oklch(100% 0 0);
+  /* OPTIONAL — border roundness across all components.
+     0 = sharp edges  |  0.375rem = default  |  0.75rem = very round        */
+  --radius: 0.375rem;
 
-  --color-accent: oklch(80% 0.1737 67);
-  --color-accent-hover: oklch(75% 0.237 67);
-  --color-accent-active: oklch(70% 0.1937 67);
-  --color-accent-foreground: oklch(15% 0 0);
+  /* OPTIONAL — global size scale. Affects all component heights and padding.
+     0.9 = compact  |  1 = default  |  1.1 = comfortable / large-display    */
+  --scaling: 1;
 
-  /* === SEMANTIC COLORS === */
-  --color-success: oklch(70% 0.2 145);
-  --color-success-hover: oklch(65% 0.22 145);
-  --color-success-active: oklch(50% 0.24 145);
-  --color-success-foreground: oklch(100% 0 0);
+  /* OPTIONAL — font family applied to the entire UI.
+     Override with any font: 'Inter', sans-serif                             */
+  --font: ui-sans-serif, system-ui, sans-serif;
+}
 
-  --color-error: oklch(63% 0.22 25);
-  --color-error-hover: oklch(56% 0.24 25);
-  --color-error-active: oklch(50% 0.26 25);
-  --color-error-foreground: oklch(100% 0 0);
+/* ============================================
+   AUTO-DERIVED COLOR TOKENS (Light Mode)
+   All tokens derive from --brand automatically.
+   Override any individual token if needed.
+   ============================================ */
+:root {
+  /* === GRAY SCALE — hue-matched to --brand automatically === */
+  --color-gray-50:  oklch(from var(--brand) 98%   0.002 h);
+  --color-gray-100: oklch(from var(--brand) 95%   0.003 h);
+  --color-gray-200: oklch(from var(--brand) 91%   0.004 h);
+  --color-gray-300: oklch(from var(--brand) 86%   0.005 h);
+  --color-gray-400: oklch(from var(--brand) 70%   0.004 h);
+  --color-gray-500: oklch(from var(--brand) 54%   0.003 h);
+  --color-gray-600: oklch(from var(--brand) 44%   0.003 h);
+  --color-gray-700: oklch(from var(--brand) 34%   0.002 h);
+  --color-gray-800: oklch(from var(--brand) 24%   0.002 h);
+  --color-gray-900: oklch(from var(--brand) 15%   0.001 h);
+  --color-gray-950: oklch(from var(--brand) 10%   0.001 h);
 
-  --color-warning: oklch(75% 0.15 85);
-  --color-warning-hover: oklch(70% 0.17 85);
-  --color-warning-active: oklch(65% 0.19 85);
-  --color-warning-foreground: oklch(15% 0 0);
+  /* === PRIMARY — derived from --brand === */
+  --color-primary:            var(--brand);
+  --color-primary-hover:      oklch(from var(--brand) calc(l - 0.05) c h);
+  --color-primary-active:     oklch(from var(--brand) calc(l - 0.10) c h);
+  --color-primary-foreground: oklch(99% 0 0);
 
-  --color-info: oklch(60% 0.19 255);
-  --color-info-hover: oklch(55% 0.21 255);
-  --color-info-active: oklch(50% 0.23 255);
-  --color-info-foreground: oklch(100% 0 0);
+  /* === SECONDARY — derived from --accent (defaults to brand+60°) === */
+  --color-secondary:            var(--accent);
+  --color-secondary-hover:      oklch(from var(--accent) calc(l - 0.05) c h);
+  --color-secondary-active:     oklch(from var(--accent) calc(l - 0.10) c h);
+  --color-secondary-foreground: oklch(99% 0 0);
 
-  /* === SURFACES & BACKGROUNDS === */
-  --color-background: oklch(100% 0 0);
-  --color-background-secondary: oklch(98% 0 0);
-  --color-surface: oklch(96% 0 0);
-  --color-card: oklch(100% 0 0);
-  --color-card-foreground: oklch(15% 0 0);
+  /* === ACCENT — brand hue rotated 60° (analogous harmony) === */
+  --color-accent:            oklch(from var(--brand) l calc(c * 0.75) calc(h + 60));
+  --color-accent-hover:      oklch(from var(--brand) calc(l - 0.05) calc(c * 0.75) calc(h + 60));
+  --color-accent-active:     oklch(from var(--brand) calc(l - 0.10) calc(c * 0.75) calc(h + 60));
+  --color-accent-foreground: oklch(99% 0 0);
+
+  /* === SEMANTIC — hardcoded WCAG-safe values, not derived from brand ===
+     Light mode: L ≤ 0.55 → white foreground passes 4.5:1
+     Warning exception: L=0.72, always dark foreground.                  */
+  --color-success:            oklch(52% 0.14 150);
+  --color-success-hover:      oklch(from var(--color-success) calc(l - 0.05) c h);
+  --color-success-active:     oklch(from var(--color-success) calc(l - 0.10) c h);
+  --color-success-foreground: oklch(99% 0 0);
+
+  --color-error:              oklch(55% 0.20 25);
+  --color-error-hover:        oklch(from var(--color-error) calc(l - 0.05) c h);
+  --color-error-active:       oklch(from var(--color-error) calc(l - 0.10) c h);
+  --color-error-foreground:   oklch(99% 0 0);
+
+  --color-warning:            oklch(72% 0.15 70);
+  --color-warning-hover:      oklch(from var(--color-warning) calc(l - 0.05) c h);
+  --color-warning-active:     oklch(from var(--color-warning) calc(l - 0.10) c h);
+  --color-warning-foreground: oklch(15% 0 0); /* always dark — do not override */
+
+  --color-info:               oklch(55% 0.17 245);
+  --color-info-hover:         oklch(from var(--color-info) calc(l - 0.05) c h);
+  --color-info-active:        oklch(from var(--color-info) calc(l - 0.10) c h);
+  --color-info-foreground:    oklch(99% 0 0);
+
+  /* === SURFACES — hue-tinted from --brand automatically === */
+  --color-background:           oklch(from var(--brand) 99.5% 0.002 h);
+  --color-background-secondary: oklch(from var(--brand) 97%   0.004 h);
+  --color-surface:              oklch(from var(--brand) 95%   0.006 h);
+  --color-surface-hover:        oklch(from var(--brand) 92%   0.008 h);
+  --color-card:                 oklch(from var(--brand) 99.5% 0.002 h);
+  --color-card-foreground:      oklch(15% 0 0);
 
   /* === BORDERS === */
-  --color-border: oklch(93% 0 0);
-  --color-border-primary: oklch(85% 0 0);
-  --color-border-hover: oklch(80% 0 0);
-  --color-border-focus: var(--color-primary);
+  --color-border:         oklch(from var(--brand) 91% 0.005 h);
+  --color-border-primary: oklch(from var(--brand) 84% 0.006 h);
+  --color-border-hover:   oklch(from var(--brand) 78% 0.007 h);
+  --color-border-focus:   var(--color-primary);
 
   /* === TEXT === */
-  --color-text-primary: oklch(15% 0 0);
-  --color-text-secondary: oklch(45% 0 0);
-  --color-text-muted: oklch(60% 0 0);
-  --color-text-disabled: oklch(71% 0 0);
+  --color-text-primary:   oklch(from var(--brand) 15% 0.002 h);
+  --color-text-secondary: oklch(from var(--brand) 44% 0.004 h);
+  --color-text-muted:     oklch(from var(--brand) 58% 0.004 h);
+  --color-text-disabled:  oklch(from var(--brand) 70% 0.002 h);
 
-  /* === FOCUS & DISABLED === */
-  --color-focus: var(--color-primary);
-  --color-focus-ring: oklch(60.29% 0.15 239.2065 / 30%);
-  --color-disabled: oklch(87% 0 0);
-  --color-disabled-text: oklch(55% 0 0);
-  --color-overlay: oklch(0% 0 0 / 50%);
+  /* === FOCUS, DISABLED, OVERLAY === */
+  --color-focus-ring:    oklch(from var(--brand) l c h / 30%);
+  --color-disabled:      oklch(from var(--brand) 93% 0.003 h);
+  --color-disabled-text: oklch(from var(--brand) 60% 0.003 h);
+  --color-overlay:       oklch(0% 0 0 / 50%);
 
-  /* === INPUT === */
-  --color-input-border: oklch(87% 0 0);
-  --color-input-border-focus: oklch(55% 0.25 255);
-  --color-input-border-error: oklch(60% 0.25 25);
-  --color-input-bg: oklch(100% 0 0);
-  --color-input-text: oklch(15% 0 0);
-  --color-input-placeholder: oklch(60% 0 0);
+  /* === MISC (consumed by third-party CSS, e.g. datepicker) === */
+  --color-white: oklch(100% 0 0);
+  --font-sans:   var(--font);
+  --text-base:   1rem;
 
-  /* === SHADOWS (Light) === */
-  --shadow-xs: 0 1px 2px 0 oklch(0% 0 0 / 0.04);
-  --shadow-sm: 0 1px 3px 0 oklch(0% 0 0 / 0.07), 0 1px 2px -1px oklch(0% 0 0 / 0.07);
-  --shadow-md: 0 4px 6px -1px oklch(0% 0 0 / 0.07), 0 2px 4px -2px oklch(0% 0 0 / 0.05);
-  --shadow-lg: 0 10px 15px -3px oklch(0% 0 0 / 0.08), 0 4px 6px -4px oklch(0% 0 0 / 0.05);
-  --shadow-xl: 0 20px 25px -5px oklch(0% 0 0 / 0.08), 0 8px 10px -6px oklch(0% 0 0 / 0.04);
+  /* === SHADOWS (Light mode — subtle) === */
+  --shadow-xs:  0 1px 2px 0 oklch(0% 0 0 / 0.04);
+  --shadow-sm:  0 1px 3px 0 oklch(0% 0 0 / 0.07), 0 1px 2px -1px oklch(0% 0 0 / 0.07);
+  --shadow-md:  0 4px 6px -1px oklch(0% 0 0 / 0.07), 0 2px 4px -2px oklch(0% 0 0 / 0.05);
+  --shadow-lg:  0 10px 15px -3px oklch(0% 0 0 / 0.08), 0 4px 6px -4px oklch(0% 0 0 / 0.05);
+  --shadow-xl:  0 20px 25px -5px oklch(0% 0 0 / 0.08), 0 8px 10px -6px oklch(0% 0 0 / 0.04);
   --shadow-2xl: 0 25px 50px -12px oklch(0% 0 0 / 0.2);
 }
 
-/*
- * Non-color design tokens — kept in @theme for Tailwind utility generation.
- * Spacing, radius, component sizes, z-index, etc.
- */
+/* ============================================
+   DARK MODE
+   Overrides surfaces + boosts brand L for dark backgrounds.
+   Set with .dark class or [data-mode="dark"] attribute.
+   ============================================ */
+:root.dark,
+.dark,
+:root[data-mode='dark'],
+[data-mode='dark'] {
+  /* === SURFACES — inverted from light === */
+  --color-background:           oklch(from var(--brand) 13% 0.007 h);
+  --color-background-secondary: oklch(from var(--brand) 16% 0.008 h);
+  --color-surface:              oklch(from var(--brand) 20% 0.010 h);
+  --color-surface-hover:        oklch(from var(--brand) 24% 0.012 h);
+  --color-card:                 oklch(from var(--brand) 16% 0.008 h);
+  --color-card-foreground:      oklch(95% 0 0);
+
+  /* === BORDERS — lighter in dark mode === */
+  --color-border:         oklch(from var(--brand) 28% 0.010 h);
+  --color-border-primary: oklch(from var(--brand) 38% 0.014 h);
+  --color-border-hover:   oklch(from var(--brand) 46% 0.016 h);
+  --color-border-focus:   oklch(from var(--brand) calc(l + 0.10) c h);
+
+  /* === TEXT — inverted === */
+  --color-text-primary:   oklch(95% 0 0);
+  --color-text-secondary: oklch(from var(--brand) 72% 0.004 h);
+  --color-text-muted:     oklch(from var(--brand) 55% 0.004 h);
+  --color-text-disabled:  oklch(from var(--brand) 40% 0.002 h);
+
+  /* === BRAND — boost L so colors pop on dark surfaces === */
+  --color-primary:            oklch(from var(--brand) calc(l + 0.10) c h);
+  --color-primary-hover:      oklch(from var(--brand) calc(l + 0.15) c h);
+  --color-primary-active:     oklch(from var(--brand) calc(l + 0.20) c h);
+  --color-primary-foreground: oklch(99% 0 0);
+
+  --color-secondary:            oklch(from var(--accent) calc(l + 0.10) c h);
+  --color-secondary-hover:      oklch(from var(--accent) calc(l + 0.15) c h);
+  --color-secondary-active:     oklch(from var(--accent) calc(l + 0.20) c h);
+  --color-secondary-foreground: oklch(99% 0 0);
+
+  --color-accent:            oklch(from var(--brand) calc(l + 0.10) calc(c * 0.75) calc(h + 60));
+  --color-accent-hover:      oklch(from var(--brand) calc(l + 0.15) calc(c * 0.75) calc(h + 60));
+  --color-accent-active:     oklch(from var(--brand) calc(l + 0.20) calc(c * 0.75) calc(h + 60));
+  --color-accent-foreground: oklch(99% 0 0);
+
+  /* === SEMANTIC — boosted L for dark backgrounds === */
+  --color-success:            oklch(62% 0.16 150);
+  --color-success-hover:      oklch(67% 0.18 150);
+  --color-success-active:     oklch(72% 0.20 150);
+  --color-success-foreground: oklch(99% 0 0);
+
+  --color-error:            oklch(62% 0.20 25);
+  --color-error-hover:      oklch(67% 0.22 25);
+  --color-error-active:     oklch(72% 0.24 25);
+  --color-error-foreground: oklch(99% 0 0);
+
+  --color-warning:            oklch(80% 0.15 70);
+  --color-warning-hover:      oklch(84% 0.17 70);
+  --color-warning-active:     oklch(88% 0.19 70);
+  --color-warning-foreground: oklch(15% 0 0);
+
+  --color-info:            oklch(62% 0.17 245);
+  --color-info-hover:      oklch(67% 0.19 245);
+  --color-info-active:     oklch(72% 0.21 245);
+  --color-info-foreground: oklch(99% 0 0);
+
+  /* === MISC === */
+  --color-focus-ring:    oklch(from var(--brand) calc(l + 0.10) c h / 35%);
+  --color-disabled:      oklch(from var(--brand) 26% 0.008 h);
+  --color-disabled-text: oklch(from var(--brand) 50% 0.003 h);
+  --color-overlay:       oklch(0% 0 0 / 65%);
+
+  /* === SHADOWS (Dark mode — heavier) === */
+  --shadow-xs:  0 1px 2px 0 oklch(0% 0 0 / 0.30);
+  --shadow-sm:  0 1px 3px 0 oklch(0% 0 0 / 0.40), 0 1px 2px -1px oklch(0% 0 0 / 0.40);
+  --shadow-md:  0 4px 8px -1px oklch(0% 0 0 / 0.50), 0 2px 4px -2px oklch(0% 0 0 / 0.40);
+  --shadow-lg:  0 12px 20px -3px oklch(0% 0 0 / 0.60), 0 4px 8px -4px oklch(0% 0 0 / 0.40);
+  --shadow-xl:  0 20px 30px -5px oklch(0% 0 0 / 0.60), 0 8px 10px -6px oklch(0% 0 0 / 0.30);
+  --shadow-2xl: 0 25px 50px -12px oklch(0% 0 0 / 0.70);
+}
+
+/* ============================================
+   DESIGN TOKENS (@theme — Tailwind utility generation)
+   Spacing, radius, component sizes, z-index, motion.
+   ============================================ */
 @theme {
 
   /* ============================================
-     GLOBAL DESIGN TOKENS
+     RADIUS
+     --radius-* derived from --radius control var.
+     Components use rounded-button, rounded-card, etc.
      ============================================ */
 
-  /* === RADIUS SCALE ===
-     Complete scale — override --radius-md to make the whole system rounder/sharper.
-     Components use these via rounded-{size} utilities. */
-  --radius-xs: 0.125rem;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
-  --radius-3xl: 1.5rem;
+  /* Base scale — used as building blocks */
+  --radius-xs:   0.125rem;
+  --radius-sm:   0.25rem;
+  --radius-md:   0.375rem;
+  --radius-lg:   0.5rem;
+  --radius-xl:   0.75rem;
+  --radius-2xl:  1rem;
+  --radius-3xl:  1.5rem;
   --radius-full: 9999px;
 
-  /* === TYPOGRAPHY SCALE ===
-     Semantic font sizes for consistent hierarchy.
-     Components should use these instead of hardcoded text-sm etc. */
+  /* Component radii — all cascade from user's --radius var */
+  --radius-button:    var(--radius);                   /* button, pagination, toggle */
+  --radius-input:     var(--radius);                   /* inputs, selects, textareas */
+  --radius-tag:       var(--radius);                   /* tag, chip */
+  --radius-alert:     var(--radius);                   /* alert, notification, toast */
+  --radius-tooltip:   var(--radius);                   /* tooltip */
+  --radius-badge:     9999px;                          /* always pill — industry standard */
+  --radius-dropdown:  calc(var(--radius) * 1.5);       /* floating panels */
+  --radius-card:      calc(var(--radius) * 2);         /* card, accordion, table */
+  --radius-popover:   calc(var(--radius) * 2);         /* popover */
+  --radius-accordion: calc(var(--radius) * 2);         /* accordion */
+  --radius-modal:     calc(var(--radius) * 3);         /* modal */
+  --radius-drawer:    calc(var(--radius) * 3);         /* drawer */
+
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
   --font-size-2xs: 0.625rem;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
+  --font-size-xs:  0.75rem;
+  --font-size-sm:  0.875rem;
   --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
+  --font-size-lg:  1.125rem;
+  --font-size-xl:  1.25rem;
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 1.875rem;
   --font-size-4xl: 2.25rem;
   --font-size-5xl: 3rem;
 
-  /* === LINE HEIGHT === */
-  --leading-none: 1;
-  --leading-tight: 1.25;
-  --leading-snug: 1.375;
-  --leading-normal: 1.5;
+  --leading-none:    1;
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.5;
   --leading-relaxed: 1.625;
-  --leading-loose: 2;
+  --leading-loose:   2;
 
-  /* === LETTER SPACING === */
   --tracking-tighter: -0.05em;
-  --tracking-tight: -0.025em;
-  --tracking-normal: 0em;
-  --tracking-wide: 0.025em;
-  --tracking-wider: 0.05em;
-  --tracking-widest: 0.1em;
+  --tracking-tight:   -0.025em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.025em;
+  --tracking-wider:   0.05em;
+  --tracking-widest:  0.1em;
 
-  /* === FONT WEIGHT === */
-  --font-weight-thin: 100;
-  --font-weight-light: 300;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+  --font-weight-thin:      100;
+  --font-weight-light:     300;
+  --font-weight-normal:    400;
+  --font-weight-medium:    500;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
   --font-weight-extrabold: 800;
 
-  /* === SPACING SCALE ===
-     Consistent spacing. Use via p-(--space-*), gap-(--space-*), etc.
-     Based on 4px grid. */
-  --space-0: 0;
-  --space-px: 1px;
+  /* ============================================
+     SPACING
+     ============================================ */
+  --space-0:   0;
+  --space-px:  1px;
   --space-0-5: 0.125rem;
-  --space-1: 0.25rem;
+  --space-1:   0.25rem;
   --space-1-5: 0.375rem;
-  --space-2: 0.5rem;
+  --space-2:   0.5rem;
   --space-2-5: 0.625rem;
-  --space-3: 0.75rem;
+  --space-3:   0.75rem;
   --space-3-5: 0.875rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-7: 1.75rem;
-  --space-8: 2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-14: 3.5rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
-  --space-24: 6rem;
-
-  /* === OPACITY === */
-  --opacity-disabled: 0.5;
-  --opacity-overlay: 0.5;
-  --opacity-hover: 0.04;
-  --opacity-focus: 0.12;
-  --opacity-placeholder: 0.5;
-
-  /* === FOCUS RING === */
-  --ring-width: 2px;
-  --ring-offset: 2px;
-
-  /* === SHADOWS (Light) ===
-     Layered for natural depth. Themed in light.css / dark.css. */
-  --shadow-xs: 0 1px 2px 0 oklch(0% 0 0 / 0.04);
-  --shadow-sm: 0 1px 3px 0 oklch(0% 0 0 / 0.07), 0 1px 2px -1px oklch(0% 0 0 / 0.07);
-  --shadow-md: 0 4px 6px -1px oklch(0% 0 0 / 0.07), 0 2px 4px -2px oklch(0% 0 0 / 0.05);
-  --shadow-lg: 0 10px 15px -3px oklch(0% 0 0 / 0.08), 0 4px 6px -4px oklch(0% 0 0 / 0.05);
-  --shadow-xl: 0 20px 25px -5px oklch(0% 0 0 / 0.08), 0 8px 10px -6px oklch(0% 0 0 / 0.04);
-  --shadow-2xl: 0 25px 50px -12px oklch(0% 0 0 / 0.2);
+  --space-4:   1rem;
+  --space-5:   1.25rem;
+  --space-6:   1.5rem;
+  --space-7:   1.75rem;
+  --space-8:   2rem;
+  --space-10:  2.5rem;
+  --space-12:  3rem;
+  --space-14:  3.5rem;
+  --space-16:  4rem;
+  --space-20:  5rem;
+  --space-24:  6rem;
 
   /* ============================================
-     COMPONENT SIZES
+     COMPONENT SIZES — scaled by --scaling
+     --scaling: 0.9 = compact, 1 = default, 1.1 = comfortable
      ============================================ */
 
-  /* === COMPONENT SIZES === */
-  --size-xs: 1.75rem;
-  --size-sm: 2rem;
-  --size-md: 2.25rem;
-  --size-lg: 2.75rem;
+  /* Base size scale */
+  --size-xs: calc(1.75rem * var(--scaling));
+  --size-sm: calc(2rem    * var(--scaling));
+  --size-md: calc(2.25rem * var(--scaling));
+  --size-lg: calc(2.75rem * var(--scaling));
 
   /* === BUTTON === */
-  --button-height-xs: var(--size-xs);
-  --button-height-sm: var(--size-sm);
-  --button-height-md: var(--size-md);
-  --button-height-lg: var(--size-lg);
-  --button-padding-x-xs: 0.5rem;
-  --button-padding-x-sm: 0.75rem;
-  --button-padding-x-md: 0.875rem;
-  --button-padding-x-lg: 1.25rem;
+  --button-height-xs:    var(--size-xs);
+  --button-height-sm:    var(--size-sm);
+  --button-height-md:    var(--size-md);
+  --button-height-lg:    var(--size-lg);
+  --button-padding-x-xs: calc(0.5rem  * var(--scaling));
+  --button-padding-x-sm: calc(0.75rem * var(--scaling));
+  --button-padding-x-md: calc(0.875rem * var(--scaling));
+  --button-padding-x-lg: calc(1.25rem * var(--scaling));
 
   /* === INPUT === */
-  --input-height-xs: var(--size-xs);
-  --input-height-sm: var(--size-sm);
-  --input-height-md: var(--size-md);
-  --input-height-lg: var(--size-lg);
+  --input-height-xs:    var(--size-xs);
+  --input-height-sm:    var(--size-sm);
+  --input-height-md:    var(--size-md);
+  --input-height-lg:    var(--size-lg);
   --input-padding-x-xs: 0.5rem;
   --input-padding-x-sm: 0.75rem;
   --input-padding-x-md: 0.875rem;
   --input-padding-x-lg: 1.125rem;
 
+  /* === FLOAT INPUT (taller — has floating label) === */
+  --float-input-height-xs: calc(2.25rem * var(--scaling));
+  --float-input-height-sm: calc(2.5rem  * var(--scaling));
+  --float-input-height-md: calc(3rem    * var(--scaling));
+  --float-input-height-lg: calc(3.5rem  * var(--scaling));
+
   /* === TEXTAREA === */
-  --textarea-min-height-xs: 4rem;
-  --textarea-min-height-sm: 5rem;
-  --textarea-min-height-md: 5rem;
-  --textarea-min-height-lg: 6rem;
+  --textarea-min-height-xs: calc(4rem * var(--scaling));
+  --textarea-min-height-sm: calc(5rem * var(--scaling));
+  --textarea-min-height-md: calc(5rem * var(--scaling));
+  --textarea-min-height-lg: calc(6rem * var(--scaling));
   --textarea-padding-xs: 0.5rem;
   --textarea-padding-sm: 0.625rem;
   --textarea-padding-md: 0.6875rem;
   --textarea-padding-lg: 0.875rem;
 
   /* === SELECT === */
-  --select-height-xs: var(--size-xs);
-  --select-height-sm: var(--size-sm);
-  --select-height-md: var(--size-md);
-  --select-height-lg: var(--size-lg);
+  --select-height-xs:    var(--size-xs);
+  --select-height-sm:    var(--size-sm);
+  --select-height-md:    var(--size-md);
+  --select-height-lg:    var(--size-lg);
   --select-padding-x-xs: 0.5rem;
   --select-padding-x-sm: 0.75rem;
   --select-padding-x-md: 0.875rem;
   --select-padding-x-lg: 1.125rem;
 
   /* === TOGGLE GROUP === */
-  --toggle-height-xs: var(--size-xs);
-  --toggle-height-sm: var(--size-sm);
-  --toggle-height-md: var(--size-md);
-  --toggle-height-lg: var(--size-lg);
+  --toggle-height-xs:    var(--size-xs);
+  --toggle-height-sm:    var(--size-sm);
+  --toggle-height-md:    var(--size-md);
+  --toggle-height-lg:    var(--size-lg);
   --toggle-padding-x-xs: 0.5rem;
   --toggle-padding-x-sm: 0.75rem;
   --toggle-padding-x-md: 0.875rem;
   --toggle-padding-x-lg: 1.125rem;
 
   /* === OTP === */
-  --otp-size-xs: 2rem;
-  --otp-size-sm: 2.25rem;
-  --otp-size-md: 2.75rem;
-  --otp-size-lg: 3.25rem;
+  --otp-size-xs: calc(2rem    * var(--scaling));
+  --otp-size-sm: calc(2.25rem * var(--scaling));
+  --otp-size-md: calc(2.75rem * var(--scaling));
+  --otp-size-lg: calc(3.25rem * var(--scaling));
 
   /* === CHECKBOX / RADIO === */
   --checkbox-size-xs: 0.875rem;
@@ -359,68 +464,110 @@
   --checkbox-size-lg: 1.375rem;
 
   /* === SWITCH === */
-  --switch-width-xs: 1.75rem;
-  --switch-width-sm: 2rem;
-  --switch-width-md: 2.5rem;
-  --switch-width-lg: 3rem;
-  --switch-height-xs: 0.875rem;
-  --switch-height-sm: 1rem;
-  --switch-height-md: 1.25rem;
-  --switch-height-lg: 1.5rem;
-  --switch-thumb-xs: 0.625rem;
-  --switch-thumb-sm: 0.75rem;
-  --switch-thumb-md: 1rem;
-  --switch-thumb-lg: 1.25rem;
+  --switch-width-xs:     1.75rem;
+  --switch-width-sm:     2rem;
+  --switch-width-md:     2.5rem;
+  --switch-width-lg:     3rem;
+  --switch-height-xs:    0.875rem;
+  --switch-height-sm:    1rem;
+  --switch-height-md:    1.25rem;
+  --switch-height-lg:    1.5rem;
+  --switch-thumb-xs:     0.625rem;
+  --switch-thumb-sm:     0.75rem;
+  --switch-thumb-md:     1rem;
+  --switch-thumb-lg:     1.25rem;
   --switch-translate-xs: 0.875rem;
   --switch-translate-sm: 1rem;
   --switch-translate-md: 1.25rem;
   --switch-translate-lg: 1.5rem;
 
   /* === LABEL === */
-  --label-font-size-xs: 0.75rem;
-  --label-font-size-sm: 0.875rem;
+  --label-font-size-xs:   0.75rem;
+  --label-font-size-sm:   0.875rem;
   --label-font-size-base: 1rem;
-  --label-font-size-lg: 1.125rem;
+  --label-font-size-lg:   1.125rem;
 
   /* === CARD === */
-  --card-padding: 1.5rem;
-  --card-header-gap: 0.375rem;
-  --card-title-size: 1.5rem;
-  --card-title-weight: var(--font-weight-semibold);
+  --card-padding:          1.5rem;
+  --card-header-gap:       0.375rem;
+  --card-title-size:       1.5rem;
+  --card-title-weight:     var(--font-weight-semibold);
   --card-description-size: 0.875rem;
-  --card-content-padding: 1.5rem;
-  --card-footer-padding: 1.5rem;
+  --card-content-padding:  1.5rem;
+  --card-footer-padding:   1.5rem;
 
   /* === MODAL === */
-  --modal-max-width-xs: 20rem;
-  --modal-max-width-sm: 24rem;
-  --modal-max-width-md: 28rem;
-  --modal-max-width-lg: 32rem;
-  --modal-max-width-xl: 36rem;
-  --modal-max-width-2xl: 42rem;
+  --modal-max-width-xs:   20rem;
+  --modal-max-width-sm:   24rem;
+  --modal-max-width-md:   28rem;
+  --modal-max-width-lg:   32rem;
+  --modal-max-width-xl:   36rem;
+  --modal-max-width-2xl:  42rem;
   --modal-max-width-full: 90vw;
-  --modal-padding-xs: 1rem;
-  --modal-padding-sm: 1rem;
-  --modal-padding-md: 1.5rem;
-  --modal-padding-lg: 2rem;
-  --modal-gap-xs: 0.75rem;
-  --modal-gap-sm: 0.75rem;
-  --modal-gap-md: 1rem;
-  --modal-gap-lg: 1.25rem;
+  --modal-padding-xs:  1rem;
+  --modal-padding-sm:  1rem;
+  --modal-padding-md:  1.5rem;
+  --modal-padding-lg:  2rem;
+  --modal-gap-xs:  0.75rem;
+  --modal-gap-sm:  0.75rem;
+  --modal-gap-md:  1rem;
+  --modal-gap-lg:  1.25rem;
+
+  /* === TAG === */
+  --tag-font-size-xs:  0.625rem;
+  --tag-font-size-sm:  0.75rem;
+  --tag-font-size-md:  0.875rem;
+  --tag-font-size-lg:  1rem;
+  --tag-padding-x-xs:  0.375rem;
+  --tag-padding-x-sm:  0.5rem;
+  --tag-padding-x-md:  0.625rem;
+  --tag-padding-x-lg:  0.75rem;
+  --tag-padding-y-xs:  0.125rem;
+  --tag-padding-y-sm:  0.25rem;
+  --tag-padding-y-md:  0.25rem;
+  --tag-padding-y-lg:  0.375rem;
+  --tag-icon-size-xs:  0.625rem;
+  --tag-icon-size-sm:  0.75rem;
+  --tag-icon-size-md:  0.875rem;
+  --tag-icon-size-lg:  1rem;
+  --tag-height-xs:     1rem;
+  --tag-height-sm:     1.25rem;
+  --tag-height-md:     1.5rem;
+  --tag-height-lg:     1.75rem;
+
+  /* === AVATAR === */
+  --avatar-size-xs:         1.5rem;
+  --avatar-size-sm:         2rem;
+  --avatar-size-md:         2.5rem;
+  --avatar-size-lg:         3rem;
+  --avatar-status-size-xs:  0.375rem;
+  --avatar-status-size-sm:  0.5rem;
+  --avatar-status-size-md:  0.625rem;
+  --avatar-status-size-lg:  0.75rem;
+
+  /* === SPINNER === */
+  --spinner-size-xs:      0.75rem;
+  --spinner-size-sm:      1rem;
+  --spinner-size-md:      1.5rem;
+  --spinner-size-lg:      2rem;
+  --spinner-dot-size-xs:  0.375rem;
+  --spinner-dot-size-sm:  0.5rem;
+  --spinner-dot-size-md:  0.625rem;
+  --spinner-dot-size-lg:  0.75rem;
 
   /* === BADGE === */
-  --badge-font-size-xs: 0.625rem;
-  --badge-font-size-sm: 0.75rem;
-  --badge-font-size-md: 0.75rem;
-  --badge-font-size-lg: 0.875rem;
-  --badge-padding-x-xs: 0.25rem;
-  --badge-padding-x-sm: 0.325rem;
-  --badge-padding-x-md: 0.5rem;
-  --badge-padding-x-lg: 0.625rem;
-  --badge-padding-y-xs: 0;
-  --badge-padding-y-sm: 0.075rem;
-  --badge-padding-y-md: 0.125rem;
-  --badge-padding-y-lg: 0.25rem;
+  --badge-font-size-xs:  0.625rem;
+  --badge-font-size-sm:  0.75rem;
+  --badge-font-size-md:  0.75rem;
+  --badge-font-size-lg:  0.875rem;
+  --badge-padding-x-xs:  0.25rem;
+  --badge-padding-x-sm:  0.325rem;
+  --badge-padding-x-md:  0.5rem;
+  --badge-padding-x-lg:  0.625rem;
+  --badge-padding-y-xs:  0;
+  --badge-padding-y-sm:  0.075rem;
+  --badge-padding-y-md:  0.125rem;
+  --badge-padding-y-lg:  0.25rem;
 
   /* === ACCORDION === */
   --accordion-padding-x-xs: 0.75rem;
@@ -433,65 +580,62 @@
   --accordion-padding-y-lg: 1rem;
 
   /* === DIVIDER === */
-  --divider-gap: 1rem;
-  --divider-thickness: 1px;
-  --divider-left-before-width: 5%;
-  --divider-left-after-width: 95%;
+  --divider-gap:                 1rem;
+  --divider-thickness:           1px;
+  --divider-left-before-width:   5%;
+  --divider-left-after-width:    95%;
   --divider-center-before-width: 50%;
-  --divider-center-after-width: 50%;
-  --divider-right-before-width: 95%;
-  --divider-right-after-width: 5%;
+  --divider-center-after-width:  50%;
+  --divider-right-before-width:  95%;
+  --divider-right-after-width:   5%;
 
   /* === TABLE === */
-  --table-padding-x-xs: 0.5rem;
-  --table-padding-x-sm: 0.75rem;
-  --table-padding-x-md: 1rem;
-  --table-padding-x-lg: 1.25rem;
-  --table-padding-y-xs: 0.5rem;
-  --table-padding-y-sm: 0.625rem;
-  --table-padding-y-md: 0.75rem;
-  --table-padding-y-lg: 1rem;
-  --table-border-width: 1px;
-  --table-header-bg: var(--color-surface);
-  --table-row-hover-bg: var(--color-background-secondary);
+  --table-padding-x-xs:  0.5rem;
+  --table-padding-x-sm:  0.75rem;
+  --table-padding-x-md:  1rem;
+  --table-padding-x-lg:  1.25rem;
+  --table-padding-y-xs:  0.5rem;
+  --table-padding-y-sm:  0.625rem;
+  --table-padding-y-md:  0.75rem;
+  --table-padding-y-lg:  1rem;
+  --table-border-width:  1px;
+  --table-header-bg:     var(--color-surface);
+  --table-row-hover-bg:  var(--color-background-secondary);
 
   /* === DROPDOWN === */
-  --dropdown-padding-x: 0.5rem;
-  --dropdown-padding-y: 0.5rem;
+  --dropdown-padding-x:      0.5rem;
+  --dropdown-padding-y:      0.5rem;
   --dropdown-item-padding-x: 0.75rem;
   --dropdown-item-padding-y: 0.5rem;
-  --dropdown-max-height: 20rem;
-  --dropdown-min-width: 8rem;
-
-  /* === TOOLTIP === */
-  --tooltip-padding-x: 0.75rem;
-  --tooltip-padding-y: 0.5rem;
-  --tooltip-max-width: 20rem;
-  --tooltip-font-size: 0.875rem;
-  --tooltip-arrow-size: 6px;
+  --dropdown-max-height:     20rem;
+  --dropdown-min-width:      8rem;
+  --dropdown-shadow:         var(--shadow-lg);
 
   /* === DRAWER === */
-  --drawer-width-sm: 20rem;
-  --drawer-width-md: 24rem;
-  --drawer-width-lg: 28rem;
-  --drawer-width-xl: 32rem;
+  --drawer-width-sm:  20rem;
+  --drawer-width-md:  24rem;
+  --drawer-width-lg:  28rem;
+  --drawer-width-xl:  32rem;
   --drawer-width-full: 100vw;
-  --drawer-padding: 1.5rem;
+  --drawer-padding:   1.5rem;
 
   /* === POPOVER === */
-  --popover-padding: 1rem;
+  --popover-padding:   1rem;
   --popover-max-width: 24rem;
   --popover-min-width: 12rem;
 
-  /* === BREADCRUMBS === */
-  --breadcrumb-gap: 0.5rem;
-  --breadcrumb-separator-gap: 0.5rem;
+  /* === TOOLTIP === */
+  --tooltip-padding-x:   0.75rem;
+  --tooltip-padding-y:   0.5rem;
+  --tooltip-max-width:   20rem;
+  --tooltip-font-size:   0.875rem;
+  --tooltip-arrow-size:  6px;
 
   /* === TABS === */
-  --tabs-gap-xs: 0.25rem;
-  --tabs-gap-sm: 0.375rem;
-  --tabs-gap-md: 0.5rem;
-  --tabs-gap-lg: 0.625rem;
+  --tabs-gap-xs:       0.25rem;
+  --tabs-gap-sm:       0.375rem;
+  --tabs-gap-md:       0.5rem;
+  --tabs-gap-lg:       0.625rem;
   --tabs-padding-x-xs: 0.5rem;
   --tabs-padding-x-sm: 0.75rem;
   --tabs-padding-x-md: 1rem;
@@ -502,180 +646,110 @@
   --tabs-padding-y-lg: 0.625rem;
 
   /* === STEPPER === */
-  --stepper-icon-size: 2rem;
+  --stepper-icon-size:      2rem;
   --stepper-line-thickness: 2px;
-  --stepper-gap: 1rem;
+  --stepper-gap:            1rem;
 
-  /* ============================================
-     MOTION TOKENS
-     ============================================ */
-
-  /* === EASING === */
-  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --ease-out: cubic-bezier(0, 0, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  /* === DURATION === */
-  --duration-instant: 0ms;
-  --duration-fast: 100ms;
-  --duration-normal: 200ms;
-  --duration-slow: 300ms;
-  --duration-slower: 500ms;
-
-  /* === TRANSITIONS (composed) === */
-  --transition-fast: var(--duration-fast) var(--ease-default);
-  --transition-base: var(--duration-normal) var(--ease-default);
-  --transition-slow: var(--duration-slow) var(--ease-default);
-
-  /* === RIPPLE === */
-  --ripple-scale: 2.5;
-  --ripple-opacity: 0.35;
-
-  /* ============================================
-     COMPONENT RADIUS TOKENS
-     Override these to change shape globally.
-     ============================================ */
-  --radius-button: var(--radius-md);
-  --radius-input: var(--radius-md);
-  --radius-card: var(--radius-lg);
-  --radius-modal: var(--radius-xl);
-  --radius-drawer: var(--radius-xl);
-  --radius-dropdown: var(--radius-lg);
-  --radius-badge: var(--radius-full);
-  --radius-tag: var(--radius-md);
-  --radius-tooltip: var(--radius-md);
-  --radius-popover: var(--radius-lg);
-  --radius-alert: var(--radius-md);
-  --radius-accordion: var(--radius-lg);
-
-  /* ============================================
-     UNDER-TOKENIZED COMPONENT TOKENS
-     ============================================ */
+  /* === BREADCRUMBS === */
+  --breadcrumb-gap:           0.5rem;
+  --breadcrumb-separator-gap: 0.5rem;
+  --breadcrumb-font-size-xs:  0.75rem;
+  --breadcrumb-font-size-sm:  0.875rem;
+  --breadcrumb-font-size-md:  0.875rem;
+  --breadcrumb-font-size-lg:  1rem;
 
   /* === PROGRESS === */
   --progress-track-height-xs: 0.25rem;
   --progress-track-height-sm: 0.375rem;
   --progress-track-height-md: 0.5rem;
   --progress-track-height-lg: 0.75rem;
-  --progress-bar-radius: var(--radius-full);
+  --progress-bar-radius:      var(--radius-full);
 
   /* === TIMELINE === */
-  --timeline-dot-size-xs: 0.5rem;
-  --timeline-dot-size-sm: 0.625rem;
-  --timeline-dot-size-md: 0.75rem;
-  --timeline-dot-size-lg: 1rem;
+  --timeline-dot-size-xs:     0.5rem;
+  --timeline-dot-size-sm:     0.625rem;
+  --timeline-dot-size-md:     0.75rem;
+  --timeline-dot-size-lg:     1rem;
   --timeline-connector-width: 2px;
 
-  /* === DROPDOWN === */
-  --dropdown-radius: var(--radius-lg);
-  --dropdown-shadow: var(--shadow-lg);
+  /* === TOAST === */
+  --toast-min-width: 18.75rem;
 
-  /* === TOOLTIP === */
-  --tooltip-radius: var(--radius-md);
+  /* === NAVIGATION MENU === */
+  --navigation-menu-content-min-width: 25rem;
 
-  /* === BREADCRUMBS === */
-  --breadcrumb-font-size-xs: 0.75rem;
-  --breadcrumb-font-size-sm: 0.875rem;
-  --breadcrumb-font-size-md: 0.875rem;
-  --breadcrumb-font-size-lg: 1rem;
+  /* === TOUR === */
+  --tour-max-width-xs: 16.25rem;
+  --tour-max-width-sm: 18.75rem;
+  --tour-max-width-md: 21.25rem;
+  --tour-max-width-lg: 25rem;
 
-  /* === OVERLAY === */
-  --overlay-stripe: oklch(100% 0 0 / 0.15);
+  /* === UPLOAD === */
+  --upload-dropzone-height-xs: 6.25rem;
+  --upload-dropzone-height-sm: 7.5rem;
+  --upload-dropzone-height-md: 10rem;
+  --upload-dropzone-height-lg: 12.5rem;
+
+  /* ============================================
+     OPACITY
+     ============================================ */
+  --opacity-disabled:   0.5;
+  --opacity-overlay:    0.5;
+  --opacity-hover:      0.04;
+  --opacity-focus:      0.12;
+  --opacity-placeholder: 0.5;
+
+  /* ============================================
+     FOCUS RING
+     ============================================ */
+  --ring-width:  2px;
+  --ring-offset: 2px;
+
+  /* ============================================
+     MOTION
+     ============================================ */
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --duration-instant: 0ms;
+  --duration-fast:    100ms;
+  --duration-normal:  200ms;
+  --duration-slow:    300ms;
+  --duration-slower:  500ms;
+
+  --duration-enter:  200ms;
+  --duration-exit:   150ms;
+
+  --transition-fast:  var(--duration-fast)   var(--ease-default);
+  --transition-base:  var(--duration-normal) var(--ease-default);
+  --transition-slow:  var(--duration-slow)   var(--ease-default);
+  --transition-enter: var(--duration-enter)  var(--ease-out);
+  --transition-exit:  var(--duration-exit)   var(--ease-in);
+
+  /* Global slot defaults — components inherit these unless overridden inline */
+  --_duration: var(--duration-normal);
+  --_ease: var(--ease-default);
+
+  /* ============================================
+     RIPPLE
+     ============================================ */
+  --ripple-scale:   2.5;
+  --ripple-opacity: 0.35;
 
   /* ============================================
      Z-INDEX
      ============================================ */
-  --z-tab: 1;
+  --z-tab:      1;
   --z-dropdown: 1000;
-  --z-sticky: 1020;
-  --z-modal: 1040;
-  --z-popover: 1050;
-  --z-tooltip: 1060;
-  --z-overlay: 1070;
-  --z-tour: 1080;
-}
-
-/* ============================================
-   DARK MODE
-   ============================================ */
-:root.dark,
-.dark,
-:root[data-mode='dark'],
-[data-mode='dark'] {
-  --color-primary: oklch(62% 0.17 239);
-  --color-primary-hover: oklch(67% 0.19 239);
-  --color-primary-active: oklch(72% 0.21 239);
-  --color-primary-foreground: oklch(100% 0 0);
-
-  --color-secondary: oklch(60% 0.08 240);
-  --color-secondary-hover: oklch(65% 0.09 240);
-  --color-secondary-active: oklch(70% 0.10 240);
-  --color-secondary-foreground: oklch(100% 0 0);
-
-  --color-accent: oklch(80% 0.17 67);
-  --color-accent-hover: oklch(84% 0.15 67);
-  --color-accent-active: oklch(88% 0.13 67);
-  --color-accent-foreground: oklch(15% 0 0);
-
-  --color-success: oklch(62% 0.18 145);
-  --color-success-hover: oklch(67% 0.20 145);
-  --color-success-active: oklch(72% 0.22 145);
-  --color-success-foreground: oklch(100% 0 0);
-
-  --color-error: oklch(62% 0.20 25);
-  --color-error-hover: oklch(67% 0.22 25);
-  --color-error-active: oklch(72% 0.24 25);
-  --color-error-foreground: oklch(100% 0 0);
-
-  --color-warning: oklch(80% 0.15 85);
-  --color-warning-hover: oklch(84% 0.17 85);
-  --color-warning-active: oklch(88% 0.19 85);
-  --color-warning-foreground: oklch(15% 0 0);
-
-  --color-info: oklch(62% 0.17 255);
-  --color-info-hover: oklch(67% 0.19 255);
-  --color-info-active: oklch(72% 0.21 255);
-  --color-info-foreground: oklch(100% 0 0);
-
-  --color-background: oklch(12% 0.01 260);
-  --color-background-secondary: oklch(16% 0.01 260);
-  --color-surface: oklch(20% 0.015 260);
-  --color-card: oklch(16% 0.01 260);
-  --color-card-foreground: oklch(95% 0 0);
-
-  --color-border: oklch(28% 0.015 260);
-  --color-border-primary: oklch(38% 0.02 260);
-  --color-border-hover: oklch(45% 0.02 260);
-  --color-border-focus: oklch(62% 0.17 239);
-
-  --color-text-primary: oklch(95% 0 0);
-  --color-text-secondary: oklch(72% 0 0);
-  --color-text-muted: oklch(55% 0 0);
-  --color-text-disabled: oklch(40% 0 0);
-
-  --color-focus: oklch(62% 0.17 239);
-  --color-focus-ring: oklch(62% 0.17 239 / 30%);
-  --color-disabled: oklch(28% 0.01 260);
-  --color-disabled-text: oklch(50% 0 0);
-  --color-overlay: oklch(0% 0 0 / 65%);
-
-  --color-input-border: oklch(28% 0.015 260);
-  --color-input-border-focus: oklch(62% 0.17 239);
-  --color-input-border-error: oklch(62% 0.20 25);
-  --color-input-bg: oklch(14% 0.01 260);
-  --color-input-text: oklch(95% 0 0);
-  --color-input-placeholder: oklch(50% 0 0);
-
-  --shadow-xs: 0 1px 2px 0 oklch(0% 0 0 / 0.3);
-  --shadow-sm: 0 1px 3px 0 oklch(0% 0 0 / 0.4), 0 1px 2px -1px oklch(0% 0 0 / 0.4);
-  --shadow-md: 0 4px 8px -1px oklch(0% 0 0 / 0.5), 0 2px 4px -2px oklch(0% 0 0 / 0.4);
-  --shadow-lg: 0 12px 20px -3px oklch(0% 0 0 / 0.6), 0 4px 8px -4px oklch(0% 0 0 / 0.4);
-  --shadow-xl: 0 20px 30px -5px oklch(0% 0 0 / 0.6), 0 8px 10px -6px oklch(0% 0 0 / 0.3);
-  --shadow-2xl: 0 25px 50px -12px oklch(0% 0 0 / 0.7);
-
-  --overlay-stripe: oklch(100% 0 0 / 0.08);
+  --z-sticky:   1020;
+  --z-modal:    1040;
+  --z-popover:  1050;
+  --z-tooltip:  1060;
+  --z-overlay:  1070;
+  --z-tour:     1080;
 }
 
 /* ============================================
@@ -688,120 +762,90 @@
   body {
     color: var(--color-text-primary);
     background-color: var(--color-background);
+    font-family: var(--font);
   }
 }
 
 /* ============================================
    COLOR SLOT UTILITIES
+   Components use these instead of hardcoded colors.
+   --_c, --_c-bg, --_c-fg, --_c-border are set
+   per-component via colorVars in variants.ts.
    ============================================ */
 
-/* Background */
-@utility bg-slot {
-  background-color: var(--_c-bg);
-}
-@utility bg-slot-10 {
-  background-color: color-mix(in oklch, var(--_c) 10%, transparent);
-}
-@utility bg-slot-20 {
-  background-color: color-mix(in oklch, var(--_c) 20%, transparent);
-}
-@utility bg-slot-50 {
-  background-color: color-mix(in oklch, var(--_c) 50%, transparent);
-}
-@utility bg-slot-90 {
-  background-color: color-mix(in oklch, var(--_c-bg) 90%, var(--color-background));
-}
+@utility bg-surface-hover { background-color: var(--color-surface-hover); }
 
-/* Text */
-@utility text-slot {
-  color: var(--_c);
-}
-@utility text-slot-fg {
-  color: var(--_c-fg);
-}
-@utility text-slot-80 {
-  color: color-mix(in oklch, var(--_c) 80%, transparent);
-}
+@utility bg-slot       { background-color: var(--_c-bg); }
+@utility bg-slot-5     { background-color: color-mix(in oklch, var(--_c) 5%,  transparent); }
+@utility bg-slot-10    { background-color: color-mix(in oklch, var(--_c) 10%, transparent); }
+@utility bg-slot-20    { background-color: color-mix(in oklch, var(--_c) 20%, transparent); }
+@utility bg-slot-50    { background-color: color-mix(in oklch, var(--_c) 50%, transparent); }
+@utility bg-slot-90    { background-color: color-mix(in oklch, var(--_c-bg) 90%, var(--color-background)); }
 
-/* Border */
-@utility border-slot {
-  border-color: var(--_c-border);
-}
-@utility border-slot-20 {
-  border-color: color-mix(in oklch, var(--_c-border) 20%, transparent);
-}
-@utility border-slot-30 {
-  border-color: color-mix(in oklch, var(--_c-border) 30%, transparent);
-}
-@utility border-slot-50 {
-  border-color: color-mix(in oklch, var(--_c-border) 50%, transparent);
-}
+@utility text-slot      { color: var(--_c); }
+@utility text-slot-fg   { color: var(--_c-fg); }
+@utility text-slot-80   { color: color-mix(in oklch, var(--_c) 80%, transparent); }
+@utility text-slot-muted { color: color-mix(in oklch, var(--_c) 60%, transparent); }
+
+@utility border-slot    { border-color: var(--_c-border); }
+@utility border-slot-20 { border-color: color-mix(in oklch, var(--_c-border) 20%, transparent); }
+@utility border-slot-30 { border-color: color-mix(in oklch, var(--_c-border) 30%, transparent); }
+@utility border-slot-50 { border-color: color-mix(in oklch, var(--_c-border) 50%, transparent); }
+@utility border-l-slot  { border-left-color: var(--_c-border); }
 @utility divide-slot-20 {
   & > :not(:first-child) {
     border-color: color-mix(in oklch, var(--_c-border) 20%, transparent);
   }
 }
-@utility border-l-slot {
-  border-left-color: var(--_c-border);
-}
 
-/* Stroke */
-@utility stroke-slot {
-  stroke: var(--_c);
-}
-@utility stroke-slot-10 {
-  stroke: oklch(from var(--_c) l c h / 10%);
-}
-@utility stroke-slot-20 {
-  stroke: oklch(from var(--_c) l c h / 20%);
-}
-@utility stroke-slot-50 {
-  stroke: oklch(from var(--_c) l c h / 50%);
-}
+@utility stroke-slot    { stroke: var(--_c); }
+@utility stroke-slot-10 { stroke: color-mix(in oklch, var(--_c) 10%, transparent); }
+@utility stroke-slot-20 { stroke: color-mix(in oklch, var(--_c) 20%, transparent); }
+@utility stroke-slot-50 { stroke: color-mix(in oklch, var(--_c) 50%, transparent); }
 
-/* Ring */
-@utility ring-slot {
-  --tw-ring-color: var(--_c);
-}
-@utility ring-slot-30 {
-  --tw-ring-color: color-mix(in oklch, var(--_c) 30%, transparent);
-}
-@utility ring-slot-50 {
-  --tw-ring-color: color-mix(in oklch, var(--_c) 50%, transparent);
-}
+@utility fill-slot    { fill: var(--_c); }
+@utility fill-slot-5  { fill: color-mix(in oklch, var(--_c)  5%, transparent); }
+@utility fill-slot-10 { fill: color-mix(in oklch, var(--_c) 10%, transparent); }
+@utility fill-slot-20 { fill: color-mix(in oklch, var(--_c) 20%, transparent); }
+@utility fill-slot-50 { fill: color-mix(in oklch, var(--_c) 50%, transparent); }
 
-/* === EXTENDED SLOT UTILITIES === */
+@utility ring-slot    { --tw-ring-color: var(--_c); }
+@utility ring-slot-30 { --tw-ring-color: color-mix(in oklch, var(--_c) 30%, transparent); }
+@utility ring-slot-50 { --tw-ring-color: color-mix(in oklch, var(--_c) 50%, transparent); }
 
-/* Ultra-subtle tint — hover states on transparent backgrounds */
-@utility bg-slot-5 {
-  background-color: color-mix(in oklch, var(--_c) 5%, transparent);
-}
+@utility shadow-slot      { box-shadow: 0 4px 14px -2px color-mix(in oklch, var(--_c) 20%, transparent); }
+@utility shadow-size-slot { box-shadow: var(--_shadow, none); }
+@utility outline-slot     { outline-color: var(--_c); }
 
-/* Muted slot text — 60% of the slot color */
-@utility text-slot-muted {
-  color: color-mix(in oklch, var(--_c) 60%, transparent);
-}
+/* ============================================
+   RADIUS SLOT
+   --_radius set inline per component.
+   Children use rounded-slot instead of rounded-{type}.
+   ============================================ */
+@utility rounded-slot   { border-radius: var(--_radius); }
+@utility rounded-t-slot { border-top-left-radius: var(--_radius); border-top-right-radius: var(--_radius); }
+@utility rounded-b-slot { border-bottom-left-radius: var(--_radius); border-bottom-right-radius: var(--_radius); }
+@utility rounded-l-slot { border-top-left-radius: var(--_radius); border-bottom-left-radius: var(--_radius); }
+@utility rounded-r-slot { border-top-right-radius: var(--_radius); border-bottom-right-radius: var(--_radius); }
 
-/* Slot shadow — box-shadow using slot color */
-@utility shadow-slot {
-  box-shadow: 0 4px 14px -2px color-mix(in oklch, var(--_c) 20%, transparent);
-}
-
-/* Slot outline — for focus-visible outlines */
-@utility outline-slot {
-  outline-color: var(--_c);
-}
+/* ============================================
+   MOTION SLOT
+   --_duration and --_ease have global defaults on :root.
+   Override inline for fast/slow/spring variants.
+   ============================================ */
+@utility duration-slot { transition-duration: var(--_duration); }
+@utility ease-slot     { transition-timing-function: var(--_ease); }
 
 /* ============================================
    ANIMATIONS
    ============================================ */
 @keyframes ripple {
   from { transform: scale(0); opacity: var(--ripple-opacity, 0.35); }
-  to { transform: scale(var(--ripple-scale, 2.5)); opacity: 0; }
+  to   { transform: scale(var(--ripple-scale, 2.5)); opacity: 0; }
 }
 
 @keyframes shimmer {
-  0% { background-position: 0 0; }
+  0%   { background-position: 0 0; }
   100% { background-position: 2rem 0; }
 }
 
@@ -817,4 +861,3 @@
     scroll-behavior: auto !important;
   }
 }
-

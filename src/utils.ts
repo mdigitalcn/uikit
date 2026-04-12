@@ -20,15 +20,7 @@ export type ValidationStatus =
   | 'info'
   | 'success'
 
-export interface StatusMessages {
-  error?: string | boolean
-  warning?: string | boolean
-  info?: string | boolean
-  success?: string | boolean
-  helperText?: string
-}
-
-export function getValidationStatus(messages: StatusMessages): {
+export function getValidationStatus(messages: import('./types').ValidationMessages): {
   status: ValidationStatus
   message?: string | boolean
 } {

@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export type InputGroupSize = ComponentSize
 
@@ -8,7 +8,13 @@ export interface InputGroupClassNames {
   input?: string
 }
 
+export type InputGroupVariant = 'outline' | 'filled'
+
 export interface InputGroupProps {
+  /** @default 'outline' */
+  variant?: InputGroupVariant
+  /** @default 'primary' */
+  color?: ComponentColor
   /**
    * Children elements (InputGroupAddon and InputGroupInput)
    * Order determines layout - addons and input flow naturally with flexbox

@@ -1,4 +1,4 @@
-import type { ComponentColor, ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages } from '../types'
 
 export interface TagsInputClassNames {
   root?: string
@@ -9,7 +9,11 @@ export interface TagsInputClassNames {
   wrapper?: string
 }
 
-export interface TagsInputProps {
+export type TagsInputVariant = 'outline' | 'filled'
+
+export interface TagsInputProps extends ValidationMessages {
+  /** @default 'outline' */
+  variant?: TagsInputVariant
   value?: string[]
   defaultValue?: string[]
   onChange?: (value: string[]) => void
@@ -27,9 +31,11 @@ export interface TagsInputProps {
   color?: ComponentColor
   disabled?: boolean
   readOnly?: boolean
+  required?: boolean
+  loading?: boolean
   label?: string
-  error?: string
-  helperText?: string
+  /** @default 'bottom' */
+  messagePosition?: 'top' | 'bottom'
   clearable?: boolean
   fullWidth?: boolean
   className?: string

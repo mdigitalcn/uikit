@@ -36,9 +36,9 @@ export interface BaseOption {
 
 export interface ValidationMessages {
   error?: string | boolean
-  warning?: string
-  info?: string
-  success?: string
+  warning?: string | boolean
+  info?: string | boolean
+  success?: string | boolean
   helperText?: string
 }
 

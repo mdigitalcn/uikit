@@ -19,6 +19,7 @@ import {
 
 const MultiSelect = React.memo<MultiSelectProps>(
   ({
+    variant = "outline",
     size = "md",
     color = "primary",
     label,
@@ -406,7 +407,7 @@ const MultiSelect = React.memo<MultiSelectProps>(
         type="button"
         className={cn(
           "multiSelect_trigger",
-          multiSelectTriggerVariants({ status, size, fullWidth }),
+          multiSelectTriggerVariants({ variant, status, size, fullWidth }),
           loading && "opacity-50",
           classNames?.trigger,
           className,
@@ -533,7 +534,7 @@ const MultiSelect = React.memo<MultiSelectProps>(
       <div
         className={cn(
           "multiSelect_root relative group",
-          colorVars[color],
+          colorVars[status !== 'default' ? status : color],
           fullWidth ? "w-full" : "inline-block",
           classNames?.root,
         )}

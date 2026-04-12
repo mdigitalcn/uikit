@@ -1,6 +1,7 @@
 import type React from 'react'
 
 import type { ComponentColor, ComponentSize } from '../types'
+import type { NotificationClassNames } from '../notification/types'
 
 export type ToastPosition =
   | 'top-right'
@@ -29,6 +30,7 @@ export interface ToastOptions {
   }
   onClose?: () => void
   icon?: React.ReactNode
+  classNames?: NotificationClassNames
 }
 
 export interface ToastContextValue {

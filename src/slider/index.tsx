@@ -3,6 +3,7 @@
 import { cva } from 'class-variance-authority'
 import React, { useCallback, useRef, useState } from 'react'
 
+import { useControllable } from '../hooks/useControllable'
 import { cn } from '../utils'
 import { colorVars } from '../variants'
 import type { SliderProps } from './types'
@@ -37,7 +38,7 @@ const sliderTrackVariants = cva('relative rounded-full', {
 })
 
 const thumbVariants = cva(
-  'absolute rounded-full border-2 bg-background cursor-pointer hover:scale-110 active:scale-100 transition-transform duration-150',
+  '[--_duration:var(--duration-fast)] absolute rounded-full border-2 bg-background cursor-pointer hover:scale-110 active:scale-100 transition-transform duration-slot',
   {
     variants: {
       size: {
@@ -91,20 +92,17 @@ const Slider = React.memo<SliderProps>(
     showTooltip = false,
   }) => {
     const isVertical = orientation === 'vertical'
-    const [internalValue, setInternalValue] = useState<number | number[]>(
+    const [value, setValue] = useControllable<number | number[]>({
+      value: controlledValue,
       defaultValue,
-    )
+      onChange,
+    })
     const [hoveredThumb, setHoveredThumb] = useState<number | null>(null)
     const trackRef = useRef<HTMLDivElement>(null)
     const isDragging = useRef(false)
     const activeThumb = useRef<number>(0)
 
-    const value = controlledValue ?? internalValue
-    const values = Array.isArray(value) ? value : [value]
-
-    // Fix 3: Mirror latest value in a ref to avoid stale closures during rapid drag
-    const valueRef = useRef(value)
-    valueRef.current = value
+    const values = Array.isArray(value) ? value : [value ?? min]
 
     const getPercentage = (val: number) => ((val - min) / (max - min)) * 100
 
@@ -120,22 +118,21 @@ const Slider = React.memo<SliderProps>(
       return Math.max(min, Math.min(max, steppedValue))
     }, [isVertical, min, max, step])
 
-    // Fix 3: Read from valueRef.current instead of value closure
     const updateValue = useCallback(
       (newValue: number) => {
-        const currentValue = valueRef.current
-        if (range && Array.isArray(currentValue)) {
-          const newValues = [...currentValue]
-          newValues[activeThumb.current] = newValue
-          newValues.sort((a, b) => a - b)
-          if (!controlledValue) setInternalValue(newValues)
-          onChange?.(newValues)
+        if (range) {
+          setValue((current) => {
+            const arr = Array.isArray(current) ? current : [current ?? min]
+            const next = [...arr]
+            next[activeThumb.current] = newValue
+            next.sort((a, b) => a - b)
+            return next
+          })
         } else {
-          if (!controlledValue) setInternalValue(newValue)
-          onChange?.(newValue)
+          setValue(newValue)
         }
       },
-      [range, controlledValue, onChange],
+      [range, setValue, min],
     )
 
     // Fix 1: Include getValue in deps (replaces isVertical, min, max, step)
@@ -185,29 +182,28 @@ const Slider = React.memo<SliderProps>(
     const handleTrackClick = useCallback((e: React.PointerEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>) => {
       if (disabled || isDragging.current) return
       const newValue = getValue(e.clientX, e.clientY)
-      const currentValue = valueRef.current
 
-      if (range && Array.isArray(currentValue)) {
-        let closestThumbIndex = 0
-        let minDistance = Math.abs(newValue - (currentValue[0] || 0))
-        for (let i = 1; i < currentValue.length; i++) {
-          const distance = Math.abs(newValue - (currentValue[i] || 0))
-          if (distance < minDistance) {
-            minDistance = distance
-            closestThumbIndex = i
+      if (range) {
+        setValue((current) => {
+          const arr = Array.isArray(current) ? current : [current ?? min]
+          let closestThumbIndex = 0
+          let minDistance = Math.abs(newValue - (arr[0] || 0))
+          for (let i = 1; i < arr.length; i++) {
+            const distance = Math.abs(newValue - (arr[i] || 0))
+            if (distance < minDistance) {
+              minDistance = distance
+              closestThumbIndex = i
+            }
           }
-        }
-
-        const newValues = [...currentValue]
-        newValues[closestThumbIndex] = newValue
-        newValues.sort((a, b) => a - b)
-        if (!controlledValue) setInternalValue(newValues)
-        onChange?.(newValues)
+          const next = [...arr]
+          next[closestThumbIndex] = newValue
+          next.sort((a, b) => a - b)
+          return next
+        })
       } else {
-        if (!controlledValue) setInternalValue(newValue)
-        onChange?.(newValue)
+        setValue(newValue)
       }
-    }, [disabled, getValue, range, controlledValue, onChange])
+    }, [disabled, getValue, range, setValue, min])
 
     // Fix 2: Single useCallback handler using data-index attribute
     // Keyboard: ArrowUp/Right = increase, ArrowDown/Left = decrease
@@ -231,18 +227,18 @@ const Slider = React.memo<SliderProps>(
         return
       }
       e.preventDefault()
-      const currentValue = valueRef.current
-      if (range && Array.isArray(currentValue)) {
-        const newValues = [...currentValue]
-        newValues[index] = newValue
-        newValues.sort((a, b) => a - b)
-        if (!controlledValue) setInternalValue(newValues)
-        onChange?.(newValues)
+      if (range) {
+        setValue((current) => {
+          const arr = Array.isArray(current) ? current : [current ?? min]
+          const next = [...arr]
+          next[index] = newValue
+          next.sort((a, b) => a - b)
+          return next
+        })
       } else {
-        if (!controlledValue) setInternalValue(newValue)
-        onChange?.(newValue)
+        setValue(newValue)
       }
-    }, [disabled, isVertical, min, max, step, range, controlledValue, onChange])
+    }, [disabled, isVertical, min, max, step, range, setValue])
 
     // Fill segment styles
     const getFillStyle = (startPct: number, endPct: number) =>
@@ -338,7 +334,7 @@ const Slider = React.memo<SliderProps>(
                   getThumbColorClasses(variant),
                   '-translate-x-1/2',
                   disabled && 'cursor-not-allowed',
-                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary',
+                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slot',
                   isVertical
                     ? cn(
                         'left-1/2 translate-y-1/2',
@@ -360,7 +356,7 @@ const Slider = React.memo<SliderProps>(
               >
                 <div
                   className={cn(
-                    'absolute bg-text-primary text-background text-xs px-2 py-1 rounded whitespace-nowrap transition-opacity',
+                    'absolute bg-slot text-slot-fg text-xs px-2 py-1 rounded whitespace-nowrap transition-opacity',
                     showTooltip && (hoveredThumb === index || isDraggingState && activeThumb.current === index) ? 'opacity-100' : 'opacity-0 pointer-events-none',
                     isVertical
                       ? 'left-full ml-2 top-1/2 -translate-y-1/2'

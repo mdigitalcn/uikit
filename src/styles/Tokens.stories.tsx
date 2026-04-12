@@ -448,7 +448,7 @@ export const HowToOverride: StoryObj = {
             4. TypeScript Token Import
           </h4>
           <pre className="bg-surface p-4 rounded-lg text-xs overflow-x-auto border border-border">
-            {`import { tokens } from '@fmlj/uikit/styles/tokens'
+            {`import { tokens } from '@mdigitalcn/uikit/styles/tokens'
 
 // tokens.colors.primary → 'var(--color-primary)'
 // tokens.components.card.padding → 'var(--card-padding)'

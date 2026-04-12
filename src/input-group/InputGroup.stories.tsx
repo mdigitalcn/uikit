@@ -1,317 +1,172 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import {
-  Search,
-  Mail,
-  Lock,
-  User,
-  Phone,
-  Globe,
-  DollarSign,
-  MapPin,
-  Calendar,
-  Clock,
-  AtSign,
-  Hash,
-} from 'lucide-react'
-import InputGroup, { InputGroupInput, InputGroupAddon } from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import { Search, Mail, Globe, DollarSign, AtSign, Lock, Hash } from "lucide-react";
+import React from "react";
+import InputGroup from "./index";
+import { InputGroupAddon, InputGroupInput } from "./index";
 
 const meta: Meta<typeof InputGroup> = {
-  title: 'Data Entry/InputGroup',
+  title: "Data Entry/InputGroup",
   component: InputGroup,
-  tags: ['autodocs'],
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'InputGroup automatically positions addons based on their order in children. Addons before the input appear on the left, addons after appear on the right.',
-      },
+  tags: ["autodocs"],
+  argTypes: {
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    variant: { control: "select", options: ["outline", "filled"] },
+    color: {
+      control: "select",
+      options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
   },
-}
+};
+export default meta;
+type Story = StoryObj<typeof InputGroup>;
 
-export default meta
-type Story = StoryObj<typeof InputGroup>
-
-export const Primary: Story = {
-  render: () => (
-    <InputGroup>
-      <InputGroupInput placeholder="Enter text..." />
-      <InputGroupAddon>
-        <Search size={16} />
-      </InputGroupAddon>
-    </InputGroup>
-  ),
-}
-
-export const BasicUsage: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      {/* Right addon - addon comes after input */}
-      <InputGroup>
-        <InputGroupInput placeholder="Search..." />
-        <InputGroupAddon>
-          <Search size={16} />
-        </InputGroupAddon>
-      </InputGroup>
-
-      {/* Left addon - addon comes before input */}
-      <InputGroup>
-        <InputGroupAddon>
-          <Mail size={16} />
-        </InputGroupAddon>
-        <InputGroupInput placeholder="Email address" />
-      </InputGroup>
-    </div>
-  ),
-}
-
-export const WithIcons: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <InputGroup>
-        <InputGroupAddon>
-          <User size={16} />
-        </InputGroupAddon>
-        <InputGroupInput placeholder="Username" />
-      </InputGroup>
-
-      <InputGroup>
-        <InputGroupAddon>
-          <Mail size={16} />
-        </InputGroupAddon>
-        <InputGroupInput type="email" placeholder="Email address" />
-      </InputGroup>
-
-      <InputGroup>
-        <InputGroupAddon>
-          <Lock size={16} />
-        </InputGroupAddon>
-        <InputGroupInput type="password" placeholder="Password" />
-      </InputGroup>
-
-      <InputGroup>
-        <InputGroupAddon>
-          <Phone size={16} />
-        </InputGroupAddon>
-        <InputGroupInput type="tel" placeholder="Phone number" />
-      </InputGroup>
-    </div>
-  ),
-}
-
-export const WithText: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <InputGroup>
-        <InputGroupAddon>
-          <span className="text-sm font-medium">https://</span>
-        </InputGroupAddon>
+export const Playground: Story = {
+  args: { size: "md", variant: "outline", color: "primary" },
+  render: (args) => (
+    <div className="max-w-xs">
+      <InputGroup {...args}>
+        <InputGroupAddon>https://</InputGroupAddon>
         <InputGroupInput placeholder="example.com" />
       </InputGroup>
-
-      <InputGroup>
-        <InputGroupInput placeholder="Enter amount" />
-        <InputGroupAddon>
-          <span className="text-sm font-medium">USD</span>
-        </InputGroupAddon>
-      </InputGroup>
-
-      <InputGroup>
-        <InputGroupAddon>
-          <span className="text-sm">@</span>
-        </InputGroupAddon>
-        <InputGroupInput placeholder="username" />
-      </InputGroup>
-
-      <InputGroup>
-        <InputGroupAddon>
-          <DollarSign size={16} />
-        </InputGroupAddon>
-        <InputGroupInput type="number" placeholder="0.00" />
-      </InputGroup>
     </div>
   ),
-}
+};
 
-export const WithButtons: Story = {
+export const Showcase: Story = {
   render: () => (
-    <div className="flex flex-col gap-4">
-      <InputGroup>
-        <InputGroupInput placeholder="Search..." />
-        <InputGroupAddon>
-          <button
-            type="button"
-            className="px-3 py-1 bg-primary text-background rounded text-sm font-medium hover:bg-primary/90 pointer-events-auto"
-          >
-            Search
-          </button>
-        </InputGroupAddon>
-      </InputGroup>
+    <div className="space-y-10 p-6 max-w-sm">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Variants
+        </h3>
+        <div className="space-y-3">
+          <div>
+            <p className="text-xs text-text-secondary mb-1">outline</p>
+            <InputGroup variant="outline">
+              <InputGroupAddon>https://</InputGroupAddon>
+              <InputGroupInput placeholder="example.com" />
+            </InputGroup>
+          </div>
+          <div>
+            <p className="text-xs text-text-secondary mb-1">filled</p>
+            <InputGroup variant="filled">
+              <InputGroupAddon>https://</InputGroupAddon>
+              <InputGroupInput placeholder="example.com" />
+            </InputGroup>
+          </div>
+        </div>
+      </section>
 
-      <InputGroup>
-        <InputGroupInput placeholder="Enter email..." />
-        <InputGroupAddon>
-          <button
-            type="button"
-            className="px-3 py-1 bg-success text-background rounded text-sm font-medium hover:bg-success/90 pointer-events-auto"
-          >
-            Send
-          </button>
-        </InputGroupAddon>
-      </InputGroup>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Colors
+        </h3>
+        <div className="space-y-3">
+          {(["primary", "secondary", "accent"] as const).map((c) => (
+            <InputGroup key={c} color={c}>
+              <InputGroupAddon>@</InputGroupAddon>
+              <InputGroupInput placeholder={`${c} color`} />
+            </InputGroup>
+          ))}
+        </div>
+      </section>
 
-      <InputGroup>
-        <InputGroupAddon>
-          <button
-            type="button"
-            className="px-3 py-1 bg-surface border border-border rounded text-sm font-medium hover:bg-surface/80 pointer-events-auto"
-          >
-            Select
-          </button>
-        </InputGroupAddon>
-        <InputGroupInput placeholder="Choose file..." />
-      </InputGroup>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Sizes
+        </h3>
+        <div className="space-y-3">
+          {(["xs", "sm", "md", "lg"] as const).map((s) => (
+            <InputGroup key={s} size={s}>
+              <InputGroupAddon>$</InputGroupAddon>
+              <InputGroupInput placeholder={`Size ${s}`} />
+              <InputGroupAddon>USD</InputGroupAddon>
+            </InputGroup>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Text Addons
+        </h3>
+        <div className="space-y-3">
+          <InputGroup>
+            <InputGroupAddon>https://</InputGroupAddon>
+            <InputGroupInput placeholder="example.com" />
+          </InputGroup>
+          <InputGroup>
+            <InputGroupInput placeholder="username" />
+            <InputGroupAddon>@gmail.com</InputGroupAddon>
+          </InputGroup>
+          <InputGroup>
+            <InputGroupAddon>$</InputGroupAddon>
+            <InputGroupInput placeholder="0.00" type="number" />
+            <InputGroupAddon>USD</InputGroupAddon>
+          </InputGroup>
+          <InputGroup>
+            <InputGroupAddon>+1</InputGroupAddon>
+            <InputGroupInput placeholder="(555) 000-0000" type="tel" />
+          </InputGroup>
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Icon Addons
+        </h3>
+        <div className="space-y-3">
+          <InputGroup>
+            <InputGroupAddon>
+              <Search className="w-4 h-4" />
+            </InputGroupAddon>
+            <InputGroupInput placeholder="Search..." />
+          </InputGroup>
+          <InputGroup>
+            <InputGroupAddon>
+              <Mail className="w-4 h-4" />
+            </InputGroupAddon>
+            <InputGroupInput placeholder="Email address" type="email" />
+          </InputGroup>
+          <InputGroup>
+            <InputGroupAddon>
+              <Globe className="w-4 h-4" />
+            </InputGroupAddon>
+            <InputGroupInput placeholder="Website URL" />
+          </InputGroup>
+          <InputGroup>
+            <InputGroupAddon>
+              <AtSign className="w-4 h-4" />
+            </InputGroupAddon>
+            <InputGroupInput placeholder="Username" />
+            <InputGroupAddon>
+              <Lock className="w-4 h-4" />
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Mixed Addons
+        </h3>
+        <div className="space-y-3">
+          <InputGroup>
+            <InputGroupAddon>
+              <DollarSign className="w-4 h-4" />
+            </InputGroupAddon>
+            <InputGroupInput placeholder="Amount" type="number" />
+            <InputGroupAddon>per month</InputGroupAddon>
+          </InputGroup>
+          <InputGroup>
+            <InputGroupAddon>
+              <Hash className="w-4 h-4" />
+            </InputGroupAddon>
+            <InputGroupInput placeholder="Tag name" />
+            <InputGroupAddon>.io</InputGroupAddon>
+          </InputGroup>
+        </div>
+      </section>
     </div>
   ),
-}
-
-export const BothSides: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <InputGroup>
-        <InputGroupAddon>
-          <Search size={16} />
-        </InputGroupAddon>
-        <InputGroupInput placeholder="Search products..." />
-        <InputGroupAddon>
-          <span className="text-xs text-text-secondary">Ctrl+K</span>
-        </InputGroupAddon>
-      </InputGroup>
-
-      <InputGroup>
-        <InputGroupAddon>
-          <Globe size={16} />
-        </InputGroupAddon>
-        <InputGroupInput placeholder="example" />
-        <InputGroupAddon>
-          <span className="text-sm">.com</span>
-        </InputGroupAddon>
-      </InputGroup>
-
-      <InputGroup>
-        <InputGroupAddon>
-          <DollarSign size={16} />
-        </InputGroupAddon>
-        <InputGroupInput type="number" placeholder="0.00" />
-        <InputGroupAddon>
-          <select className="text-sm bg-transparent outline-none cursor-pointer pointer-events-auto">
-            <option>USD</option>
-            <option>EUR</option>
-            <option>GBP</option>
-          </select>
-        </InputGroupAddon>
-      </InputGroup>
-    </div>
-  ),
-}
-
-export const SearchExamples: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <InputGroup>
-        <InputGroupAddon>
-          <Search size={16} />
-        </InputGroupAddon>
-        <InputGroupInput placeholder="Search products..." />
-      </InputGroup>
-
-      <InputGroup>
-        <InputGroupInput placeholder="Search..." />
-        <InputGroupAddon>
-          <Search size={16} />
-        </InputGroupAddon>
-      </InputGroup>
-
-      <InputGroup>
-        <InputGroupAddon>
-          <Search size={16} />
-        </InputGroupAddon>
-        <InputGroupInput placeholder="Search..." />
-        <InputGroupAddon>
-          <button
-            type="button"
-            className="px-3 py-1.5 bg-primary text-background rounded text-sm font-medium hover:bg-primary/90 pointer-events-auto"
-          >
-            Search
-          </button>
-        </InputGroupAddon>
-      </InputGroup>
-    </div>
-  ),
-}
-
-export const RegistrationForm: Story = {
-  render: () => (
-    <div className="max-w-md p-6 border border-border rounded-lg space-y-4">
-      <h2 className="text-xl font-semibold text-text-primary mb-4">
-        Create Account
-      </h2>
-
-      <div>
-        <label className="block text-sm font-medium text-text-secondary mb-1.5">
-          Full Name
-        </label>
-        <InputGroup>
-          <InputGroupAddon>
-            <User size={16} />
-          </InputGroupAddon>
-          <InputGroupInput placeholder="John Doe" />
-        </InputGroup>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-text-secondary mb-1.5">
-          Email
-        </label>
-        <InputGroup>
-          <InputGroupAddon>
-            <Mail size={16} />
-          </InputGroupAddon>
-          <InputGroupInput type="email" placeholder="john@example.com" />
-        </InputGroup>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-text-secondary mb-1.5">
-          Username
-        </label>
-        <InputGroup>
-          <InputGroupAddon>
-            <AtSign size={16} />
-          </InputGroupAddon>
-          <InputGroupInput placeholder="johndoe" />
-        </InputGroup>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-text-secondary mb-1.5">
-          Password
-        </label>
-        <InputGroup>
-          <InputGroupAddon>
-            <Lock size={16} />
-          </InputGroupAddon>
-          <InputGroupInput type="password" placeholder="Create password" />
-        </InputGroup>
-      </div>
-
-      <button
-        type="button"
-        className="w-full h-12 bg-primary text-background rounded-md font-medium hover:bg-primary/90"
-      >
-        Sign Up
-      </button>
-    </div>
-  ),
-}
-
+};

@@ -14,7 +14,7 @@ const tableVariants = cva('w-full border-separate border-spacing-0', {
       false: '',
     },
     rounded: {
-      true: 'rounded-lg',
+      true: '[--_radius:var(--radius-card)] rounded-slot',
       false: '',
     },
   },

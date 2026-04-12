@@ -1,321 +1,117 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
-import Radio from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+
+import Radio from "./index";
 
 const meta: Meta<typeof Radio> = {
-  title: 'Data Entry/Radio',
+  title: "Form/Radio",
   component: Radio,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     color: {
-      control: 'select',
-      options: ['primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'],
-      description: 'Theme color',
+      control: "select",
+      options: ["primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
     size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Radio size',
+      control: "select",
+      options: ["xs", "sm", "md", "lg"],
     },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    label: {
-      control: 'text',
-      description: 'Label text',
-    },
-    helperText: {
-      control: 'text',
-      description: 'Helper text below radio',
-    },
-    error: {
-      control: 'text',
-      description: 'Error message',
-    },
+    label: { control: "text" },
+    helperText: { control: "text" },
+    error: { control: "text" },
+    disabled: { control: "boolean" },
+    defaultChecked: { control: "boolean" },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof Radio>
+export default meta;
+type Story = StoryObj<typeof Radio>;
 
-export const Default: Story = {
+export const Playground: Story = {
   args: {
-    label: 'Radio option',
-    name: 'default',
+    label: "Select this option",
+    color: "primary",
+    size: "md",
+    name: "playground",
   },
-}
+};
 
-
-export const WithLabels: Story = {
-  render: () => {
-    const [selected, setSelected] = useState('option1')
-
-    return (
-      <div className="flex flex-col gap-4 max-w-md">
-        <Radio
-          label="Option 1"
-          name="options"
-          value="option1"
-          checked={selected === 'option1'}
-          onChange={(e) => setSelected(e.target.value)}
-        />
-        <Radio
-          label="Option 2"
-          helperText="This is a helpful description for option 2"
-          name="options"
-          value="option2"
-          checked={selected === 'option2'}
-          onChange={(e) => setSelected(e.target.value)}
-        />
-        <Radio
-          label="Option 3"
-          helperText="This is a helpful description for option 3"
-          name="options"
-          value="option3"
-          checked={selected === 'option3'}
-          onChange={(e) => setSelected(e.target.value)}
-        />
-      </div>
-    )
-  },
-}
-
-export const Disabled: Story = {
-  args: {
-    label: 'Disabled (checked)',
-    name: 'disabled',
-    disabled: true,
-    checked: true,
-  },
-}
-
-export const WithError: Story = {
-  render: () => {
-    const [selected, setSelected] = useState('')
-
-    return (
-      <div className="flex flex-col gap-4 max-w-md">
-        <Radio
-          label="Option 1"
-          name="error-example"
-          value="option1"
-          error={!selected && 'Please select an option'}
-          checked={selected === 'option1'}
-          onChange={(e) => setSelected(e.target.value)}
-        />
-        <Radio
-          label="Option 2"
-          name="error-example"
-          value="option2"
-          error={!selected && 'Please select an option'}
-          checked={selected === 'option2'}
-          onChange={(e) => setSelected(e.target.value)}
-        />
-        <Radio
-          label="Option 3"
-          name="error-example"
-          value="option3"
-          error={!selected && 'Please select an option'}
-          checked={selected === 'option3'}
-          onChange={(e) => setSelected(e.target.value)}
-        />
-      </div>
-    )
-  },
-}
-
-export const PaymentMethodExample: Story = {
-  render: () => {
-    const [paymentMethod, setPaymentMethod] = useState('credit-card')
-
-    return (
-      <div className="space-y-4 max-w-md">
-        <h3 className="text-lg font-semibold">Select Payment Method</h3>
-        <div className="space-y-3">
-          <Radio
-            label="Credit Card"
-            helperText="Pay with Visa, Mastercard, or American Express"
-            name="payment"
-            value="credit-card"
-            checked={paymentMethod === 'credit-card'}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          />
-          <Radio
-            label="PayPal"
-            helperText="Secure payment through PayPal"
-            name="payment"
-            value="paypal"
-            checked={paymentMethod === 'paypal'}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          />
-          <Radio
-            label="Bank Transfer"
-            helperText="Direct bank transfer (may take 2-3 business days)"
-            name="payment"
-            value="bank-transfer"
-            checked={paymentMethod === 'bank-transfer'}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          />
-          <Radio
-            label="Cryptocurrency"
-            helperText="Pay with Bitcoin or Ethereum"
-            name="payment"
-            value="crypto"
-            disabled
-          />
+export const Showcase: Story = {
+  render: () => (
+    <div className="space-y-10">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="flex flex-wrap gap-6">
+          {(["primary", "secondary", "accent", "success", "error", "warning", "info"] as const).map((color) => (
+            <Radio key={color} color={color} label={color} name={`color-${color}`} defaultChecked />
+          ))}
         </div>
-      </div>
-    )
-  },
-}
+      </section>
 
-export const ShippingOptionsExample: Story = {
-  render: () => {
-    const [shipping, setShipping] = useState('standard')
-
-    return (
-      <div className="space-y-4 max-w-md">
-        <h3 className="text-lg font-semibold">Shipping Method</h3>
-        <div className="space-y-3">
-          <Radio
-            label="Standard Shipping - Free"
-            helperText="Delivery in 5-7 business days"
-            name="shipping"
-            value="standard"
-            color="success"
-            checked={shipping === 'standard'}
-            onChange={(e) => setShipping(e.target.value)}
-          />
-          <Radio
-            label="Express Shipping - $9.99"
-            helperText="Delivery in 2-3 business days"
-            name="shipping"
-            value="express"
-            color="info"
-            checked={shipping === 'express'}
-            onChange={(e) => setShipping(e.target.value)}
-          />
-          <Radio
-            label="Overnight Shipping - $24.99"
-            helperText="Next business day delivery"
-            name="shipping"
-            value="overnight"
-            color="warning"
-            checked={shipping === 'overnight'}
-            onChange={(e) => setShipping(e.target.value)}
-          />
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="flex flex-wrap items-center gap-6">
+          <Radio size="xs" label="Extra small" name="sizes" defaultChecked />
+          <Radio size="sm" label="Small" name="sizes" />
+          <Radio size="md" label="Medium" name="sizes" />
+          <Radio size="lg" label="Large" name="sizes" />
         </div>
-      </div>
-    )
-  },
-}
+      </section>
 
-export const SubscriptionPlanExample: Story = {
-  render: () => {
-    const [plan, setPlan] = useState('pro')
-
-    return (
-      <div className="space-y-4 max-w-2xl">
-        <h3 className="text-lg font-semibold">Choose Your Plan</h3>
-        <div className="space-y-4">
-          <div className="border border-border rounded-lg p-4">
-            <Radio
-              label={
-                <div className="flex items-center justify-between w-full">
-                  <div>
-                    <span className="font-medium">Free</span>
-                    <span className="ml-2 text-muted-foreground">$0/month</span>
-                  </div>
-                </div>
-              }
-              helperText="Basic features for personal use"
-              name="plan"
-              value="free"
-              checked={plan === 'free'}
-              onChange={(e) => setPlan(e.target.value)}
-            />
-          </div>
-
-          <div className="border border-primary rounded-lg p-4 bg-primary/5">
-            <Radio
-              label={
-                <div className="flex items-center justify-between w-full">
-                  <div>
-                    <span className="font-medium">Pro</span>
-                    <span className="ml-2 text-muted-foreground">$19/month</span>
-                  </div>
-                  <span className="px-2 py-1 text-xs bg-primary text-white rounded">
-                    Popular
-                  </span>
-                </div>
-              }
-              helperText="Advanced features and priority support"
-              name="plan"
-              value="pro"
-              color="primary"
-              checked={plan === 'pro'}
-              onChange={(e) => setPlan(e.target.value)}
-            />
-          </div>
-
-          <div className="border border-border rounded-lg p-4">
-            <Radio
-              label={
-                <div className="flex items-center justify-between w-full">
-                  <div>
-                    <span className="font-medium">Enterprise</span>
-                    <span className="ml-2 text-muted-foreground">$99/month</span>
-                  </div>
-                </div>
-              }
-              helperText="Custom solutions with dedicated support"
-              name="plan"
-              value="enterprise"
-              checked={plan === 'enterprise'}
-              onChange={(e) => setPlan(e.target.value)}
-            />
-          </div>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">States</h3>
+        <div className="flex flex-wrap gap-6">
+          <Radio label="Unchecked" name="states-a" />
+          <Radio label="Checked" name="states-b" defaultChecked />
+          <Radio label="Disabled unchecked" name="states-c" disabled />
+          <Radio label="Disabled checked" name="states-d" disabled defaultChecked />
         </div>
-      </div>
-    )
-  },
-}
+      </section>
 
-export const ColorSizeMatrix: Story = {
-  render: () => {
-    const colors = ['primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'] as const
-    const sizes = ['xs', 'sm', 'md', 'lg'] as const
-
-    return (
-      <div className="space-y-6">
-        <div className="overflow-x-auto">
-          <table className="border-collapse">
-            <thead>
-              <tr>
-                <th className="p-2 text-left text-sm text-gray-500">Color \ Size</th>
-                {sizes.map(size => (
-                  <th key={size} className="p-2 text-center text-sm text-gray-500">{size}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {colors.map(color => (
-                <tr key={color}>
-                  <td className="p-2 text-sm font-medium">{color}</td>
-                  {sizes.map(size => (
-                    <td key={size} className="p-2">
-                      <Radio color={color} size={size} label={color} name={`radio-${color}-${size}`} defaultChecked />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Validation</h3>
+        <div className="space-y-3 max-w-sm">
+          <Radio label="With helper text" name="helper" helperText="Selecting this will notify you via email" />
+          <Radio label="Error state" name="error" error="Please select an option" />
         </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Radio Group (native)</h3>
+        <div className="space-y-2 max-w-sm">
+          <p className="text-sm text-text-secondary mb-2">Select your preferred plan:</p>
+          <Radio name="plan" value="free" label="Free" helperText="Up to 3 projects" defaultChecked />
+          <Radio name="plan" value="pro" label="Pro" helperText="Unlimited projects, $9/mo" />
+          <Radio name="plan" value="enterprise" label="Enterprise" helperText="Custom pricing, contact us" />
+        </div>
+      </section>
+    </div>
+  ),
+};
+
+export const RadioGroup: Story = {
+  render: () => {
+    const [value, setValue] = React.useState("react");
+    return (
+      <div className="space-y-2 max-w-sm">
+        <p className="text-sm font-medium text-text-primary mb-3">Preferred framework</p>
+        {[
+          { value: "react", label: "React", helperText: "A JavaScript library for building UIs" },
+          { value: "vue", label: "Vue", helperText: "The progressive JavaScript framework" },
+          { value: "svelte", label: "Svelte", helperText: "Cybernetically enhanced web apps" },
+          { value: "solid", label: "Solid", helperText: "Simple and performant reactivity" },
+        ].map((option) => (
+          <Radio
+            key={option.value}
+            name="framework"
+            value={option.value}
+            label={option.label}
+            helperText={option.helperText}
+            checked={value === option.value}
+            onChange={() => setValue(option.value)}
+          />
+        ))}
       </div>
-    )
+    );
   },
-}
-
-
+};

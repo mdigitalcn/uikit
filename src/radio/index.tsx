@@ -4,14 +4,14 @@ import { cva } from "class-variance-authority";
 import React, { useId } from "react";
 
 import { cn } from "../utils";
-import { colorVars } from "../variants";
+import { buttonColorVars } from "../variants";
 import type { RadioProps } from "./types";
 
 const radioVariants = cva(
   "appearance-none rounded-full border cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
   {
     variants: {
-      color: colorVars,
+      color: buttonColorVars,
       size: {
         xs: "w-(--checkbox-size-xs) h-(--checkbox-size-xs)",
         sm: "w-(--checkbox-size-sm) h-(--checkbox-size-sm)",
@@ -55,12 +55,13 @@ const Radio = React.memo<RadioProps>(
           "radio_radio",
           radioVariants({ color, size, error: !!error }),
           "border-slot-30 checked:border-slot checked:shadow-[inset_0_0_0_2px_var(--color-background),inset_0_0_0_13px_var(--_c)]",
-          "focus-visible:ring-slot",
+          "focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           className,
           classNames?.radio,
         )}
         aria-invalid={!!error || undefined}
         aria-describedby={hasHelperText ? helperId : undefined}
+        data-slot="radio"
         {...props}
         id={radioId}
       />
@@ -93,6 +94,7 @@ const Radio = React.memo<RadioProps>(
         {(helperText || error) && (
           <p
             id={helperId}
+            data-slot="description"
             className={cn(
               "radio_description",
               "mt-1 ml-0 text-xs",

@@ -13,10 +13,10 @@ const avatarVariants = cva(
   {
     variants: {
       size: {
-        xs: "size-6 text-xs",
-        sm: "size-8 text-sm",
-        md: "size-10 text-base",
-        lg: "size-12 text-lg",
+        xs: "size-(--avatar-size-xs) text-xs",
+        sm: "size-(--avatar-size-sm) text-sm",
+        md: "size-(--avatar-size-md) text-base",
+        lg: "size-(--avatar-size-lg) text-lg",
       },
       shape: {
         circle: "rounded-full",
@@ -43,10 +43,10 @@ const avatarVariants = cva(
 );
 
 const statusSizeClasses: Record<AvatarSize, string> = {
-  xs: "size-1.5",
-  sm: "size-2",
-  md: "size-2.5",
-  lg: "size-3",
+  xs: "size-(--avatar-status-size-xs)",
+  sm: "size-(--avatar-status-size-sm)",
+  md: "size-(--avatar-status-size-md)",
+  lg: "size-(--avatar-status-size-lg)",
 };
 
 const statusColorClasses = {
@@ -131,9 +131,16 @@ const Avatar = React.memo<AvatarProps>(
     const showFallback = !showImage && (initials || icon);
     const showDefaultIcon = !showImage && !showFallback;
 
+    // For non-image avatars, the root acts as an img representation
+    // Screen readers need role="img" + aria-label to understand it
+    const accessibleName = alt || name || (initials ? `Avatar: ${initials}` : "User avatar");
+    const isNonImageAvatar = !showImage;
+
     return (
       <div
         ref={ref}
+        role={isNonImageAvatar ? "img" : undefined}
+        aria-label={isNonImageAvatar ? accessibleName : undefined}
         className={cn(
           "avatar_root",
           avatarVariants({
@@ -175,6 +182,7 @@ const Avatar = React.memo<AvatarProps>(
                 "flex items-center justify-center size-[60%]",
                 classNames?.fallback,
               )}
+              aria-hidden="true"
               data-slot="fallback"
             >
               {icon}
@@ -182,7 +190,7 @@ const Avatar = React.memo<AvatarProps>(
           ) : (
             <span
               className={cn("avatar_fallback", classNames?.fallback)}
-              aria-label={`Avatar for ${name || initials}`}
+              aria-hidden="true"
               data-slot="fallback"
             >
               {initials}
@@ -208,11 +216,14 @@ const Avatar = React.memo<AvatarProps>(
         {badge && (
           <span
             className={cn(
+              "avatar_badge",
               "absolute -top-1 -right-1 flex items-center justify-center rounded-full bg-error text-background font-medium px-1",
               badgeSizeClasses[size],
+              classNames?.badge,
             )}
             aria-label={typeof badge === "number" ? `${badge} notifications` : undefined}
             role={typeof badge === "number" ? "status" : undefined}
+            data-slot="badge"
           >
             {badge}
           </span>

@@ -1,4 +1,4 @@
-import type { ComponentColor, ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages } from '../types'
 
 export type DatePickerVariant = 'outline' | 'filled'
 
@@ -21,18 +21,12 @@ export interface DatePickerClassNames {
   clear?: string
 }
 
-export interface BaseDatePickerProps {
+export interface BaseDatePickerProps extends ValidationMessages {
   variant?: DatePickerVariant
   size?: DatePickerSize
   color?: ComponentColor
-
-  // Validation
   label?: string
-  error?: string
-  warning?: string
-  info?: string
-  success?: string
-  helperText?: string
+  /** @default 'bottom' */
   messagePosition?: 'top' | 'bottom'
 
   // Common props

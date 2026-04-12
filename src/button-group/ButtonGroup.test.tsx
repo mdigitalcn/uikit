@@ -4,12 +4,14 @@ import Button from '../button'
 import ButtonGroup from '../button-group'
 
 describe('ButtonGroup', () => {
-  it('renders button group with role group', () => {
+  // ── Core rendering ───────────────────────────────────────────────
+
+  it('renders with role="group"', () => {
     render(
       <ButtonGroup>
-        <Button>First</Button>
-        <Button>Second</Button>
-      </ButtonGroup>
+        <Button>A</Button>
+        <Button>B</Button>
+      </ButtonGroup>,
     )
     expect(screen.getByRole('group')).toBeInTheDocument()
   })
@@ -20,218 +22,261 @@ describe('ButtonGroup', () => {
         <Button>First</Button>
         <Button>Second</Button>
         <Button>Third</Button>
-      </ButtonGroup>
+      </ButtonGroup>,
     )
-    expect(screen.getByRole('button', { name: 'First' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Second' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Third' })).toBeInTheDocument()
+    expect(screen.getAllByRole('button')).toHaveLength(3)
   })
+
+  it('has data-slot="root"', () => {
+    const { container } = render(
+      <ButtonGroup><Button>A</Button></ButtonGroup>,
+    )
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+  })
+
+  it('has buttonGroup_root class', () => {
+    const { container } = render(
+      <ButtonGroup><Button>A</Button></ButtonGroup>,
+    )
+    expect(container.querySelector('.buttonGroup_root')).toBeInTheDocument()
+  })
+
+  // ── Orientation ──────────────────────────────────────────────────
 
   it('renders horizontal by default', () => {
+    render(<ButtonGroup><Button>A</Button></ButtonGroup>)
+    expect(screen.getByRole('group')).toHaveClass('flex-row')
+  })
+
+  it('renders vertical when vertical=true', () => {
+    render(<ButtonGroup vertical><Button>A</Button></ButtonGroup>)
+    expect(screen.getByRole('group')).toHaveClass('flex-col')
+  })
+
+  // ── Attached / Separated ─────────────────────────────────────────
+
+  it('renders attached by default (no gap class)', () => {
     render(
-      <ButtonGroup>
-        <Button>A</Button>
-        <Button>B</Button>
-      </ButtonGroup>
+      <ButtonGroup><Button>A</Button><Button>B</Button></ButtonGroup>,
     )
     const group = screen.getByRole('group')
-    expect(group).toHaveClass('flex-row')
+    expect(group.className).not.toContain('gap-')
   })
 
-  it('renders vertical when vertical prop is true', () => {
-    render(
-      <ButtonGroup vertical>
-        <Button>A</Button>
-        <Button>B</Button>
-      </ButtonGroup>
-    )
-    const group = screen.getByRole('group')
-    expect(group).toHaveClass('flex-col')
-  })
-
-  it('applies size prop to all child buttons', () => {
-    render(
-      <ButtonGroup size="sm">
-        <Button>Small 1</Button>
-        <Button>Small 2</Button>
-      </ButtonGroup>
-    )
-    const buttons = screen.getAllByRole('button')
-    buttons.forEach(button => {
-      expect(button).toBeInTheDocument()
-    })
-  })
-
-  it('applies variant prop to all child buttons', () => {
-    render(
-      <ButtonGroup variant="outline">
-        <Button>Outline 1</Button>
-        <Button>Outline 2</Button>
-      </ButtonGroup>
-    )
-    const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(2)
-  })
-
-  it('applies color prop to all child buttons', () => {
-    render(
-      <ButtonGroup color="primary">
-        <Button>Primary 1</Button>
-        <Button>Primary 2</Button>
-      </ButtonGroup>
-    )
-    const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(2)
-  })
-
-  it('applies shape prop to all child buttons', () => {
-    render(
-      <ButtonGroup shape="pill">
-        <Button>Pill 1</Button>
-        <Button>Pill 2</Button>
-      </ButtonGroup>
-    )
-    const buttons = screen.getAllByRole('button')
-    expect(buttons).toHaveLength(2)
-  })
-
-  it('child button props override group props', () => {
-    render(
-      <ButtonGroup size="sm" variant="solid">
-        <Button size="lg">Large Override</Button>
-        <Button variant="outline">Outline Override</Button>
-      </ButtonGroup>
-    )
-    expect(screen.getAllByRole('button')).toHaveLength(2)
-  })
-
-  it('disables all buttons when disabled prop is true', () => {
-    render(
-      <ButtonGroup disabled>
-        <Button>First</Button>
-        <Button>Second</Button>
-      </ButtonGroup>
-    )
-    const buttons = screen.getAllByRole('button')
-    buttons.forEach(button => {
-      expect(button).toBeDisabled()
-    })
-  })
-
-  it('respects individual button disabled state even when group is not disabled', () => {
-    render(
-      <ButtonGroup>
-        <Button disabled>Disabled</Button>
-        <Button>Enabled</Button>
-      </ButtonGroup>
-    )
-    expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled()
-    expect(screen.getByRole('button', { name: 'Enabled' })).not.toBeDisabled()
-  })
-
-  it('renders fullWidth group', () => {
-    render(
-      <ButtonGroup fullWidth>
-        <Button>A</Button>
-        <Button>B</Button>
-      </ButtonGroup>
-    )
-    const group = screen.getByRole('group')
-    expect(group).toHaveClass('w-full')
-  })
-
-  it('renders attached buttons by default', () => {
-    render(
-      <ButtonGroup>
-        <Button>A</Button>
-        <Button>B</Button>
-      </ButtonGroup>
-    )
-    const group = screen.getByRole('group')
-    expect(group).toBeInTheDocument()
-  })
-
-  it('renders separated buttons with gap when attached is false', () => {
+  it('renders separated with gap when attached=false', () => {
     render(
       <ButtonGroup attached={false} gap="md">
-        <Button>A</Button>
-        <Button>B</Button>
-      </ButtonGroup>
+        <Button>A</Button><Button>B</Button>
+      </ButtonGroup>,
     )
-    const group = screen.getByRole('group')
-    expect(group).toHaveClass('gap-2')
+    expect(screen.getByRole('group')).toHaveClass('gap-2')
   })
 
-  it('renders with small gap', () => {
+  it.each([
+    ['sm', 'gap-1'],
+    ['md', 'gap-2'],
+    ['lg', 'gap-3'],
+  ] as const)('gap=%s → %s class', (gap, expected) => {
     render(
-      <ButtonGroup attached={false} gap="sm">
+      <ButtonGroup attached={false} gap={gap}>
         <Button>A</Button>
-        <Button>B</Button>
-      </ButtonGroup>
+      </ButtonGroup>,
     )
-    const group = screen.getByRole('group')
-    expect(group).toHaveClass('gap-1')
+    expect(screen.getByRole('group')).toHaveClass(expected)
   })
 
-  it('renders with large gap', () => {
-    render(
-      <ButtonGroup attached={false} gap="lg">
-        <Button>A</Button>
-        <Button>B</Button>
-      </ButtonGroup>
-    )
-    const group = screen.getByRole('group')
-    expect(group).toHaveClass('gap-3')
-  })
+  // ── Prop inheritance ─────────────────────────────────────────────
 
-  it('applies custom className', () => {
-    render(
-      <ButtonGroup className="custom-group">
-        <Button>A</Button>
-      </ButtonGroup>
-    )
-    expect(screen.getByRole('group')).toHaveClass('custom-group')
-  })
+  describe('prop inheritance', () => {
+    it('passes size to children', () => {
+      render(
+        <ButtonGroup size="sm">
+          <Button>A</Button>
+          <Button>B</Button>
+        </ButtonGroup>,
+      )
+      expect(screen.getAllByRole('button')).toHaveLength(2)
+    })
 
-  it('applies classNames.root', () => {
-    render(
-      <ButtonGroup classNames={{ root: 'root-class' }}>
-        <Button>A</Button>
-      </ButtonGroup>
-    )
-    expect(screen.getByRole('group')).toHaveClass('root-class')
-  })
+    it('passes variant to children', () => {
+      render(
+        <ButtonGroup variant="outline">
+          <Button>A</Button>
+          <Button>B</Button>
+        </ButtonGroup>,
+      )
+      expect(screen.getAllByRole('button')).toHaveLength(2)
+    })
 
-  it('applies classNames.button to all buttons', () => {
-    render(
-      <ButtonGroup classNames={{ button: 'button-class' }}>
-        <Button>A</Button>
-        <Button>B</Button>
-      </ButtonGroup>
-    )
-    const buttons = screen.getAllByRole('button')
-    buttons.forEach(button => {
-      expect(button).toHaveClass('button-class')
+    it('passes color to children', () => {
+      render(
+        <ButtonGroup color="primary">
+          <Button>A</Button>
+          <Button>B</Button>
+        </ButtonGroup>,
+      )
+      expect(screen.getAllByRole('button')).toHaveLength(2)
+    })
+
+    it('passes shape to children', () => {
+      render(
+        <ButtonGroup shape="pill">
+          <Button>A</Button>
+          <Button>B</Button>
+        </ButtonGroup>,
+      )
+      expect(screen.getAllByRole('button')).toHaveLength(2)
+    })
+
+    it('child props override group props', () => {
+      render(
+        <ButtonGroup size="sm" variant="solid">
+          <Button size="lg">Large</Button>
+          <Button variant="outline">Outline</Button>
+        </ButtonGroup>,
+      )
+      expect(screen.getAllByRole('button')).toHaveLength(2)
     })
   })
 
-  it('forwards ref to group element', () => {
-    const ref = { current: null }
+  // ── Disabled ─────────────────────────────────────────────────────
+
+  describe('disabled', () => {
+    it('disables all children when group disabled', () => {
+      render(
+        <ButtonGroup disabled>
+          <Button>A</Button>
+          <Button>B</Button>
+        </ButtonGroup>,
+      )
+      screen.getAllByRole('button').forEach((btn) => {
+        expect(btn).toBeDisabled()
+      })
+    })
+
+    it('respects individual button disabled when group is not', () => {
+      render(
+        <ButtonGroup>
+          <Button disabled>Off</Button>
+          <Button>On</Button>
+        </ButtonGroup>,
+      )
+      expect(screen.getByRole('button', { name: 'Off' })).toBeDisabled()
+      expect(screen.getByRole('button', { name: 'On' })).not.toBeDisabled()
+    })
+
+    it('group disabled + individual disabled both work', () => {
+      render(
+        <ButtonGroup disabled>
+          <Button disabled>Both</Button>
+          <Button>GroupOnly</Button>
+        </ButtonGroup>,
+      )
+      screen.getAllByRole('button').forEach((btn) => {
+        expect(btn).toBeDisabled()
+      })
+    })
+  })
+
+  // ── Full width ───────────────────────────────────────────────────
+
+  it('applies fullWidth class', () => {
     render(
-      <ButtonGroup ref={ref}>
-        <Button>A</Button>
-      </ButtonGroup>
+      <ButtonGroup fullWidth><Button>A</Button></ButtonGroup>,
     )
+    expect(screen.getByRole('group')).toHaveClass('w-full')
+  })
+
+  // ── aria-label ───────────────────────────────────────────────────
+
+  it('passes aria-label', () => {
+    render(
+      <ButtonGroup aria-label="Actions">
+        <Button>Save</Button>
+        <Button>Cancel</Button>
+      </ButtonGroup>,
+    )
+    expect(screen.getByRole('group', { name: 'Actions' })).toBeInTheDocument()
+  })
+
+  // ── classNames ───────────────────────────────────────────────────
+
+  describe('classNames', () => {
+    it('applies className', () => {
+      render(
+        <ButtonGroup className="my-group"><Button>A</Button></ButtonGroup>,
+      )
+      expect(screen.getByRole('group')).toHaveClass('my-group')
+    })
+
+    it('applies classNames.root', () => {
+      render(
+        <ButtonGroup classNames={{ root: 'cn-root' }}><Button>A</Button></ButtonGroup>,
+      )
+      expect(screen.getByRole('group')).toHaveClass('cn-root')
+    })
+
+    it('applies classNames.button to all children', () => {
+      render(
+        <ButtonGroup classNames={{ button: 'cn-btn' }}>
+          <Button>A</Button>
+          <Button>B</Button>
+        </ButtonGroup>,
+      )
+      screen.getAllByRole('button').forEach((btn) => {
+        expect(btn).toHaveClass('cn-btn')
+      })
+    })
+  })
+
+  // ── Ref ──────────────────────────────────────────────────────────
+
+  it('forwards ref', () => {
+    const ref = { current: null }
+    render(<ButtonGroup ref={ref}><Button>A</Button></ButtonGroup>)
     expect(ref.current).toBeInstanceOf(HTMLDivElement)
   })
 
-  it('handles aria-label for accessibility', () => {
-    render(
-      <ButtonGroup aria-label="Action buttons">
-        <Button>Save</Button>
-        <Button>Cancel</Button>
-      </ButtonGroup>
-    )
-    expect(screen.getByRole('group', { name: 'Action buttons' })).toBeInTheDocument()
+  // ── Edge cases ───────────────────────────────────────────────────
+
+  describe('edge cases', () => {
+    it('renders single button', () => {
+      render(<ButtonGroup><Button>Solo</Button></ButtonGroup>)
+      expect(screen.getByRole('button', { name: 'Solo' })).toBeInTheDocument()
+    })
+
+    it('handles non-Button children gracefully', () => {
+      render(
+        <ButtonGroup>
+          <Button>A</Button>
+          <span data-testid="span">Divider</span>
+          <Button>B</Button>
+        </ButtonGroup>,
+      )
+      expect(screen.getByTestId('span')).toBeInTheDocument()
+      expect(screen.getAllByRole('button')).toHaveLength(2)
+    })
+
+    it('vertical + attached applies vertical border classes', () => {
+      const { container } = render(
+        <ButtonGroup vertical>
+          <Button>A</Button>
+          <Button>B</Button>
+        </ButtonGroup>,
+      )
+      const group = container.querySelector('.buttonGroup_root')!
+      // Should have vertical attached classes, not horizontal
+      expect(group.className).toContain('rounded-t-none')
+    })
+
+    it('spreads native HTML attributes', () => {
+      render(
+        <ButtonGroup data-testid="grp" id="btn-grp">
+          <Button>A</Button>
+        </ButtonGroup>,
+      )
+      expect(screen.getByTestId('grp')).toBeInTheDocument()
+      expect(screen.getByRole('group')).toHaveAttribute('id', 'btn-grp')
+    })
   })
 })

@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority";
 import React from "react";
 
 import { cn } from "../utils";
-import { colorVars } from "../variants";
+import { colorVars, shadowVars } from "../variants";
 import type {
   CardActionProps,
   CardClassNames,
@@ -33,7 +33,7 @@ function useCardContext() {
   return React.useContext(CardContext);
 }
 
-const cardVariants = cva("rounded-lg transition-[shadow,transform]", {
+const cardVariants = cva("[--_radius:var(--radius-card)] rounded-slot shadow-size-slot transition-[box-shadow,transform]", {
   variants: {
     variant: {
       default: "bg-card text-card-foreground border border-slot",
@@ -41,21 +41,21 @@ const cardVariants = cva("rounded-lg transition-[shadow,transform]", {
       outline: "bg-transparent border border-slot text-text-primary",
       soft: "border-transparent bg-slot-10 text-slot",
       ghost: "border-transparent bg-transparent text-slot",
-      elevated: "bg-card text-card-foreground border-transparent shadow-md",
+      elevated: `bg-card text-card-foreground border-transparent ${shadowVars.md}`,
     },
     color: colorVars,
     shadow: {
-      none: "",
-      sm: "shadow-sm",
-      md: "shadow-md",
-      lg: "shadow-lg",
+      none: shadowVars.none,
+      sm: shadowVars.sm,
+      md: shadowVars.md,
+      lg: shadowVars.lg,
     },
     hoverable: {
-      true: "hover:shadow-lg hover:-translate-y-0.5 cursor-pointer",
+      true: "hover:[--_shadow:var(--shadow-lg)] hover:-translate-y-0.5 cursor-pointer",
       false: "",
     },
     clickable: {
-      true: "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background active:translate-y-0 active:shadow-md",
+      true: "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background active:translate-y-0 active:[--_shadow:var(--shadow-md)]",
       false: "",
     },
   },
@@ -291,8 +291,8 @@ const CardImage: React.FC<CardImageProps> = ({
     <div
       className={cn(
         "overflow-hidden",
-        position === "top" && "rounded-t-lg",
-        position === "bottom" && "rounded-b-lg",
+        position === "top" && "rounded-t-slot",
+        position === "bottom" && "rounded-b-slot",
         aspectRatio !== "auto" && aspectRatioClasses[aspectRatio],
       )}
     >

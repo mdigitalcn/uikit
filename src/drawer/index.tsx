@@ -6,6 +6,7 @@ import { Drawer as DrawerPrimitive } from "vaul";
 import React, { createContext, useContext } from "react";
 
 import { cn } from "../utils";
+import { colorVars } from "../variants";
 import type {
   ComposedDrawerProps,
   DrawerBodyProps,
@@ -28,12 +29,12 @@ const DrawerContext = createContext<{
 }>({ direction: "bottom" });
 
 const drawerContentVariants = cva(
-  "fixed bg-background border-border flex flex-col outline-none",
+  "fixed bg-background border-border flex flex-col outline-none [--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot",
   {
     variants: {
       direction: {
-        bottom: "bottom-0 left-0 right-0 border-t rounded-t-xl max-h-[96vh]",
-        top: "top-0 left-0 right-0 border-b rounded-b-xl max-h-[96vh]",
+        bottom: "bottom-0 left-0 right-0 border-t rounded-t-drawer max-h-[96vh]",
+        top: "top-0 left-0 right-0 border-b rounded-b-drawer max-h-[96vh]",
         left: "left-0 top-0 bottom-0 border-r max-w-[96vw]",
         right: "right-0 top-0 bottom-0 border-l max-w-[96vw]",
       },
@@ -58,16 +59,16 @@ const drawerContentVariants = cva(
       { direction: "top", size: "lg", class: "h-3/4" },
       { direction: "top", size: "full", class: "h-[96vh]" },
       // Left/Right - width based
-      { direction: "left", size: "xs", class: "w-64" },
-      { direction: "left", size: "sm", class: "w-80" },
-      { direction: "left", size: "md", class: "w-96" },
-      { direction: "left", size: "lg", class: "w-[480px]" },
-      { direction: "left", size: "full", class: "w-[96vw]" },
-      { direction: "right", size: "xs", class: "w-64" },
-      { direction: "right", size: "sm", class: "w-80" },
-      { direction: "right", size: "md", class: "w-96" },
-      { direction: "right", size: "lg", class: "w-[480px]" },
-      { direction: "right", size: "full", class: "w-[96vw]" },
+      { direction: "left", size: "xs", class: "w-(--drawer-width-sm)" },
+      { direction: "left", size: "sm", class: "w-(--drawer-width-md)" },
+      { direction: "left", size: "md", class: "w-(--drawer-width-lg)" },
+      { direction: "left", size: "lg", class: "w-(--drawer-width-xl)" },
+      { direction: "left", size: "full", class: "w-(--drawer-width-full)" },
+      { direction: "right", size: "xs", class: "w-(--drawer-width-sm)" },
+      { direction: "right", size: "sm", class: "w-(--drawer-width-md)" },
+      { direction: "right", size: "md", class: "w-(--drawer-width-lg)" },
+      { direction: "right", size: "lg", class: "w-(--drawer-width-xl)" },
+      { direction: "right", size: "full", class: "w-(--drawer-width-full)" },
     ],
     defaultVariants: {
       direction: "bottom",
@@ -153,7 +154,7 @@ export const DrawerOverlay = React.memo<DrawerOverlayProps>(
       ref={ref}
       className={cn(
         "drawer_overlay",
-        "fixed inset-0 z-[var(--z-modal)] bg-overlay backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 duration-200",
+        "fixed inset-0 z-[var(--z-modal)] bg-overlay backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 [--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot",
         classNames?.overlay,
         className,
       )}
@@ -195,6 +196,7 @@ export const DrawerContent = React.memo<DrawerContentProps>(
             drawerContentVariants({ direction, size }),
             paddingClasses[size],
             "z-[var(--z-modal)]",
+            colorVars[color],
             classNames?.content,
             className,
           )}
@@ -254,7 +256,7 @@ export const DrawerContent = React.memo<DrawerContentProps>(
               className={cn(
                 "drawer_closeButton",
                 "absolute rounded-md opacity-70 transition-opacity hover:opacity-100",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                 "text-text-secondary hover:text-text-primary hover:bg-surface",
                 closeButtonSizeClasses[size],
                 classNames?.closeButton,

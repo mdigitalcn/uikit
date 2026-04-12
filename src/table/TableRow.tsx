@@ -37,12 +37,13 @@ export function TableRow<TData>({
   return (
     <tr
       className={cn(
-        'table_row border-b border-border last:border-b-0 transition-colors duration-150',
+        '[--_duration:var(--duration-fast)] table_row border-b border-border last:border-b-0 transition-colors duration-slot',
         striped && index % 2 === 1 && 'bg-surface/50',
-        hoverable && 'hover:bg-surface cursor-pointer',
-        onRowClick && 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
-        isPinned && 'bg-primary/5 border-primary/20',
-        row.getIsSelected() && 'bg-primary/10',
+        hoverable && 'hover:bg-surface',
+        hoverable && onRowClick && 'cursor-pointer',
+        onRowClick && 'cursor-pointer focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-slot focus-visible:outline-offset-[-2px]',
+        isPinned && 'bg-slot-5 border-slot-20',
+        row.getIsSelected() && 'bg-slot-10',
         className,
       )}
       onClick={() => onRowClick?.(row.original)}

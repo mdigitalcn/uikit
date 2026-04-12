@@ -6,24 +6,30 @@ import React from 'react'
 import { Loader2, X, ChevronDown } from 'lucide-react'
 import { useControllable } from '../hooks/useControllable'
 import { Popover, PopoverAnchor, PopoverContent } from '../popover'
-import { cn, iconSizes, statusMessageVariants } from '../utils'
+import { cn, getValidationStatus, iconSizes, statusMessageVariants } from '../utils'
 import { colorVars } from '../variants'
 import type { AutocompleteOption, AutocompleteProps } from './types'
 
 const inputVariants = cva(
-  'w-full flex items-center rounded-md bg-background text-text-primary border outline-none transition-colors',
+  'w-full flex items-center [--_radius:var(--radius-input)] rounded-slot text-text-primary outline-none transition-colors',
   {
     variants: {
+      variant: {
+        outline: 'bg-background border border-border hover:border-slot-50 focus-within:border-slot focus-within:ring-2 focus-within:ring-slot-30',
+        filled: 'bg-surface border border-transparent hover:border-slot-30 focus-within:border-slot focus-within:ring-2 focus-within:ring-slot-30',
+      },
       status: {
-        default: 'border-border focus-within:border-slot hover:border-slot-50',
-        primary: 'border-slot', secondary: 'border-slot', accent: 'border-slot',
-        success: 'border-slot', error: 'border-slot', warning: 'border-slot', info: 'border-slot',
+        default: '',
+        error: 'border-error',
+        warning: 'border-warning',
+        info: 'border-info',
+        success: 'border-success',
       },
       size: {
-        xs: 'h-(--input-height-xs) px-2 text-xs gap-1.5',
-        sm: 'h-(--input-height-sm) px-2.5 text-sm gap-2',
-        md: 'h-(--input-height-md) px-3 text-base gap-2',
-        lg: 'h-(--input-height-lg) px-3.5 text-lg gap-2.5',
+        xs: 'h-(--input-height-xs) px-(--input-padding-x-xs) text-xs gap-1.5',
+        sm: 'h-(--input-height-sm) px-(--input-padding-x-sm) text-sm gap-2',
+        md: 'h-(--input-height-md) px-(--input-padding-x-md) text-base gap-2',
+        lg: 'h-(--input-height-lg) px-(--input-padding-x-lg) text-lg gap-2.5',
       },
       fullWidth: {
         true: 'w-full',
@@ -35,6 +41,7 @@ const inputVariants = cva(
       },
     },
     defaultVariants: {
+      variant: 'outline',
       status: 'default',
       size: 'md',
       fullWidth: true,
@@ -61,14 +68,19 @@ const Autocomplete = React.memo<AutocompleteProps>(
     label,
     helperText,
     error,
+    warning,
+    info,
+    success,
+    variant = 'outline',
     size = 'md',
-    color = 'primary',    status: statusProp,
+    color = 'primary',
     disabled = false,
     loading = false,
     clearable = false,
     filter = defaultFilter,
     limit = 10,
     emptyMessage = 'No results',
+    renderOption,
     fullWidth = true,
     className,
     classNames,
@@ -79,9 +91,10 @@ const Autocomplete = React.memo<AutocompleteProps>(
     const inputRef = React.useRef<HTMLInputElement>(null)
     const listRef = React.useRef<HTMLDivElement>(null)
     const labelId = React.useId()
+    const listboxId = React.useId()
     // Guard against blur closing the dropdown while clicking an option
     const selectingRef = React.useRef(false)
-    const status = error ? 'error' : statusProp || 'default'
+    const { status, message: statusMessage } = getValidationStatus({ error, warning, info, success, helperText })
 
     const options = React.useMemo(
       () => rawOptions.map(normalizeOption),
@@ -155,6 +168,7 @@ const Autocomplete = React.memo<AutocompleteProps>(
 
     const handleBlur = () => {
       // Delay close so option mousedown/click can fire first
+      // selectingRef prevents close when user is mid-click on an option
       setTimeout(() => {
         if (!selectingRef.current) close()
         selectingRef.current = false
@@ -168,13 +182,17 @@ const Autocomplete = React.memo<AutocompleteProps>(
       }
     }, [highlightIdx])
 
+    // Build the active descendant ID for the highlighted option
+    const getOptionId = (idx: number) => `${listboxId}-option-${idx}`
+    const activeDescendant = highlightIdx >= 0 ? getOptionId(highlightIdx) : undefined
+
     return (
       <div
         data-slot="root"
         className={cn(
           'autocomplete_root',
           'flex flex-col gap-1.5',
-          colorVars[status === 'default' ? 'primary' : status],
+          colorVars[status !== 'default' ? status : color],
           fullWidth ? 'w-full' : 'inline-flex',
           classNames?.root,
           className,
@@ -183,6 +201,7 @@ const Autocomplete = React.memo<AutocompleteProps>(
         {label && (
           <label
             id={labelId}
+            data-slot="label"
             className="text-sm font-medium text-text-primary"
           >
             {label}
@@ -192,7 +211,7 @@ const Autocomplete = React.memo<AutocompleteProps>(
         <Popover open={isOpen && !disabled} onOpenChange={(v) => { if (!v) close() }}>
           <PopoverAnchor asChild>
             <div
-              className={inputVariants({ status, size, fullWidth, disabled })}
+              className={inputVariants({ variant, status, size, fullWidth, disabled })}
               onClick={() => { if (!isOpen) open(); inputRef.current?.focus() }}
             >
               <input
@@ -201,8 +220,16 @@ const Autocomplete = React.memo<AutocompleteProps>(
                 role="combobox"
                 aria-expanded={isOpen}
                 aria-autocomplete="list"
+                aria-controls={listboxId}
+                aria-activedescendant={activeDescendant}
                 aria-labelledby={label ? labelId : undefined}
-                className="flex-1 min-w-0 bg-transparent outline-none placeholder:text-text-secondary/50"
+                aria-invalid={error ? true : undefined}
+                data-slot="input"
+                className={cn(
+                  'autocomplete_input',
+                  'flex-1 min-w-0 bg-transparent outline-none placeholder:text-text-secondary/50',
+                  classNames?.input,
+                )}
                 placeholder={placeholder}
                 value={currentValue}
                 onChange={handleInputChange}
@@ -226,10 +253,10 @@ const Autocomplete = React.memo<AutocompleteProps>(
                   <X className={iconSizes[size]} />
                 </button>
               )}
-              {!loading && !clearable && (
+              {!loading && !(clearable && currentValue) && (
                 <ChevronDown
                   className={cn(
-                    'text-text-secondary transition-transform duration-200',
+                    'text-text-secondary transition-transform duration-slot',
                     iconSizes[size],
                     isOpen && 'rotate-180',
                   )}
@@ -255,9 +282,10 @@ const Autocomplete = React.memo<AutocompleteProps>(
               }
             }}
           >
-            <div ref={listRef} role="listbox">
+            <div ref={listRef} id={listboxId} role="listbox">
               {filtered.length === 0 ? (
                 <div
+                  data-slot="empty"
                   className={cn(
                     'autocomplete_empty',
                     'px-3 py-2 text-sm text-text-secondary text-center',
@@ -270,26 +298,29 @@ const Autocomplete = React.memo<AutocompleteProps>(
                 filtered.map((option, idx) => (
                   <div
                     key={option.value}
+                    id={getOptionId(idx)}
                     role="option"
                     aria-selected={idx === highlightIdx}
                     aria-disabled={option.disabled}
                     onMouseDown={(e) => {
-                      // Prevent blur from firing before select
                       e.preventDefault()
                       selectingRef.current = true
                     }}
                     onClick={() => handleSelect(option)}
                     onMouseEnter={() => setHighlightIdx(idx)}
+                    data-slot="option"
                     className={cn(
                       'autocomplete_option',
-                      'px-3 py-2 text-sm rounded-md cursor-pointer transition-colors',
+                      'px-3 py-2 text-sm [--_radius:var(--radius-dropdown)] rounded-slot cursor-pointer transition-colors',
                       idx === highlightIdx && 'bg-surface',
                       option.disabled && 'opacity-50 cursor-not-allowed',
                       !option.disabled && 'hover:bg-surface',
                       classNames?.option,
                     )}
                   >
-                    {option.label}
+                    {renderOption
+                      ? renderOption(option, { highlighted: idx === highlightIdx, query: currentValue ?? '' })
+                      : option.label}
                   </div>
                 ))
               )}
@@ -297,12 +328,12 @@ const Autocomplete = React.memo<AutocompleteProps>(
           </PopoverContent>
         </Popover>
 
-        {(error || helperText) && (
-          <p className={cn(
-            'text-xs',
-            error ? statusMessageVariants({ status: 'error' }) : 'text-text-secondary',
-          )}>
-            {error || helperText}
+        {statusMessage && (
+          <p
+            data-slot="helper"
+            className={cn('text-xs', statusMessageVariants({ status }))}
+          >
+            {typeof statusMessage === 'boolean' ? undefined : statusMessage}
           </p>
         )}
       </div>

@@ -3,293 +3,467 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import { Avatar, AvatarGroup } from './index'
 
 describe('Avatar', () => {
+  // ── Core rendering ───────────────────────────────────────────────
+
   it('renders with image src', () => {
-    render(<Avatar src="https://example.com/avatar.jpg" alt="User Avatar" />)
-    const img = screen.getByAltText('User Avatar')
+    render(<Avatar src="https://example.com/photo.jpg" alt="User" />)
+    const img = screen.getByAltText('User')
     expect(img).toBeInTheDocument()
-    expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg')
+    expect(img).toHaveAttribute('src', 'https://example.com/photo.jpg')
   })
 
-  it('renders all size variants', () => {
-    const { rerender } = render(<Avatar size="xs" name="Test" />)
-    expect(screen.getByLabelText(/avatar for test/i)).toBeInTheDocument()
-
-    rerender(<Avatar size="sm" name="Test" />)
-    expect(screen.getByLabelText(/avatar for test/i)).toBeInTheDocument()
-
-    rerender(<Avatar size="md" name="Test" />)
-    expect(screen.getByLabelText(/avatar for test/i)).toBeInTheDocument()
-
-    rerender(<Avatar size="lg" name="Test" />)
-    expect(screen.getByLabelText(/avatar for test/i)).toBeInTheDocument()
+  it('renders data-slot="root"', () => {
+    const { container } = render(<Avatar name="Test" />)
+    expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
   })
 
-  it('renders all shape variants', () => {
-    const { rerender } = render(<Avatar shape="circle" name="Test" />)
-    expect(screen.getByLabelText(/avatar for test/i)).toBeInTheDocument()
-
-    rerender(<Avatar shape="square" name="Test" />)
-    expect(screen.getByLabelText(/avatar for test/i)).toBeInTheDocument()
+  it('renders avatar_root class', () => {
+    const { container } = render(<Avatar name="Test" />)
+    expect(container.querySelector('.avatar_root')).toBeInTheDocument()
   })
 
-  it('generates initials from name', () => {
-    render(<Avatar name="John Doe" />)
-    expect(screen.getByText('JD')).toBeInTheDocument()
+  // ── Initials ─────────────────────────────────────────────────────
+
+  describe('initials', () => {
+    it('generates from two-word name', () => {
+      render(<Avatar name="John Doe" />)
+      expect(screen.getByText('JD')).toBeInTheDocument()
+    })
+
+    it('generates from single-word name', () => {
+      render(<Avatar name="John" />)
+      expect(screen.getByText('JO')).toBeInTheDocument()
+    })
+
+    it('generates from three-word name (first + last)', () => {
+      render(<Avatar name="John Michael Doe" />)
+      expect(screen.getByText('JD')).toBeInTheDocument()
+    })
+
+    it('uses fallback text over name', () => {
+      render(<Avatar name="John Doe" fallback="AB" />)
+      expect(screen.getByText('AB')).toBeInTheDocument()
+      expect(screen.queryByText('JD')).not.toBeInTheDocument()
+    })
+
+    it('truncates fallback to 2 chars', () => {
+      render(<Avatar fallback="Hello" />)
+      expect(screen.getByText('HE')).toBeInTheDocument()
+    })
+
+    it('uppercases initials', () => {
+      render(<Avatar name="john doe" />)
+      expect(screen.getByText('JD')).toBeInTheDocument()
+    })
   })
 
-  it('generates initials from single word name', () => {
-    render(<Avatar name="John" />)
-    expect(screen.getByText('JO')).toBeInTheDocument()
+  // ── Fallback chain ───────────────────────────────────────────────
+
+  describe('fallback chain', () => {
+    it('shows image when src loads', () => {
+      render(<Avatar src="photo.jpg" alt="User" name="John Doe" />)
+      expect(screen.getByAltText('User')).toBeInTheDocument()
+      expect(screen.queryByText('JD')).not.toBeInTheDocument()
+    })
+
+    it('shows initials when no src', () => {
+      render(<Avatar name="John Doe" />)
+      expect(screen.getByText('JD')).toBeInTheDocument()
+    })
+
+    it('shows custom icon when no src and no name', () => {
+      render(<Avatar icon={<span data-testid="custom-icon">🎨</span>} />)
+      expect(screen.getByTestId('custom-icon')).toBeInTheDocument()
+    })
+
+    it('shows default User icon when nothing provided', () => {
+      const { container } = render(<Avatar />)
+      expect(container.querySelector('svg')).toBeInTheDocument()
+    })
+
+    it('shows initials after image error', async () => {
+      const onError = vi.fn()
+      render(<Avatar src="broken.jpg" name="Test User" onError={onError} />)
+      fireEvent.error(screen.getByAltText('Test User'))
+      await waitFor(() => {
+        expect(screen.getByText('TU')).toBeInTheDocument()
+        expect(onError).toHaveBeenCalled()
+      })
+    })
+
+    it('resets error when src changes', async () => {
+      const { rerender } = render(<Avatar src="broken.jpg" name="Test" />)
+      fireEvent.error(screen.getByAltText('Test'))
+      await waitFor(() => expect(screen.getByText('TE')).toBeInTheDocument())
+
+      rerender(<Avatar src="new.jpg" name="Test" />)
+      expect(screen.getByAltText('Test')).toHaveAttribute('src', 'new.jpg')
+    })
   })
 
-  it('uses fallback text when provided', () => {
-    render(<Avatar name="John Doe" fallback="Custom" />)
-    expect(screen.getByText('CU')).toBeInTheDocument()
-  })
+  // ── Sizes ────────────────────────────────────────────────────────
 
-  it('renders custom icon', () => {
-    render(<Avatar icon={<span data-testid="custom-icon">🎨</span>} />)
-    expect(screen.getByTestId('custom-icon')).toBeInTheDocument()
-  })
+  it.each(['xs', 'sm', 'md', 'lg'] as const)(
+    'renders size=%s',
+    (size) => {
+      render(<Avatar size={size} name="Test" />)
+      expect(screen.getByRole('img', { name: 'Test' })).toBeInTheDocument()
+    },
+  )
 
-  it('renders status indicator', () => {
-    const { rerender } = render(<Avatar name="Test" status="online" />)
-    expect(screen.getByLabelText('Status: online')).toBeInTheDocument()
+  // ── Shapes ───────────────────────────────────────────────────────
 
-    rerender(<Avatar name="Test" status="offline" />)
-    expect(screen.getByLabelText('Status: offline')).toBeInTheDocument()
+  it.each(['circle', 'square'] as const)(
+    'renders shape=%s',
+    (shape) => {
+      render(<Avatar shape={shape} name="Test" />)
+      expect(screen.getByRole('img', { name: 'Test' })).toBeInTheDocument()
+    },
+  )
 
-    rerender(<Avatar name="Test" status="away" />)
-    expect(screen.getByLabelText('Status: away')).toBeInTheDocument()
+  // ── Colors ───────────────────────────────────────────────────────
 
-    rerender(<Avatar name="Test" status="busy" />)
-    expect(screen.getByLabelText('Status: busy')).toBeInTheDocument()
-  })
-
-  it('renders badge with number', () => {
-    render(<Avatar name="Test" badge={5} />)
-    expect(screen.getByRole('status', { name: '5 notifications' })).toBeInTheDocument()
-  })
-
-  it('renders badge with custom content', () => {
-    render(<Avatar name="Test" badge="NEW" />)
-    expect(screen.getByText('NEW')).toBeInTheDocument()
-  })
-
-  it('applies all color variants for fallback', () => {
-    const colors = ['default', 'primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'] as const
-    colors.forEach((color) => {
-      const { unmount } = render(<Avatar name="Test" color={color} />)
+  it.each(['default', 'primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'] as const)(
+    'renders color=%s',
+    (color) => {
+      render(<Avatar name="Test" color={color} />)
       expect(screen.getByText('TE')).toBeInTheDocument()
-      unmount()
-    })
-  })
+    },
+  )
 
-  it('shows bordered variant', () => {
-    const { container } = render(<Avatar name="Test" bordered />)
-    const avatar = container.querySelector('.avatar_root')
-    expect(avatar).toBeInTheDocument()
-  })
+  // ── Status indicator ─────────────────────────────────────────────
 
-  it('shows disabled state', () => {
-    render(<Avatar name="Test" disabled />)
-    const avatar = screen.getByLabelText(/avatar for test/i).parentElement
-    expect(avatar).toHaveAttribute('aria-disabled', 'true')
-  })
-
-  it('handles image load error and shows fallback', async () => {
-    const onError = vi.fn()
-    render(<Avatar src="invalid-image.jpg" name="Test User" onError={onError} />)
-
-    const img = screen.getByAltText('Test User') as HTMLImageElement
-
-    // Simulate error event using fireEvent from testing-library
-    fireEvent.error(img)
-
-    await waitFor(() => {
-      expect(onError).toHaveBeenCalled()
-      expect(screen.getByText('TU')).toBeInTheDocument()
-    })
-  })
-
-  it('resets error state when src changes', async () => {
-    const { rerender } = render(<Avatar src="invalid-image.jpg" name="Test" />)
-
-    const img = screen.getByAltText('Test') as HTMLImageElement
-    fireEvent.error(img)
-
-    await waitFor(() => {
-      expect(screen.getByText('TE')).toBeInTheDocument()
-    })
-
-    rerender(<Avatar src="new-valid-image.jpg" name="Test" />)
-
-    // After src change, should attempt to load new image
-    const newImg = screen.getByAltText('Test')
-    expect(newImg).toHaveAttribute('src', 'new-valid-image.jpg')
-  })
-
-  it('applies custom className', () => {
-    render(<Avatar name="Test" className="custom-class" />)
-    const avatar = screen.getByLabelText(/avatar for test/i).parentElement
-    expect(avatar).toHaveClass('custom-class')
-  })
-
-  it('applies classNames API to sub-elements', () => {
-    const { container } = render(
-      <Avatar
-        src="test.jpg"
-        name="Test"
-        status="online"
-        classNames={{
-          root: 'root-class',
-          image: 'image-class',
-          fallback: 'fallback-class',
-          status: 'status-class',
-        }}
-      />
+  describe('status', () => {
+    it.each(['online', 'offline', 'away', 'busy'] as const)(
+      'renders status=%s with aria-label',
+      (status) => {
+        render(<Avatar name="Test" status={status} />)
+        expect(screen.getByLabelText(`Status: ${status}`)).toBeInTheDocument()
+      },
     )
 
-    const avatar = container.querySelector('[data-slot="root"]')
-    expect(avatar).toHaveClass('root-class')
+    it('status has data-slot="status"', () => {
+      const { container } = render(<Avatar name="T" status="online" />)
+      expect(container.querySelector('[data-slot="status"]')).toBeInTheDocument()
+    })
 
-    const img = container.querySelector('[data-slot="image"]')
-    expect(img).toHaveClass('image-class')
-
-    const status = container.querySelector('[data-slot="status"]')
-    expect(status).toHaveClass('status-class')
+    it('does not render status when not provided', () => {
+      const { container } = render(<Avatar name="T" />)
+      expect(container.querySelector('[data-slot="status"]')).not.toBeInTheDocument()
+    })
   })
 
-  it('forwards ref to avatar element', () => {
+  // ── Badge ────────────────────────────────────────────────────────
+
+  describe('badge', () => {
+    it('renders numeric badge with role="status"', () => {
+      render(<Avatar name="Test" badge={5} />)
+      expect(screen.getByRole('status', { name: '5 notifications' })).toBeInTheDocument()
+    })
+
+    it('renders text badge', () => {
+      render(<Avatar name="Test" badge="NEW" />)
+      expect(screen.getByText('NEW')).toBeInTheDocument()
+    })
+
+    it('badge has data-slot="badge"', () => {
+      const { container } = render(<Avatar name="T" badge={3} />)
+      expect(container.querySelector('[data-slot="badge"]')).toBeInTheDocument()
+    })
+
+    it('does not render badge when not provided', () => {
+      const { container } = render(<Avatar name="T" />)
+      expect(container.querySelector('[data-slot="badge"]')).not.toBeInTheDocument()
+    })
+  })
+
+  // ── Bordered / Disabled ──────────────────────────────────────────
+
+  it('applies bordered ring', () => {
+    const { container } = render(<Avatar name="T" bordered />)
+    expect(container.querySelector('.avatar_root')).toBeInTheDocument()
+  })
+
+  it('shows disabled state with aria-disabled', () => {
+    render(<Avatar name="Test" disabled />)
+    expect(screen.getByRole('img', { name: 'Test' })).toHaveAttribute('aria-disabled', 'true')
+  })
+
+  // ── Accessibility ────────────────────────────────────────────────
+
+  describe('accessibility', () => {
+    it('non-image avatar has role="img"', () => {
+      render(<Avatar name="John Doe" />)
+      expect(screen.getByRole('img')).toBeInTheDocument()
+    })
+
+    it('non-image avatar has aria-label from name', () => {
+      render(<Avatar name="John Doe" />)
+      expect(screen.getByRole('img')).toHaveAttribute('aria-label', 'John Doe')
+    })
+
+    it('non-image avatar uses alt over name for aria-label', () => {
+      render(<Avatar name="John Doe" alt="JD Avatar" />)
+      expect(screen.getByRole('img')).toHaveAttribute('aria-label', 'JD Avatar')
+    })
+
+    it('image avatar does not have role="img" on root (img element handles it)', () => {
+      const { container } = render(<Avatar src="photo.jpg" alt="User" />)
+      const root = container.querySelector('[data-slot="root"]')!
+      expect(root).not.toHaveAttribute('role')
+    })
+
+    it('image avatar has alt on img element', () => {
+      render(<Avatar src="photo.jpg" alt="User Photo" />)
+      expect(screen.getByAltText('User Photo')).toBeInTheDocument()
+    })
+
+    it('fallback initials are aria-hidden (label is on root)', () => {
+      const { container } = render(<Avatar name="John Doe" />)
+      const fallback = container.querySelector('[data-slot="fallback"]')!
+      expect(fallback).toHaveAttribute('aria-hidden', 'true')
+    })
+
+    it('custom icon fallback is aria-hidden', () => {
+      const { container } = render(<Avatar icon={<span>★</span>} />)
+      const fallback = container.querySelector('[data-slot="fallback"]')!
+      expect(fallback).toHaveAttribute('aria-hidden', 'true')
+    })
+
+    it('default icon has no name → aria-label fallback', () => {
+      render(<Avatar />)
+      expect(screen.getByRole('img')).toHaveAttribute('aria-label', 'User avatar')
+    })
+
+    it('image uses lazy loading', () => {
+      render(<Avatar src="photo.jpg" alt="User" />)
+      expect(screen.getByAltText('User')).toHaveAttribute('loading', 'lazy')
+    })
+  })
+
+  // ── classNames ───────────────────────────────────────────────────
+
+  describe('classNames', () => {
+    it('applies className to root', () => {
+      render(<Avatar name="Test" className="my-avatar" />)
+      expect(screen.getByRole('img', { name: 'Test' })).toHaveClass('my-avatar')
+    })
+
+    it('applies classNames.root', () => {
+      const { container } = render(<Avatar name="T" classNames={{ root: 'cn-root' }} />)
+      expect(container.querySelector('[data-slot="root"]')).toHaveClass('cn-root')
+    })
+
+    it('applies classNames.image', () => {
+      const { container } = render(<Avatar src="p.jpg" alt="X" classNames={{ image: 'cn-img' }} />)
+      expect(container.querySelector('[data-slot="image"]')).toHaveClass('cn-img')
+    })
+
+    it('applies classNames.fallback', () => {
+      const { container } = render(<Avatar name="T" classNames={{ fallback: 'cn-fb' }} />)
+      expect(container.querySelector('[data-slot="fallback"]')).toHaveClass('cn-fb')
+    })
+
+    it('applies classNames.status', () => {
+      const { container } = render(<Avatar name="T" status="online" classNames={{ status: 'cn-st' }} />)
+      expect(container.querySelector('[data-slot="status"]')).toHaveClass('cn-st')
+    })
+
+    it('applies classNames.badge', () => {
+      const { container } = render(<Avatar name="T" badge={3} classNames={{ badge: 'cn-badge' }} />)
+      expect(container.querySelector('[data-slot="badge"]')).toHaveClass('cn-badge')
+    })
+  })
+
+  // ── Ref ──────────────────────────────────────────────────────────
+
+  it('forwards ref', () => {
     const ref = { current: null }
     render(<Avatar name="Test" ref={ref} />)
     expect(ref.current).toBeInstanceOf(HTMLDivElement)
   })
+
+  // ── Edge cases ───────────────────────────────────────────────────
+
+  describe('edge cases', () => {
+    it('renders with no props', () => {
+      const { container } = render(<Avatar />)
+      expect(container.querySelector('[data-slot="root"]')).toBeInTheDocument()
+    })
+
+    it('renders with empty name', () => {
+      const { container } = render(<Avatar name="" />)
+      // Should show default icon, not empty initials
+      expect(container.querySelector('svg')).toBeInTheDocument()
+    })
+
+    it('renders badge + status simultaneously', () => {
+      const { container } = render(<Avatar name="T" badge={5} status="online" />)
+      expect(container.querySelector('[data-slot="badge"]')).toBeInTheDocument()
+      expect(container.querySelector('[data-slot="status"]')).toBeInTheDocument()
+    })
+
+    it('passes native HTML attributes', () => {
+      render(<Avatar name="T" data-testid="my-avatar" id="av-1" />)
+      expect(screen.getByTestId('my-avatar')).toBeInTheDocument()
+      expect(screen.getByRole('img')).toHaveAttribute('id', 'av-1')
+    })
+  })
 })
 
 describe('AvatarGroup', () => {
+  // ── Core ─────────────────────────────────────────────────────────
+
   it('renders multiple avatars', () => {
     render(
       <AvatarGroup>
         <Avatar name="User 1" />
         <Avatar name="User 2" />
         <Avatar name="User 3" />
-      </AvatarGroup>
+      </AvatarGroup>,
     )
-
     expect(screen.getByText('U1')).toBeInTheDocument()
     expect(screen.getByText('U2')).toBeInTheDocument()
     expect(screen.getByText('U3')).toBeInTheDocument()
   })
 
-  it('limits visible avatars with max prop', () => {
+  it('has role="group"', () => {
+    render(<AvatarGroup><Avatar name="U" /></AvatarGroup>)
+    expect(screen.getByRole('group')).toBeInTheDocument()
+  })
+
+  it('has aria-label with total count', () => {
+    render(
+      <AvatarGroup>
+        <Avatar name="A" />
+        <Avatar name="B" />
+      </AvatarGroup>,
+    )
+    expect(screen.getByRole('group')).toHaveAttribute('aria-label', 'Avatar group with 2 members')
+  })
+
+  // ── Max / overflow ───────────────────────────────────────────────
+
+  it('limits visible avatars with max', () => {
     render(
       <AvatarGroup max={2}>
         <Avatar name="User 1" />
         <Avatar name="User 2" />
         <Avatar name="User 3" />
         <Avatar name="User 4" />
-      </AvatarGroup>
+      </AvatarGroup>,
     )
-
     expect(screen.getByText('U1')).toBeInTheDocument()
     expect(screen.getByText('U2')).toBeInTheDocument()
     expect(screen.queryByText('U3')).not.toBeInTheDocument()
     expect(screen.getByText('+2')).toBeInTheDocument()
   })
 
-  it('shows total count instead of remaining with showTotal', () => {
+  it('showTotal displays total instead of remainder', () => {
     render(
       <AvatarGroup max={2} showTotal>
-        <Avatar name="User 1" />
-        <Avatar name="User 2" />
-        <Avatar name="User 3" />
-        <Avatar name="User 4" />
-      </AvatarGroup>
+        <Avatar name="A" />
+        <Avatar name="B" />
+        <Avatar name="C" />
+        <Avatar name="D" />
+      </AvatarGroup>,
     )
-
     expect(screen.getByText('4')).toBeInTheDocument()
-    expect(screen.queryByText('+2')).not.toBeInTheDocument()
   })
 
-  it('renders custom surplus content', () => {
+  it('renderSurplus for custom overflow', () => {
     render(
-      <AvatarGroup max={2} renderSurplus={(count) => <div>Custom {count}</div>}>
-        <Avatar name="User 1" />
-        <Avatar name="User 2" />
-        <Avatar name="User 3" />
-      </AvatarGroup>
+      <AvatarGroup max={1} renderSurplus={(n) => <div data-testid="custom">+{n} more</div>}>
+        <Avatar name="A" />
+        <Avatar name="B" />
+        <Avatar name="C" />
+      </AvatarGroup>,
     )
-
-    expect(screen.getByText('Custom 1')).toBeInTheDocument()
+    expect(screen.getByTestId('custom')).toHaveTextContent('+2 more')
   })
 
-  it('applies size to all avatars', () => {
+  it('overflow has data-slot="overflow"', () => {
+    const { container } = render(
+      <AvatarGroup max={1}>
+        <Avatar name="A" />
+        <Avatar name="B" />
+      </AvatarGroup>,
+    )
+    expect(container.querySelector('[data-slot="overflow"]')).toBeInTheDocument()
+  })
+
+  // ── Prop inheritance ─────────────────────────────────────────────
+
+  it('passes size to children', () => {
     render(
       <AvatarGroup size="lg">
-        <Avatar name="User 1" />
-        <Avatar name="User 2" />
-      </AvatarGroup>
+        <Avatar name="A" />
+      </AvatarGroup>,
     )
-
-    expect(screen.getByText('U1')).toBeInTheDocument()
-    expect(screen.getByText('U2')).toBeInTheDocument()
+    expect(screen.getByText('A')).toBeInTheDocument()
   })
 
-  it('applies shape to all avatars', () => {
-    render(
-      <AvatarGroup shape="square">
-        <Avatar name="User 1" />
-        <Avatar name="User 2" />
-      </AvatarGroup>
-    )
-
-    expect(screen.getByText('U1')).toBeInTheDocument()
-    expect(screen.getByText('U2')).toBeInTheDocument()
-  })
-
-  it('applies bordered to all avatars', () => {
+  it('passes bordered to children', () => {
     render(
       <AvatarGroup bordered>
-        <Avatar name="User 1" />
-        <Avatar name="User 2" />
-      </AvatarGroup>
+        <Avatar name="A" />
+      </AvatarGroup>,
     )
-
-    expect(screen.getByText('U1')).toBeInTheDocument()
-    expect(screen.getByText('U2')).toBeInTheDocument()
+    expect(screen.getByText('A')).toBeInTheDocument()
   })
 
-  it('has proper accessibility attributes', () => {
+  // ── Styling ──────────────────────────────────────────────────────
+
+  it('applies className', () => {
+    render(<AvatarGroup className="my-group"><Avatar name="A" /></AvatarGroup>)
+    expect(screen.getByRole('group')).toHaveClass('my-group')
+  })
+
+  it('applies classNames.root', () => {
+    render(<AvatarGroup classNames={{ root: 'cn-root' }}><Avatar name="A" /></AvatarGroup>)
+    expect(screen.getByRole('group')).toHaveClass('cn-root')
+  })
+
+  it('applies classNames.overflow', () => {
+    const { container } = render(
+      <AvatarGroup max={1} classNames={{ overflow: 'cn-over' }}>
+        <Avatar name="A" />
+        <Avatar name="B" />
+      </AvatarGroup>,
+    )
+    expect(container.querySelector('[data-slot="overflow"]')).toHaveClass('cn-over')
+  })
+
+  // ── Ref ──────────────────────────────────────────────────────────
+
+  it('forwards ref', () => {
+    const ref = { current: null }
+    render(<AvatarGroup ref={ref}><Avatar name="A" /></AvatarGroup>)
+    expect(ref.current).toBeInstanceOf(HTMLDivElement)
+  })
+
+  // ── Edge cases ───────────────────────────────────────────────────
+
+  it('renders with no max (shows all)', () => {
     render(
       <AvatarGroup>
-        <Avatar name="User 1" />
-        <Avatar name="User 2" />
-      </AvatarGroup>
+        <Avatar name="A" />
+        <Avatar name="B" />
+        <Avatar name="C" />
+      </AvatarGroup>,
     )
-
-    const group = screen.getByRole('group')
-    expect(group).toHaveAttribute('aria-label', 'Avatar group with 2 members')
+    expect(screen.getByText('A')).toBeInTheDocument()
+    expect(screen.getByText('B')).toBeInTheDocument()
+    expect(screen.getByText('C')).toBeInTheDocument()
   })
 
-  it('applies custom className', () => {
-    render(
-      <AvatarGroup className="custom-class">
-        <Avatar name="User 1" />
-      </AvatarGroup>
+  it('no overflow when max >= total', () => {
+    const { container } = render(
+      <AvatarGroup max={5}>
+        <Avatar name="A" />
+        <Avatar name="B" />
+      </AvatarGroup>,
     )
-
-    const group = screen.getByRole('group')
-    expect(group).toHaveClass('custom-class')
-  })
-
-  it('forwards ref to group element', () => {
-    const ref = { current: null }
-    render(
-      <AvatarGroup ref={ref}>
-        <Avatar name="User 1" />
-      </AvatarGroup>
-    )
-    expect(ref.current).toBeInstanceOf(HTMLDivElement)
+    expect(container.querySelector('[data-slot="overflow"]')).not.toBeInTheDocument()
   })
 })

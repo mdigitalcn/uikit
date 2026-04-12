@@ -1,4 +1,4 @@
-import type { ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize } from '../types'
 
 export type TreeSize = ComponentSize
 
@@ -69,6 +69,8 @@ export interface TreeProps {
     },
   ) => void
   disabled?: boolean
+  /** @default 'primary' */
+  color?: ComponentColor
   /**
    * Size variant (tree only supports xs, sm, md, lg)
    */

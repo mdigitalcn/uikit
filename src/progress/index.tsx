@@ -133,7 +133,7 @@ const CircleProgress: React.FC<CircleProgressProps> = ({
             strokeLinecap="round"
             className={cn(
               getCircleStrokeClasses(variant),
-              "transition-[stroke-dashoffset] duration-300 ease-in-out",
+              "[--_duration:var(--duration-slow)] transition-[stroke-dashoffset] duration-slot ease-in-out",
               "progress_fill",
               classNames?.fill,
             )}
@@ -389,7 +389,7 @@ const LineProgress: React.FC<LineProgressProps> = ({
         >
           <div
             className={cn(
-              "w-full transition-[width,height] duration-300 ease-in-out rounded-full",
+              "[--_duration:var(--duration-slow)] w-full transition-[width,height] duration-slot ease-in-out rounded-full",
               getBarColorClasses(variant),
               animated && striped && "progress-shimmer",
               "progress_fill",

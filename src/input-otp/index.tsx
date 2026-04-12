@@ -4,10 +4,11 @@ import { cva } from 'class-variance-authority'
 import React from 'react'
 
 import { cn, getValidationStatus as getStatus, statusMessageVariants } from '../utils'
+import { colorVars } from '../variants'
 import type { InputOTPProps } from './types'
 
 const otpSlotVariants = cva(
-  'inline-flex items-center justify-center border rounded-md bg-background text-text-primary font-medium text-center outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+  'inline-flex items-center justify-center border [--_radius:var(--radius-input)] rounded-slot bg-background text-text-primary font-medium text-center outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
   {
     variants: {
       size: {
@@ -17,11 +18,11 @@ const otpSlotVariants = cva(
         lg: 'h-(--otp-size-lg) w-(--otp-size-lg) text-lg',
       },
       status: {
-        default: 'border-border focus:border-primary',
-        error: 'border-error focus:border-error',
-        warning: 'border-warning focus:border-warning',
-        info: 'border-info focus:border-info',
-        success: 'border-success focus:border-success',
+        default: 'border-border hover:border-slot-50 focus-visible:border-slot focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+        error: 'border-error',
+        warning: 'border-warning',
+        info: 'border-info',
+        success: 'border-success',
       },
     },
     defaultVariants: { size: 'md', status: 'default' },
@@ -138,7 +139,7 @@ const InputOTP = React.memo<InputOTPProps>(
       <div
         ref={ref}
         data-slot="inputOTP_root"
-        className={cn('inputOTP_root', 'w-full', classNames?.root, className)}
+        className={cn('inputOTP_root', 'w-full', colorVars[status !== 'default' ? status : color], classNames?.root, className)}
       >
         {label && (
           <label
@@ -187,8 +188,8 @@ const InputOTP = React.memo<InputOTPProps>(
                   'inputOTP_slot',
                   otpSlotVariants({ size, status }),
                   'font-semibold',
-                  'hover:border-primary/50',
-                  'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary',
+                  'hover:border-slot/50',
+                  'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slot',
                   classNames?.slot,
                   isActive && classNames?.slotActive,
                 )}

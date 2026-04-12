@@ -18,15 +18,19 @@ import { colorVars } from "../variants";
 import type { NumberInputProps } from "./types";
 
 const numberInputVariants = cva(
-  "w-full placeholder:text-text-secondary/50 rounded-md disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none text-text-primary transition-colors",
+  "w-full placeholder:text-text-secondary/50 [--_radius:var(--radius-input)] rounded-slot disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none text-text-primary transition-colors",
   {
     variants: {
+      variant: {
+        outline: "bg-background border border-border hover:border-slot-50 focus:border-slot focus:ring-2 focus:ring-slot-30",
+        filled: "bg-surface border border-transparent hover:border-slot-30 focus:border-slot focus:ring-2 focus:ring-slot-30",
+      },
       status: {
-        default: "bg-background border border-border focus:border-primary",
-        error: "bg-background border border-error focus:border-error",
-        warning: "bg-background border border-warning focus:border-warning",
-        info: "bg-background border border-info focus:border-info",
-        success: "bg-background border border-success focus:border-success",
+        default: "",
+        error: "border-error",
+        warning: "border-warning",
+        info: "border-info",
+        success: "border-success",
       },
       size: {
         xs: "h-(--input-height-xs) px-(--input-padding-x-xs) text-xs",
@@ -44,6 +48,7 @@ const numberInputVariants = cva(
       },
     },
     defaultVariants: {
+      variant: "outline",
       status: "default",
       size: "md",
       fullWidth: true,
@@ -53,18 +58,18 @@ const numberInputVariants = cva(
 );
 
 const controlButtonVariants = cva(
-  "flex items-center justify-center cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+  "flex items-center justify-center cursor-pointer transition-colors disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed",
   {
     variants: {
       size: {
-        xs: "w-6 h-6",
-        sm: "w-7 h-7",
-        md: "w-8 h-8",
-        lg: "w-10 h-10",
+        xs: "w-(--input-height-xs) h-(--input-height-xs)",
+        sm: "w-(--input-height-sm) h-(--input-height-sm)",
+        md: "w-(--input-height-md) h-(--input-height-md)",
+        lg: "w-(--input-height-lg) h-(--input-height-lg)",
       },
       position: {
-        right: "hover:bg-surface-hover",
-        sides: "hover:bg-surface-hover",
+        right: "hover:bg-surface",
+        sides: "hover:bg-surface",
       },
     },
     defaultVariants: {
@@ -93,6 +98,7 @@ const NumberInput = React.memo<NumberInputProps>(
     max,
     step = 1,
     precision,
+    variant = "outline",
     size = "md",
     color = "primary",
     label,
@@ -273,7 +279,7 @@ const NumberInput = React.memo<NumberInputProps>(
         cn(
           "number-input_root",
           "w-full flex flex-col relative",
-          color !== "primary" && colorVars[color],
+          colorVars[status !== 'default' ? status : color],
           !fullWidth && "inline-block",
           classNames?.root,
         ),
@@ -295,7 +301,7 @@ const NumberInput = React.memo<NumberInputProps>(
         cn(
           "number-input_wrapper",
           "relative flex items-center",
-          loading && "opacity-50 cursor-not-allowed",
+          loading && "opacity-50 pointer-events-none cursor-not-allowed",
           controlsPosition === "sides" && "gap-1",
           classNames?.wrapper,
         ),
@@ -306,7 +312,7 @@ const NumberInput = React.memo<NumberInputProps>(
       () =>
         cn(
           "number-input_input",
-          numberInputVariants({ status, size, fullWidth, controlsPosition }),
+          numberInputVariants({ variant, status, size, fullWidth, controlsPosition }),
           controls && controlsPosition === "right" && "pr-16",
           controls && controlsPosition === "sides" && "text-center",
           className,

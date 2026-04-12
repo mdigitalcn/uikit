@@ -220,7 +220,7 @@ export const TimePickerComponent = React.memo<TimePickerProps>(
                 onClick={() => setIsOpen(!isOpen)}
                 aria-expanded={isOpen}
                 aria-haspopup="dialog"
-                className={cn('datePicker_trigger', pickerInputVariants({ variant, status, size, fullWidth }), colorVars[color], 'focus-visible:ring-slot', 'flex items-center justify-start cursor-pointer', pickerPaddingLeft[size], showClear && pickerPaddingRight[size], className, classNames?.trigger)}
+                className={cn('datePicker_trigger', pickerInputVariants({ variant, status, size, fullWidth }), colorVars[status !== 'default' ? status : color], 'focus-visible:ring-slot', 'flex items-center justify-start cursor-pointer', pickerPaddingLeft[size], showClear && pickerPaddingRight[size], className, classNames?.trigger)}
                 data-slot="trigger"
               >
                 {confirmed || preview ? (
@@ -239,7 +239,7 @@ export const TimePickerComponent = React.memo<TimePickerProps>(
           </Popover>
 
           {showClear && (
-            <button type="button" onClick={handleClear} className={cn('absolute flex items-center h-full top-0 text-text-secondary hover:text-text-primary z-10', pickerIconRight[size], classNames?.clear)} aria-label="Clear time" data-slot="clear">
+            <button type="button" onClick={handleClear} className={cn('absolute top-1/2 -translate-y-1/2 flex items-center justify-center rounded-sm p-0.5 cursor-pointer text-text-secondary hover:text-text-primary z-10 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-slot/50', pickerIconRight[size], classNames?.clear)} aria-label="Clear time" data-slot="clear">
               <X className={iconSizes[size]} />
             </button>
           )}

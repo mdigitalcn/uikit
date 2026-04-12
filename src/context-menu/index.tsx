@@ -247,6 +247,7 @@ const ContextMenuContent = ({
 
   // Document-level keyboard listener (menu is in a portal, no focus bubbling)
   useEffect(() => {
+    const HANDLED = new Set(["ArrowDown", "ArrowUp", "ArrowLeft", "Home", "End", "Enter", " ", "Escape", "Tab"]);
     const listener = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft" && level > 0) {
         e.preventDefault();
@@ -254,8 +255,10 @@ const ContextMenuContent = ({
         onClose();
         return;
       }
-      handleKeyDown(e);
-      e.stopImmediatePropagation();
+      if (HANDLED.has(e.key)) {
+        handleKeyDown(e);
+        e.stopImmediatePropagation();
+      }
     };
     document.addEventListener("keydown", listener);
     return () => document.removeEventListener("keydown", listener);
@@ -265,7 +268,7 @@ const ContextMenuContent = ({
     <div
       ref={menuRef}
       className={cn(
-        "contextMenu_content min-w-[180px] rounded-md border border-border bg-background shadow-lg py-1",
+        "contextMenu_content min-w-(--dropdown-min-width) [--_radius:var(--radius-dropdown)] rounded-slot border border-border bg-background [--_shadow:var(--shadow-lg)] shadow-size-slot py-1",
         colorVars[color],
         level === 0 && "animate-in fade-in-0 zoom-in-95",
         className,

@@ -63,7 +63,8 @@ const ToastRenderer = ({
         closable={closable}
         onClose={() => sonnerToast.dismiss(id)}
         action={options.action}
-        className="min-w-[300px] rounded-lg shadow-lg"
+        classNames={options.classNames}
+        className="min-w-(--toast-min-width) rounded-slot [--_shadow:var(--shadow-lg)] shadow-size-slot"
       />
     </div>
   );

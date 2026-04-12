@@ -1,4 +1,5 @@
 import type { SwiperProps } from 'swiper/react'
+import type { ComponentColor } from '../types'
 
 export interface CarouselClassNames {
   /**
@@ -46,6 +47,8 @@ export interface CarouselProps extends SwiperProps {
   withArrows?: boolean
   withPagination?: boolean
   children: React.ReactNode
+  /** @default 'primary' */
+  color?: ComponentColor
   /**
    * ClassNames for component parts
    */

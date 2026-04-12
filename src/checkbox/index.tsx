@@ -5,7 +5,7 @@ import { Check, Minus } from "lucide-react";
 import React, { useState, useCallback, useEffect, useId } from "react";
 
 import { cn, iconSizes } from "../utils";
-import { colorVars } from "../variants";
+import { buttonColorVars } from "../variants";
 import type { CheckboxProps } from "./types";
 
 function useMergeRefs<T>(
@@ -37,7 +37,7 @@ const checkboxVariants = cva(
         soft:
           "bg-background border-slot-30 checked:bg-slot-10 checked:border-slot indeterminate:bg-slot-10 indeterminate:border-slot",
       },
-      color: colorVars,
+      color: buttonColorVars,
       size: {
         xs: "w-(--checkbox-size-xs) h-(--checkbox-size-xs)",
         sm: "w-(--checkbox-size-sm) h-(--checkbox-size-sm)",
@@ -111,14 +111,14 @@ const Checkbox = React.memo<CheckboxProps>(
     }, [indeterminate]);
 
     const checkboxElement = (
-      <span className={cn("relative inline-flex", colorVars[color])} data-slot="wrapper">
+      <span className={cn("relative inline-flex", buttonColorVars[color])} data-slot="wrapper">
         <input
           ref={mergedRef}
           type="checkbox"
           className={cn(
             "checkbox_checkbox",
             checkboxVariants({ variant, color, size, error: !!error }),
-            "focus-visible:ring-slot",
+            "focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             className,
             classNames?.checkbox,
           )}

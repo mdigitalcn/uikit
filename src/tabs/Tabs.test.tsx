@@ -324,7 +324,7 @@ describe('Tabs', () => {
     it('indicator has proper classes for pill variant', () => {
       const { container } = render(<Tabs items={mockItems} variant="pill" />)
       const indicator = container.querySelector('[data-slot="tabs_indicator"]')
-      expect(indicator).toHaveClass('rounded-md', 'shadow-sm', 'top-0.5')
+      expect(indicator).toHaveClass('shadow-size-slot', 'top-0.5')
     })
 
     it('indicator uses radius-matched rounding for pill variant', () => {
@@ -375,7 +375,7 @@ describe('Tabs', () => {
         await new Promise(resolve => setTimeout(resolve, 100))
       })
       
-      expect(indicator).toHaveClass('transition-[transform,width]', 'duration-300', 'ease-out')
+      expect(indicator).toHaveClass('transition-[transform,width]', 'duration-slot', 'ease-out')
     })
 
     it('indicator respects custom classNames.indicator', () => {

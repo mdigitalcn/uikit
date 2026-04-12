@@ -1,0 +1,7 @@
+/* Warm — Terracotta orange. Friendly, approachable, human. */
+[data-theme="warm"] {
+  --brand:   oklch(55% 0.20 30);
+  --accent:  oklch(52% 0.18 60);
+  --radius:  0.5rem;
+  --scaling: 1;
+}

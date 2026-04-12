@@ -202,7 +202,7 @@ const Stepper = React.memo<StepperProps>(
                       stepCircleVariants({ size }),
                       getStepCircleClasses(variant, state),
                       isClickable &&
-                        "cursor-pointer hover:scale-105 transition-transform duration-150",
+                        "[--_duration:var(--duration-fast)] cursor-pointer hover:scale-105 transition-transform duration-slot",
                       step.disabled && "opacity-50 cursor-not-allowed",
                       classNames?.icon,
                     )}
@@ -322,7 +322,7 @@ const Stepper = React.memo<StepperProps>(
                         stepDotVariants({ size }),
                         getStepCircleClasses(variant, state),
                         isClickable &&
-                          "cursor-pointer hover:scale-105 transition-transform duration-150",
+                          "[--_duration:var(--duration-fast)] cursor-pointer hover:scale-105 transition-transform duration-slot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2",
                         step.disabled && "opacity-50 cursor-not-allowed",
                         "flex-shrink-0",
                         classNames?.icon,
@@ -445,7 +445,7 @@ const Stepper = React.memo<StepperProps>(
                       stepCircleVariants({ size }),
                       getStepCircleClasses(variant, state),
                       isClickable &&
-                        "cursor-pointer hover:scale-105 transition-transform duration-150",
+                        "[--_duration:var(--duration-fast)] cursor-pointer hover:scale-105 transition-transform duration-slot",
                       step.disabled && "opacity-50 cursor-not-allowed",
                       "flex-shrink-0",
                       classNames?.icon,

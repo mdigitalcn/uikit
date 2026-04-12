@@ -31,7 +31,7 @@ export const transferItemVariants = cva(
 export const transferButtonVariants = cva('flex flex-col gap-2')
 
 export const transferActionButtonVariants = cva(
-  'flex items-center justify-center p-2 rounded-md border border-border bg-background text-text-secondary hover:bg-slot hover:text-slot-fg hover:border-slot transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-text-secondary disabled:hover:border-border',
+  'flex items-center justify-center p-2 [--_radius:var(--radius-button)] rounded-slot border border-border bg-background text-text-secondary hover:bg-slot hover:text-slot-fg hover:border-slot transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-text-secondary disabled:hover:border-border',
 )
 
 export const filterItems = (

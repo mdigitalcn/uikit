@@ -1,220 +1,105 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
-import { Mail } from 'lucide-react'
-import { PasswordInput } from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import { Lock, User } from "lucide-react";
+import React from "react";
+import { PasswordInput } from "./index";
 
 const meta: Meta<typeof PasswordInput> = {
-  title: 'Data Entry/InputPassword',
+  title: "Data Entry/InputPassword",
   component: PasswordInput,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Input size',
-    },
-    variant: {
-      control: 'select',
-      options: ['outline', 'filled'],
-      description: 'Visual style variant',
-    },
-    visibilityToggle: {
-      control: 'boolean',
-      description: 'Show/hide password toggle button',
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    loading: {
-      control: 'boolean',
-      description: 'Loading state',
-    },
-    clearable: {
-      control: 'boolean',
-      description: 'Show clear button',
-    },
+    variant: { control: "select", options: ["outline", "filled"] },
+    color: { control: "select", options: ["primary", "secondary", "accent", "success", "error", "warning", "info"] },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    visibilityToggle: { control: "boolean" },
+    clearable: { control: "boolean" },
+    loading: { control: "boolean" },
+    disabled: { control: "boolean" },
+    fullWidth: { control: "boolean" },
+    messagePosition: { control: "select", options: ["top", "bottom"] },
   },
-}
+};
+export default meta;
+type Story = StoryObj<typeof PasswordInput>;
 
-export default meta
-type Story = StoryObj<typeof PasswordInput>
+export const Playground: Story = {
+  args: { label: "Password", placeholder: "Enter password...", size: "md", variant: "outline" },
+};
 
-export const Primary: Story = {
-  args: {
-    placeholder: 'Enter your password',
-    size: 'md',
-    visibilityToggle: true,
-  },
-}
+const colors = ["primary", "secondary", "accent", "success", "error", "warning", "info"] as const;
 
-export const WithLabel: Story = {
+export const Showcase: Story = {
   render: () => (
-    <div className="flex flex-col gap-4">
-      <PasswordInput
-        label="Password"
-        placeholder="Enter your password"
-      />
-      <PasswordInput
-        label="Confirm Password"
-        placeholder="Re-enter password"
-        required
-      />
-    </div>
-  ),
-}
-
-export const ValidationStates: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <PasswordInput
-        label="Valid Password"
-        placeholder="Enter password"
-        success="Password meets all requirements!"
-        defaultValue="SecurePass123!"
-      />
-      <PasswordInput
-        label="Invalid Password"
-        placeholder="Enter password"
-        error="Password is too weak"
-        defaultValue="weak"
-      />
-      <PasswordInput
-        label="Warning"
-        placeholder="Enter password"
-        warning="Consider using more special characters"
-        defaultValue="password123"
-      />
-      <PasswordInput
-        label="Info"
-        placeholder="Enter password"
-        info="Must be at least 8 characters with uppercase, lowercase, and numbers"
-      />
-    </div>
-  ),
-}
-
-export const Clearable: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <PasswordInput
-        clearable
-        label="Clearable Password"
-        placeholder="Type to see clear button"
-        defaultValue="ClearablePassword"
-      />
-      <PasswordInput
-        clearable
-        visibilityToggle={false}
-        label="Clearable (No Toggle)"
-        placeholder="Clear without toggle"
-        defaultValue="PasswordValue"
-      />
-    </div>
-  ),
-}
-
-export const PasswordStrengthIndicator: Story = {
-  render: () => {
-    const [password, setPassword] = useState('')
-
-    const getStrength = (pass: string) => {
-      if (pass.length === 0) return { level: 'none', text: '', color: '' }
-      if (pass.length < 6) return { level: 'weak', text: 'Weak password', color: 'error' }
-      if (pass.length < 10) return { level: 'medium', text: 'Medium strength', color: 'warning' }
-      if (!/[A-Z]/.test(pass) || !/[0-9]/.test(pass)) return { level: 'medium', text: 'Add uppercase and numbers', color: 'warning' }
-      return { level: 'strong', text: 'Strong password!', color: 'success' }
-    }
-
-    const strength = getStrength(password)
-
-    return (
-      <div className="max-w-md">
-        <PasswordInput
-          label="Create Password"
-          placeholder="Enter secure password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          {...(strength.color === 'error' && { error: strength.text })}
-          {...(strength.color === 'warning' && { warning: strength.text })}
-          {...(strength.color === 'success' && { success: strength.text })}
-          clearable
-        />
-      </div>
-    )
-  },
-}
-
-export const LoginForm: Story = {
-  render: () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-
-    return (
-      <div className="max-w-md space-y-4 p-6 border border-border rounded-lg">
-        <h2 className="text-xl font-semibold text-text-primary mb-4">Login to your account</h2>
-
-        <div>
-          <label className="block text-sm font-medium text-text-secondary mb-1.5">
-            Email Address
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="w-full h-12 px-4 text-base bg-background border border-border rounded-md outline-none text-text-primary placeholder:text-text-muted focus:border-primary transition-colors"
-          />
+    <div className="space-y-10 max-w-md">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Variants</h3>
+        <div className="space-y-3">
+          <PasswordInput variant="outline" label="Outline" placeholder="Enter password..." />
+          <PasswordInput variant="filled" label="Filled" placeholder="Enter password..." />
         </div>
+      </section>
 
-        <PasswordInput
-          label="Password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          helperText="Forgot your password?"
-        />
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="space-y-3">
+          {(["xs", "sm", "md", "lg"] as const).map((s) => (
+            <PasswordInput key={s} size={s} label={`Size ${s}`} placeholder="Password" />
+          ))}
+        </div>
+      </section>
 
-        <button
-          className="w-full h-12 bg-primary text-background rounded-md font-medium hover:bg-primary/90 transition-colors"
-        >
-          Sign In
-        </button>
-      </div>
-    )
-  },
-}
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="space-y-3">
+          {colors.map((c) => (
+            <PasswordInput key={c} color={c} label={c} placeholder="Password" />
+          ))}
+        </div>
+      </section>
 
-export const RegistrationForm: Story = {
-  render: () => {
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Left Icon</h3>
+        <div className="space-y-3">
+          <PasswordInput leftIcon={<Lock className="w-4 h-4" />} label="Secure password" placeholder="Minimum 8 characters" />
+          <PasswordInput leftIcon={<User className="w-4 h-4" />} label="Account password" placeholder="Your password" variant="filled" />
+        </div>
+      </section>
 
-    const passwordsMatch = confirmPassword.length > 0 && password === confirmPassword
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Toggle Options</h3>
+        <div className="space-y-3">
+          <PasswordInput label="With toggle (default)" defaultValue="secret123" />
+          <PasswordInput label="No toggle" visibilityToggle={false} defaultValue="secret123" />
+          <PasswordInput label="Clearable" clearable defaultValue="secret123" />
+        </div>
+      </section>
 
-    return (
-      <div className="max-w-md space-y-4 p-6 border border-border rounded-lg">
-        <h2 className="text-xl font-semibold text-text-primary mb-4">Create Account</h2>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Validation States</h3>
+        <div className="space-y-3">
+          <PasswordInput error="Password must be at least 8 characters" label="Error" placeholder="Too short" />
+          <PasswordInput warning="Password strength: medium" label="Warning" placeholder="Password" />
+          <PasswordInput success="Strong password" label="Success" defaultValue="Str0ng!Pass" />
+          <PasswordInput info="Use uppercase, numbers, and symbols" label="Info hint" placeholder="Password" />
+        </div>
+      </section>
 
-        <PasswordInput
-          label="Password"
-          placeholder="Create password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          helperText="Must be at least 8 characters"
-          required
-        />
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Message Position</h3>
+        <div className="space-y-3">
+          <PasswordInput error="Error shown at top" label="Message top" messagePosition="top" placeholder="Password" />
+          <PasswordInput error="Error shown at bottom" label="Message bottom" messagePosition="bottom" placeholder="Password" />
+        </div>
+      </section>
 
-        <PasswordInput
-          label="Confirm Password"
-          placeholder="Re-enter password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          {...(confirmPassword.length > 0 && !passwordsMatch && { error: 'Passwords do not match' })}
-          {...(passwordsMatch && { success: 'Passwords match!' })}
-          required
-        />
-      </div>
-    )
-  },
-}
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">States</h3>
+        <div className="space-y-3">
+          <PasswordInput loading label="Loading" placeholder="Checking..." />
+          <PasswordInput disabled label="Disabled" placeholder="Not editable" />
+          <PasswordInput readOnly defaultValue="readonly-value-123" label="Read only" />
+        </div>
+      </section>
+    </div>
+  ),
+};

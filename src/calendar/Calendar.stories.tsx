@@ -1,95 +1,135 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
-
-import Calendar from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import React, { useState } from "react";
+import Calendar from "./index";
 
 const meta: Meta<typeof Calendar> = {
-  title: 'Data Entry/Calendar',
+  title: "Data Entry/Calendar",
   component: Calendar,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
+    color: {
+      control: "select",
+      options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
     weekStartsOn: {
-      control: 'select',
+      control: "select",
       options: [0, 1, 2, 3, 4, 5, 6],
     },
+    showOutsideDays: { control: "boolean" },
   },
-}
+};
+export default meta;
+type Story = StoryObj<typeof Calendar>;
 
-export default meta
-type Story = StoryObj<typeof Calendar>
+const today = new Date();
 
-export const Default: Story = {
-  render: () => <Calendar />,
-}
-
-export const Controlled: Story = {
-  render: () => {
-    const [date, setDate] = useState<Date | null>(new Date())
-
-    return (
-      <div className="space-y-4">
-        <Calendar value={date} onChange={setDate} />
-        <p className="text-sm text-text-secondary">
-          Selected: {date ? date.toLocaleDateString() : 'None'}
-        </p>
-      </div>
-    )
+export const Playground: Story = {
+  args: {
+    color: "primary",
+    size: "md",
+    showOutsideDays: true,
+    weekStartsOn: 0,
+    defaultValue: today,
   },
-}
+};
 
-export const MondayStart: Story = {
-  render: () => <Calendar weekStartsOn={1} />,
-}
+const ControlledDemo = () => {
+  const [value, setValue] = useState<Date | null>(today);
+  return (
+    <div className="space-y-3">
+      <Calendar value={value} onChange={setValue} color="primary" />
+      <p className="text-xs text-text-secondary">
+        Selected: {value ? value.toLocaleDateString() : "none"}
+      </p>
+    </div>
+  );
+};
 
-export const WithMinMax: Story = {
-  render: () => {
-    const today = new Date()
-    const min = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7)
-    const max = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 14)
-
-    return (
-      <div className="space-y-2">
-        <p className="text-sm text-text-secondary">Only ±7/+14 days from today selectable</p>
-        <Calendar minDate={min} maxDate={max} />
-      </div>
-    )
-  },
-}
-
-export const DisabledWeekends: Story = {
+export const Showcase: Story = {
   render: () => (
-    <Calendar
-      disabledDates={(date) => date.getDay() === 0 || date.getDay() === 6}
-    />
-  ),
-}
-
-export const Sizes: Story = {
-  render: () => (
-    <div className="flex flex-wrap gap-8">
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size}>
-          <p className="text-xs text-text-secondary mb-2">{size}</p>
-          <Calendar size={size} />
+    <div className="space-y-10 p-6 max-w-3xl">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Sizes
+        </h3>
+        <div className="flex flex-wrap gap-6 items-start">
+          {(["xs", "sm", "md", "lg"] as const).map((s) => (
+            <div key={s}>
+              <p className="text-xs text-text-secondary mb-2">{s}</p>
+              <Calendar size={s} defaultValue={today} />
+            </div>
+          ))}
         </div>
-      ))}
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Colors
+        </h3>
+        <div className="flex flex-wrap gap-6 items-start">
+          {(["primary", "secondary", "accent", "success", "error", "warning", "info"] as const).map((c) => (
+            <div key={c}>
+              <p className="text-xs text-text-secondary mb-2">{c}</p>
+              <Calendar color={c} defaultValue={today} size="sm" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Controlled Selection
+        </h3>
+        <ControlledDemo />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          With Min / Max Constraints
+        </h3>
+        <div className="flex flex-wrap gap-6 items-start">
+          <div>
+            <p className="text-xs text-text-secondary mb-2">min = today</p>
+            <Calendar
+              minDate={today}
+              maxDate={new Date(today.getFullYear(), today.getMonth() + 2, today.getDate())}
+              color="primary"
+            />
+          </div>
+          <div>
+            <p className="text-xs text-text-secondary mb-2">max = today</p>
+            <Calendar
+              maxDate={today}
+              color="accent"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Custom Disabled Dates (weekends)
+        </h3>
+        <Calendar
+          disabledDates={(date) => date.getDay() === 0 || date.getDay() === 6}
+          color="primary"
+        />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Hide Outside Days
+        </h3>
+        <Calendar showOutsideDays={false} defaultValue={today} color="secondary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Week Starts on Monday
+        </h3>
+        <Calendar weekStartsOn={1} defaultValue={today} color="primary" />
+      </section>
     </div>
   ),
-}
-
-export const NoOutsideDays: Story = {
-  render: () => <Calendar showOutsideDays={false} />,
-}
-
-export const PreselectedDate: Story = {
-  render: () => (
-    <Calendar
-      defaultValue={new Date(2025, 11, 25)}
-      defaultMonth={new Date(2025, 11, 1)}
-    />
-  ),
-}
+};

@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import React from "react";
 
 import { cn } from "../utils";
+import { colorVars } from "../variants";
 import type {
   NavigationMenuProps,
   NavigationMenuItem,
@@ -43,23 +44,29 @@ const navigationMenuItemVariants = cva("navigationMenu_item relative", {
 });
 
 const navigationMenuTriggerVariants = cva(
-  "navigationMenu_trigger inline-flex items-center justify-center gap-2 rounded-md cursor-pointer px-4 py-2 text-sm font-medium transition-colors hover:bg-surface focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-surface",
+  "navigationMenu_trigger inline-flex items-center justify-center gap-2 [--_radius:var(--radius-button)] rounded-slot cursor-pointer px-4 py-2 text-sm font-medium transition-colors hover:bg-surface focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slot focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-surface",
   {
     variants: {},
   },
 );
 
 const navigationMenuLinkVariants = cva(
-  "navigationMenu_link inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-surface focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
+  "navigationMenu_link inline-flex items-center justify-center gap-2 [--_radius:var(--radius-button)] rounded-slot px-4 py-2 text-sm font-medium transition-colors hover:bg-surface focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slot focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {},
   },
 );
 
 const navigationMenuContentVariants = cva(
-  "navigationMenu_content z-(--z-popover) absolute top-full left-0 mt-1 w-auto min-w-[400px] rounded-md border border-border bg-background p-4 shadow-lg data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-top-2 duration-200",
+  "navigationMenu_content z-(--z-popover) absolute w-auto min-w-(--navigation-menu-content-min-width) [--_radius:var(--radius-dropdown)] rounded-slot border border-border bg-background p-4 [--_shadow:var(--shadow-lg)] shadow-size-slot [--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
   {
-    variants: {},
+    variants: {
+      orientation: {
+        horizontal: "top-full left-0 mt-1 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2",
+        vertical: "left-full top-0 ml-1 data-[state=closed]:slide-out-to-left-2 data-[state=open]:slide-in-from-left-2",
+      },
+    },
+    defaultVariants: { orientation: "horizontal" },
   },
 );
 
@@ -67,10 +74,12 @@ const NavigationMenuContent = React.memo(
   ({
     children,
     isOpen,
+    orientation = "horizontal",
     className,
   }: {
     children: NavigationMenuChildItem[];
     isOpen: boolean;
+    orientation?: "horizontal" | "vertical";
     className?: string;
   }) => {
     return (
@@ -78,7 +87,7 @@ const NavigationMenuContent = React.memo(
         data-slot="content"
         data-state={isOpen ? "open" : "closed"}
         className={cn(
-          navigationMenuContentVariants(),
+          navigationMenuContentVariants({ orientation }),
           !isOpen && "hidden",
           className,
         )}
@@ -166,12 +175,14 @@ const NavigationMenuItemComponent = React.memo(
     item,
     onOpenChange,
     isOpen,
+    orientation = "horizontal",
     classNames,
     closeDelay = 150,
   }: {
     item: NavigationMenuItem;
     onOpenChange: (key: string, open: boolean) => void;
     isOpen: boolean;
+    orientation?: "horizontal" | "vertical";
     classNames?: NavigationMenuProps["classNames"];
     closeDelay?: number;
   }) => {
@@ -282,6 +293,7 @@ const NavigationMenuItemComponent = React.memo(
             <NavigationMenuContent
               children={item.children!}
               isOpen={isOpen}
+              orientation={orientation}
               className={classNames?.content}
             />
           </>
@@ -326,6 +338,7 @@ export const NavigationMenu = React.memo<NavigationMenuProps>(
     items,
     orientation = "horizontal",
     closeDelay,
+    color = "primary",
     className,
     classNames,
     ref,
@@ -381,6 +394,7 @@ export const NavigationMenu = React.memo<NavigationMenuProps>(
         data-slot="root"
         className={cn(
           navigationMenuVariants({ orientation }),
+          colorVars[color],
           className,
           classNames?.root,
         )}
@@ -401,6 +415,7 @@ export const NavigationMenu = React.memo<NavigationMenuProps>(
               item={item}
               onOpenChange={handleOpenChange}
               isOpen={openItems.has(item.key)}
+              orientation={orientation}
               classNames={classNames}
               closeDelay={closeDelay}
             />

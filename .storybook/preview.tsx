@@ -2,15 +2,16 @@ import React, { useEffect } from "react";
 import { withThemeByClassName } from "@storybook/addon-themes";
 import type { Preview, Decorator } from "@storybook/react";
 
-// Base styles
+// Base styles — light/dark mode built-in via .dark class
 import "../src/styles/global.css";
-import "../src/styles/themes/light.css";
-import "../src/styles/themes/dark.css";
 
 // Theme presets (must be imported AFTER base styles for cascade priority)
 import "../src/styles/themes/presets/corporate.css";
 import "../src/styles/themes/presets/vibrant.css";
 import "../src/styles/themes/presets/minimal.css";
+import "../src/styles/themes/presets/warm.css";
+import "../src/styles/themes/presets/ocean.css";
+import "../src/styles/themes/presets/rose.css";
 
 // Swiper CSS for Carousel component
 import "swiper/css";
@@ -48,6 +49,9 @@ const preview: Preview = {
           { value: "corporate", title: "Corporate" },
           { value: "vibrant", title: "Vibrant" },
           { value: "minimal", title: "Minimal" },
+          { value: "warm", title: "Warm" },
+          { value: "ocean", title: "Ocean" },
+          { value: "rose", title: "Rose" },
         ],
         dynamicTitle: true,
       },

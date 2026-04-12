@@ -83,6 +83,7 @@ const Badge = React.memo<BadgeProps>(({
   content,
   className,
   wrapperClassName,
+  classNames,
   ref,
 }) => {
     const getDisplayCount = () => {
@@ -131,6 +132,7 @@ const Badge = React.memo<BadgeProps>(({
           processing && "animate-pulse",
           invisible && "opacity-0 scale-0",
           "z-10",
+          classNames?.root,
           className,
         )}
         style={{
@@ -142,10 +144,13 @@ const Badge = React.memo<BadgeProps>(({
           <>
             {icon && (
               <span
+                data-slot="icon"
                 className={cn(
+                  "badge_icon",
                   "inline-flex items-center justify-center shrink-0",
                   iconSizeClasses[size],
                   badgeContent && "mr-1",
+                  classNames?.icon,
                 )}
               >
                 {React.isValidElement(icon)
@@ -186,14 +191,14 @@ const Badge = React.memo<BadgeProps>(({
 
       if (count !== undefined && count === 0 && !showZero && !dot && !content) {
         return (
-          <span className={cn("relative inline-flex", wrapperClassName)}>
+          <span data-slot="wrapper" className={cn("badge_wrapper", "relative inline-flex", classNames?.wrapper, wrapperClassName)}>
             {children}
           </span>
         );
       }
 
       return (
-        <span className={cn("relative inline-flex", wrapperClassName)}>
+        <span data-slot="wrapper" className={cn("badge_wrapper", "relative inline-flex", classNames?.wrapper, wrapperClassName)}>
           {children}
           <span
             className={cn(
@@ -218,7 +223,7 @@ const Badge = React.memo<BadgeProps>(({
 
     if (dot && processing) {
       return (
-        <span className={cn("relative inline-flex", wrapperClassName)}>
+        <span data-slot="wrapper" className={cn("badge_wrapper", "relative inline-flex", classNames?.wrapper, wrapperClassName)}>
           {renderBadge(null)}
           {renderProcessingRing()}
         </span>

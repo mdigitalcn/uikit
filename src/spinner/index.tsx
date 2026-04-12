@@ -12,10 +12,10 @@ const spinnerVariants = cva(
   {
     variants: {
       size: {
-        xs: 'w-3 h-3 border',
-        sm: 'w-4 h-4 border',
-        md: 'w-6 h-6 border-2',
-        lg: 'w-8 h-8 border-2',
+        xs: 'w-(--spinner-size-xs) h-(--spinner-size-xs) border',
+        sm: 'w-(--spinner-size-sm) h-(--spinner-size-sm) border',
+        md: 'w-(--spinner-size-md) h-(--spinner-size-md) border-2',
+        lg: 'w-(--spinner-size-lg) h-(--spinner-size-lg) border-2',
       },
       color: colorVars,
     },
@@ -26,8 +26,8 @@ const spinnerVariants = cva(
   },
 )
 
-const dotSizes = { xs: 'w-1.5 h-1.5', sm: 'w-2 h-2', md: 'w-2.5 h-2.5', lg: 'w-3 h-3' } as const
-const pulseSizes = { xs: 'w-3 h-3', sm: 'w-4 h-4', md: 'w-6 h-6', lg: 'w-8 h-8' } as const
+const dotSizes = { xs: 'w-(--spinner-dot-size-xs) h-(--spinner-dot-size-xs)', sm: 'w-(--spinner-dot-size-sm) h-(--spinner-dot-size-sm)', md: 'w-(--spinner-dot-size-md) h-(--spinner-dot-size-md)', lg: 'w-(--spinner-dot-size-lg) h-(--spinner-dot-size-lg)' } as const
+const pulseSizes = { xs: 'w-(--spinner-size-xs) h-(--spinner-size-xs)', sm: 'w-(--spinner-size-sm) h-(--spinner-size-sm)', md: 'w-(--spinner-size-md) h-(--spinner-size-md)', lg: 'w-(--spinner-size-lg) h-(--spinner-size-lg)' } as const
 
 const Spinner = React.memo<SpinnerProps>(({ size = 'sm', color = 'primary', variant = 'ring', label, className }) => {
   if (variant === 'dots') {

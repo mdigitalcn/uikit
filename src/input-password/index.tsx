@@ -72,6 +72,7 @@ export const PasswordInput = React.memo<PasswordInputProps>(
       <Input
         {...props}
         size={size}
+        color={color}
         ref={ref}
         type={showPassword ? 'text' : 'password'}
         classNames={memoizedClassNames}

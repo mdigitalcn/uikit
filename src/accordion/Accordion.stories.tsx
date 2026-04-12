@@ -1,67 +1,33 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import {
-  Settings,
-  User,
-  Bell,
-  Shield,
-  ChevronRight,
-  Plus,
-  Minus,
-  HelpCircle,
-} from "lucide-react";
-import React, { useState, useCallback, useEffect } from "react";
+import { Bell, CreditCard, HelpCircle, Lock, Settings, Shield, User } from "lucide-react";
+import React from "react";
 import Accordion from "./index";
+import type { AccordionItem } from "./types";
 
 const meta: Meta<typeof Accordion> = {
-  title: "Data Display/Accordion",
+  title: "Layout/Accordion",
   component: Accordion,
   tags: ["autodocs"],
   argTypes: {
+    variant: {
+      control: "select",
+      options: ["default", "solid", "soft", "bordered", "splitted"],
+    },
     color: {
       control: "select",
-      options: [
-        "default",
-        "primary",
-        "secondary",
-        "accent",
-        "success",
-        "error",
-        "warning",
-        "info",
-      ],
-      description: "Theme color",
+      options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
     size: {
       control: "select",
       options: ["xs", "sm", "md", "lg"],
-      description: "Accordion size",
     },
-    variant: {
-      control: "select",
-      options: ["default", "solid", "soft", "bordered", "splitted"],
-      description: "Visual style variant",
-    },
-    multiple: {
-      control: "boolean",
-      description: "Allow multiple panels to be open simultaneously",
-    },
+    multiple: { control: "boolean" },
+    collapsible: { control: "boolean" },
+    destroyOnClose: { control: "boolean" },
+    showDivider: { control: "boolean" },
     expandIconPosition: {
       control: "select",
       options: ["left", "right"],
-      description: "Position of expand icon",
-    },
-    collapsible: {
-      control: "boolean",
-      description:
-        "Prevent all panels from closing (requires at least one open)",
-    },
-    destroyOnClose: {
-      control: "boolean",
-      description: "Unmount content when collapsed",
-    },
-    showDivider: {
-      control: "boolean",
-      description: "Show divider between items",
     },
   },
 };
@@ -69,360 +35,192 @@ const meta: Meta<typeof Accordion> = {
 export default meta;
 type Story = StoryObj<typeof Accordion>;
 
-const sampleItems = [
+const faqItems: AccordionItem[] = [
   {
     key: "1",
-    title: "What is your return policy?",
-    content:
-      "We offer a 30-day return policy on all items. Items must be in their original condition with tags attached. Please contact our support team to initiate a return.",
+    title: "What is included in the free plan?",
+    content: "The free plan includes up to 3 projects, 5 GB of storage, and access to core features. You can invite up to 2 collaborators per project. All projects are limited to 1,000 API calls per month.",
   },
   {
     key: "2",
-    title: "How long does shipping take?",
-    content:
-      "Standard shipping typically takes 5-7 business days. Express shipping options are available at checkout for 2-3 day delivery.",
+    title: "How do I upgrade my account?",
+    content: "You can upgrade your account at any time from the Billing section in your account settings. We accept all major credit cards and PayPal. Upgrades take effect immediately.",
   },
   {
     key: "3",
-    title: "Do you ship internationally?",
-    content:
-      "Yes, we ship to over 50 countries worldwide. International shipping costs and delivery times vary by destination.",
+    title: "Can I export my data?",
+    content: "Yes, you can export all your data in JSON or CSV format from the Settings page. Data exports include all projects, configurations, and usage history.",
+  },
+  {
+    key: "4",
+    title: "Is there a limit on API calls?",
+    content: "Free accounts are limited to 1,000 API calls per month. Pro accounts get 100,000 calls/month, and Enterprise accounts have unlimited calls. Contact us for custom limits.",
+    disabled: true,
   },
 ];
 
-// Basic Examples
-
-export const Default: Story = {
-  args: {
-    items: sampleItems,
-    color: "default",
-    size: "md",
-    variant: "default",
-  },
-};
-
-// Icon Features
-
-export const WithIcons: Story = {
-  args: {
-    items: [
-      {
-        key: "1",
-        title: "User Profile",
-        icon: <User className="w-5 h-5" />,
-        content: "Manage your profile settings and personal information.",
-      },
-      {
-        key: "2",
-        title: "Notifications",
-        icon: <Bell className="w-5 h-5" />,
-        content: "Configure your notification preferences.",
-      },
-      {
-        key: "3",
-        title: "Security",
-        icon: <Shield className="w-5 h-5" />,
-        content: "Update your password and security settings.",
-      },
-      {
-        key: "4",
-        title: "Settings",
-        icon: <Settings className="w-5 h-5" />,
-        content: "General application settings.",
-      },
-    ],
-    color: "primary",
-    variant: "bordered",
-  },
-};
-
-export const WithSubtitles: Story = {
-  args: {
-    items: [
-      {
-        key: "1",
-        title: "Basic Plan",
-        subtitle: "$9.99/month",
-        icon: <User className="w-5 h-5" />,
-        content:
-          "Perfect for individuals. Includes 10GB storage, email support, and basic features.",
-      },
-      {
-        key: "2",
-        title: "Pro Plan",
-        subtitle: "$29.99/month - Most Popular",
-        icon: <Shield className="w-5 h-5" />,
-        content:
-          "For professionals. Includes 100GB storage, priority support, and advanced features.",
-        extra: (
-          <span className="text-xs bg-primary text-white px-2 py-0.5 rounded-full">
-            Popular
-          </span>
-        ),
-      },
-      {
-        key: "3",
-        title: "Enterprise Plan",
-        subtitle: "Custom pricing",
-        icon: <Settings className="w-5 h-5" />,
-        content:
-          "For large teams. Unlimited storage, dedicated support, and custom integrations.",
-      },
-    ],
-    color: "primary",
-    variant: "splitted",
-  },
-};
-
-export const WithExtraContent: Story = {
-  args: {
-    items: [
-      {
-        key: "1",
-        title: "Account Settings",
-        extra: <span className="text-xs text-success">Active</span>,
-        content: "Manage your account preferences and settings.",
-      },
-      {
-        key: "2",
-        title: "Billing Information",
-        extra: <span className="text-xs text-warning">Action Required</span>,
-        content: "Update your payment methods and billing details.",
-      },
-      {
-        key: "3",
-        title: "API Access",
-        extra: <span className="text-xs text-text-secondary">Disabled</span>,
-        content: "Configure API keys and access tokens.",
-      },
-    ],
-    variant: "bordered",
-  },
-};
-
-// Behavior Options
-
-export const MultipleMode: Story = {
-  args: {
-    items: sampleItems,
-    multiple: true,
-    defaultActiveKey: ["1", "3"],
-    color: "primary",
-    variant: "splitted",
-  },
-};
-
-// Controlled Mode
-
-export const ControlledMode: Story = {
-  render: () => {
-    const [activeKey, setActiveKey] = useState<string | string[]>("1");
-
-    return (
-      <div className="space-y-4">
-        <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={() => setActiveKey("1")}
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
-          >
-            Open First
-          </button>
-          <button
-            onClick={() => setActiveKey("2")}
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
-          >
-            Open Second
-          </button>
-          <button
-            onClick={() => setActiveKey("3")}
-            className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
-          >
-            Open Third
-          </button>
-          <button
-            onClick={() => setActiveKey("")}
-            className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary/90"
-          >
-            Close All
-          </button>
+const settingsItems: AccordionItem[] = [
+  {
+    key: "profile",
+    icon: <User size={16} />,
+    title: "Profile Settings",
+    subtitle: "Manage your personal information",
+    content: (
+      <div className="space-y-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-text-secondary">Display Name</label>
+          <div className="h-8 bg-surface rounded border border-border px-3 flex items-center text-sm">Alex Johnson</div>
         </div>
-        <div className="text-sm text-text-secondary">
-          Current active key: <strong>{activeKey || "none"}</strong>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-text-secondary">Email</label>
+          <div className="h-8 bg-surface rounded border border-border px-3 flex items-center text-sm">alex@example.com</div>
         </div>
-        <Accordion
-          items={sampleItems}
-          activeKey={activeKey}
-          onChange={setActiveKey}
-          color="primary"
-          variant="bordered"
-        />
       </div>
-    );
+    ),
   },
-};
-
-
-// Real-World Examples
-
-export const FAQ: Story = {
-  render: () => (
-    <div className="max-w-3xl">
-      <div className="flex items-center gap-2 mb-4">
-        <HelpCircle className="w-6 h-6 text-primary" />
-        <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
-      </div>
-      <Accordion
-        items={[
-          {
-            key: "1",
-            title: "How do I reset my password?",
-            content:
-              'Click on the "Forgot Password" link on the login page. Enter your email address and we will send you instructions to reset your password.',
-          },
-          {
-            key: "2",
-            title: "Can I change my subscription plan?",
-            content:
-              "Yes, you can upgrade or downgrade your plan at any time from your account settings. Changes take effect at the start of your next billing cycle.",
-          },
-          {
-            key: "3",
-            title: "What payment methods do you accept?",
-            content:
-              "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for enterprise customers.",
-          },
-          {
-            key: "4",
-            title: "Is my data secure?",
-            content:
-              "Absolutely. We use industry-standard encryption to protect your data both in transit and at rest. Our infrastructure is regularly audited for security compliance.",
-          },
-          {
-            key: "5",
-            title: "Do you offer customer support?",
-            content:
-              "Yes! We offer 24/7 email support for all plans. Premium and Enterprise plans also include phone support and dedicated account managers.",
-          },
-        ]}
-        color="primary"
-        variant="soft"
-        expandIcon={(isExpanded) =>
-          isExpanded ? (
-            <Minus className="w-5 h-5" />
-          ) : (
-            <Plus className="w-5 h-5" />
-          )
-        }
-      />
-    </div>
-  ),
-};
-
-export const SettingsPanel: Story = {
-  render: () => (
-    <div className="max-w-2xl">
-      <h2 className="text-xl font-bold mb-4">Settings</h2>
-      <Accordion
-        items={[
-          {
-            key: "profile",
-            title: "Profile Settings",
-            subtitle: "Manage your public profile",
-            icon: <User className="w-5 h-5" />,
-            content: (
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <User className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <div className="font-semibold">John Doe</div>
-                    <div className="text-sm text-text-secondary">
-                      john.doe@example.com
-                    </div>
-                  </div>
-                </div>
-                <button className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
-                  Edit Profile
-                </button>
-              </div>
-            ),
-          },
-          {
-            key: "notifications",
-            title: "Notification Preferences",
-            subtitle: "Choose what updates you receive",
-            icon: <Bell className="w-5 h-5" />,
-            content: (
-              <div className="space-y-2">
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" className="rounded" defaultChecked />
-                  <span>Email notifications</span>
-                </label>
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" className="rounded" />
-                  <span>Push notifications</span>
-                </label>
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" className="rounded" defaultChecked />
-                  <span>Weekly digest</span>
-                </label>
-              </div>
-            ),
-          },
-          {
-            key: "security",
-            title: "Security & Privacy",
-            subtitle: "Protect your account",
-            icon: <Shield className="w-5 h-5" />,
-            extra: <span className="text-xs text-success">Secure</span>,
-            content: (
-              <div className="space-y-2">
-                <p className="text-sm">Two-factor authentication is enabled.</p>
-                <button className="text-primary hover:underline text-sm">
-                  Manage security settings
-                </button>
-              </div>
-            ),
-          },
-        ]}
-        color="primary"
-        variant="splitted"
-        defaultActiveKey="profile"
-      />
-    </div>
-  ),
-};
-
-// Color × Variant Matrix
-export const ColorVariantMatrix: Story = {
-  render: () => {
-    const colors = ['default', 'primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'] as const
-    const variants = ['default', 'solid', 'soft', 'bordered', 'splitted'] as const
-
-    return (
-      <div className="space-y-8">
-        {variants.map((v) => (
-          <div key={v}>
-            <h3 className="text-lg font-semibold mb-3 capitalize">{v}</h3>
-            <div className="space-y-2">
-              {colors.map((c) => (
-                <Accordion
-                  key={c}
-                  items={[
-                    { key: '1', title: `${c} ${v} - Item 1`, content: 'Content 1' },
-                    { key: '2', title: `${c} ${v} - Item 2`, content: 'Content 2' },
-                  ]}
-                  color={c}
-                  variant={v}
-                  size="md"
-                />
-              ))}
-            </div>
+  {
+    key: "notifications",
+    icon: <Bell size={16} />,
+    title: "Notifications",
+    subtitle: "Configure how you receive alerts",
+    extra: <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">3 new</span>,
+    content: (
+      <div className="space-y-2">
+        {["Email notifications", "Push notifications", "SMS alerts", "Weekly digest"].map((item) => (
+          <div key={item} className="flex items-center justify-between py-1">
+            <span className="text-sm">{item}</span>
+            <div className="w-8 h-4 bg-primary rounded-full" />
           </div>
         ))}
       </div>
-    )
+    ),
   },
+  {
+    key: "security",
+    icon: <Shield size={16} />,
+    title: "Security",
+    subtitle: "Two-factor auth and password",
+    content: (
+      <div className="space-y-2 text-sm text-text-secondary">
+        <p>Two-factor authentication is currently <strong className="text-success">enabled</strong>.</p>
+        <p>Last password change: 30 days ago.</p>
+      </div>
+    ),
+  },
+  {
+    key: "billing",
+    icon: <CreditCard size={16} />,
+    title: "Billing",
+    subtitle: "Subscription and payment methods",
+    content: (
+      <div className="text-sm text-text-secondary">
+        <p>Current plan: <strong className="text-text-primary">Pro — $29/month</strong></p>
+        <p className="mt-1">Next billing date: May 1, 2026</p>
+      </div>
+    ),
+  },
+];
+
+export const Playground: Story = {
+  args: {
+    variant: "default",
+    color: "default",
+    size: "md",
+    multiple: false,
+    collapsible: true,
+    showDivider: true,
+    expandIconPosition: "right",
+  },
+  render: (args) => (
+    <div className="max-w-xl">
+      <Accordion {...args} items={faqItems} defaultActiveKey="1" />
+    </div>
+  ),
 };
 
+export const Showcase: Story = {
+  render: () => (
+    <div className="space-y-10 p-6 max-w-2xl">
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Variants</h3>
+        <div className="space-y-6">
+          {(["default", "solid", "soft", "bordered", "splitted"] as const).map((variant) => (
+            <div key={variant}>
+              <p className="text-xs text-text-secondary mb-2">variant="{variant}"</p>
+              <Accordion
+                variant={variant}
+                color="primary"
+                items={faqItems.slice(0, 2)}
+                defaultActiveKey="1"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Colors — soft variant</h3>
+        <div className="space-y-4">
+          {(["primary", "secondary", "accent", "success"] as const).map((color) => (
+            <Accordion
+              key={color}
+              variant="soft"
+              color={color}
+              items={[{ key: "1", title: `color="${color}"`, content: `This accordion uses the ${color} color slot.` }]}
+              defaultActiveKey="1"
+            />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Icon + Subtitle + Extra</h3>
+        <Accordion items={settingsItems} variant="bordered" defaultActiveKey="profile" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Multiple Open + Icon Left</h3>
+        <Accordion
+          items={faqItems}
+          multiple
+          expandIconPosition="left"
+          variant="splitted"
+          color="primary"
+          defaultActiveKey={["1", "2"]}
+        />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Sizes</h3>
+        <div className="space-y-4">
+          {(["xs", "sm", "md", "lg"] as const).map((size) => (
+            <div key={size}>
+              <p className="text-xs text-text-secondary mb-1">size="{size}"</p>
+              <Accordion
+                size={size}
+                items={[{ key: "1", title: "Accordion item", content: "Content inside this accordion panel." }]}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">FAQ Example</h3>
+        <Accordion
+          items={[
+            { key: "1", icon: <HelpCircle size={16} />, title: "What is included in the free plan?", content: faqItems[0].content },
+            { key: "2", icon: <Lock size={16} />, title: "How secure is my data?", content: "All data is encrypted at rest using AES-256 and in transit using TLS 1.3. We are SOC 2 Type II certified." },
+            { key: "3", icon: <Settings size={16} />, title: "Can I customize the product?", content: "Yes, we offer extensive customization options via our API and SDK. Enterprise plans also include white-labeling." },
+          ]}
+          variant="default"
+          color="primary"
+          defaultActiveKey="1"
+          multiple
+        />
+      </section>
+
+    </div>
+  ),
+};

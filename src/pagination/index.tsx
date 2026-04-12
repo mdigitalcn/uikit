@@ -31,14 +31,14 @@ const paginationVariants = cva('inline-flex items-center gap-1', {
 })
 
 const paginationItemVariants = cva(
-  'inline-flex items-center justify-center rounded-md font-medium outline-none cursor-pointer border min-w-fit',
+  'inline-flex items-center justify-center [--_radius:var(--radius-button)] rounded-slot font-medium outline-none cursor-pointer border min-w-fit transition-colors focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background',
   {
     variants: {
       size: {
-        xs: 'h-6 min-w-6 px-1.5 text-xs',
-        sm: 'h-8 min-w-8 px-2 text-sm',
-        md: 'h-10 min-w-10 px-3 text-base',
-        lg: 'h-12 min-w-12 px-4 text-lg',
+        xs: 'h-(--button-height-xs) min-w-(--button-height-xs) px-(--button-padding-x-xs) text-xs',
+        sm: 'h-(--button-height-sm) min-w-(--button-height-sm) px-(--button-padding-x-sm) text-sm',
+        md: 'h-(--button-height-md) min-w-(--button-height-md) px-(--button-padding-x-md) text-base',
+        lg: 'h-(--button-height-lg) min-w-(--button-height-lg) px-(--button-padding-x-lg) text-lg',
       },
       disabled: {
         true: 'opacity-50 cursor-not-allowed',
@@ -184,7 +184,8 @@ const Pagination = React.memo<PaginationProps>(
 
     if (simple) {
       return (
-        <div
+        <nav
+          aria-label="Pagination"
           data-slot="root"
           className={cn(
             'pagination_root',
@@ -212,12 +213,13 @@ const Pagination = React.memo<PaginationProps>(
           >
             <ChevronRight className={iconSizes[size]} />
           </PaginationButton>
-        </div>
+        </nav>
       )
     }
 
     return (
-      <div
+      <nav
+        aria-label="Pagination"
         data-slot="root"
         className={cn(
           'pagination_root',
@@ -422,11 +424,12 @@ const Pagination = React.memo<PaginationProps>(
                 paginationItemVariants({ size, disabled }),
                 getInactiveStyles(color, variant),
                 'w-16 text-center',
+                disabled && 'pointer-events-none',
               )}
             />
           </div>
         )}
-      </div>
+      </nav>
     )
   },
 )

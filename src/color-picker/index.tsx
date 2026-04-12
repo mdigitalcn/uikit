@@ -6,6 +6,7 @@ import React from "react";
 import { useControllable } from "../hooks/useControllable";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 import { cn } from "../utils";
+import { colorVars } from "../variants";
 import type { ColorPickerProps, ColorInputProps } from "./types";
 
 // ── Color utilities ──────────────────────────────────────────
@@ -20,14 +21,14 @@ const sizeMap = {
 };
 
 const inputVariants = cva(
-  "flex items-center rounded-md border border-border bg-background text-text-primary transition-colors focus-within:border-primary",
+  "flex items-center [--_radius:var(--radius-input)] rounded-slot border border-border bg-background text-text-primary transition-colors hover:border-slot-50 focus-within:border-slot focus-within:ring-2 focus-within:ring-slot-30",
   {
     variants: {
       size: {
-        xs: "h-7 px-2 text-xs gap-1.5",
-        sm: "h-8 px-2.5 text-sm gap-2",
-        md: "h-9 px-3 text-sm gap-2",
-        lg: "h-10 px-3.5 text-base gap-2.5",
+        xs: "h-(--input-height-xs) px-(--input-padding-x-xs) text-xs gap-1.5",
+        sm: "h-(--input-height-sm) px-(--input-padding-x-sm) text-sm gap-2",
+        md: "h-(--input-height-md) px-(--input-padding-x-md) text-sm gap-2",
+        lg: "h-(--input-height-lg) px-(--input-padding-x-lg) text-base gap-2.5",
       },
     },
     defaultVariants: { size: "md" },
@@ -107,7 +108,7 @@ function SaturationArea({
       ref={ref}
       className={cn(
         "colorPicker_saturation",
-        "relative rounded-md cursor-crosshair select-none overflow-visible",
+        "relative [--_radius:var(--radius-input)] rounded-slot cursor-crosshair select-none overflow-visible",
         areaClass,
       )}
       style={{
@@ -121,15 +122,15 @@ function SaturationArea({
       onPointerCancel={handlePointerUp}
     >
       <div
-        className="absolute inset-0 rounded-md"
+        className="absolute inset-0 rounded-slot"
         style={{ background: "linear-gradient(to right, white, transparent)" }}
       />
       <div
-        className="absolute inset-0 rounded-md"
+        className="absolute inset-0 rounded-slot"
         style={{ background: "linear-gradient(to top, black, transparent)" }}
       />
       <div
-        className="absolute w-3.5 h-3.5 rounded-full border-2 border-white shadow-md pointer-events-none z-10"
+        className="absolute w-3.5 h-3.5 rounded-full border-2 border-white [--_shadow:var(--shadow-md)] shadow-size-slot pointer-events-none z-10"
         style={{
           left: `${sat * 100}%`,
           top: `${(1 - val) * 100}%`,
@@ -185,7 +186,7 @@ function HueSlider({
       onPointerCancel={handlePointerUp}
     >
       <div
-        className="absolute w-3.5 h-3.5 rounded-full border-2 border-white shadow-md pointer-events-none z-10"
+        className="absolute w-3.5 h-3.5 rounded-full border-2 border-white [--_shadow:var(--shadow-md)] shadow-size-slot pointer-events-none z-10"
         style={{
           left: `${(hue / 360) * 100}%`,
           top: "50%",
@@ -205,6 +206,7 @@ const ColorPicker = React.memo<ColorPickerProps>(
     onChange,
     swatches,
     size = "md",
+    color = "primary",
     disabled = false,
     label,
     className,
@@ -290,6 +292,7 @@ const ColorPicker = React.memo<ColorPickerProps>(
         className={cn(
           "colorPicker_root",
           "inline-flex flex-col gap-3",
+          colorVars[color],
           disabled && "opacity-50 pointer-events-none",
           classNames?.root,
           className,
@@ -321,7 +324,7 @@ const ColorPicker = React.memo<ColorPickerProps>(
             data-slot="preview"
             className={cn(
               "colorPicker_preview",
-              "w-8 h-8 rounded-md border border-border shrink-0",
+              "w-8 h-8 [--_radius:var(--radius-input)] rounded-slot border border-border shrink-0",
               classNames?.preview,
             )}
             style={{ backgroundColor: currentValue }}
@@ -334,7 +337,7 @@ const ColorPicker = React.memo<ColorPickerProps>(
             onKeyDown={(e) => e.key === "Enter" && handleInputBlur()}
             className={cn(
               "colorPicker_input",
-              "flex-1 min-w-0 bg-transparent border border-border rounded-md px-2 py-1 text-sm text-text-primary outline-none focus:border-primary font-mono",
+              "flex-1 min-w-0 bg-transparent border border-border [--_radius:var(--radius-input)] rounded-slot px-2 py-1 text-sm text-text-primary outline-none hover:border-slot-50 focus:border-slot font-mono",
               classNames?.input,
             )}
             disabled={disabled}
@@ -359,9 +362,9 @@ const ColorPicker = React.memo<ColorPickerProps>(
                 className={cn(
                   "colorPicker_swatch",
                   sizes.swatch,
-                  "rounded-md border border-border cursor-pointer transition-transform hover:scale-110",
+                  "[--_radius:var(--radius-input)] rounded-slot border border-border cursor-pointer transition-transform hover:scale-110",
                   currentValue === normalizeHex(swatch) &&
-                    "ring-2 ring-primary ring-offset-1 ring-offset-background",
+                    "ring-2 ring-slot ring-offset-1 ring-offset-background",
                   classNames?.swatch,
                 )}
                 style={{ backgroundColor: swatch }}
@@ -385,6 +388,7 @@ const ColorInput = React.memo<ColorInputProps>(
     onChange,
     swatches,
     size = "md",
+    color = "primary",
     disabled = false,
     label,
     fullWidth = true,
@@ -422,6 +426,7 @@ const ColorInput = React.memo<ColorInputProps>(
             <div
               className={cn(
                 inputVariants({ size }),
+                colorVars[color],
                 disabled && "opacity-50 cursor-not-allowed",
                 fullWidth && "w-full",
               )}

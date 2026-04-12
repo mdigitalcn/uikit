@@ -1,325 +1,166 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
-import Select from './index'
-import type { SelectOption } from './types'
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+
+import Select from "./index";
 
 const meta: Meta<typeof Select> = {
-  title: 'Data Entry/Select',
+  title: "Form/Select",
   component: Select,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
+    variant: {
+      control: "select",
+      options: ["outline", "filled"],
+    },
     size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Select size',
+      control: "select",
+      options: ["xs", "sm", "md", "lg"],
     },
-    placeholder: {
-      control: 'text',
-      description: 'Placeholder text',
+    color: {
+      control: "select",
+      options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    loading: {
-      control: 'boolean',
-      description: 'Loading state',
-    },
-    clearable: {
-      control: 'boolean',
-      description: 'Show clear button',
-    },
-    fullWidth: {
-      control: 'boolean',
-      description: 'Full width select',
-    },
-    required: {
-      control: 'boolean',
-      description: 'Required field',
+    label: { control: "text" },
+    placeholder: { control: "text" },
+    helperText: { control: "text" },
+    error: { control: "text" },
+    warning: { control: "text" },
+    info: { control: "text" },
+    success: { control: "text" },
+    clearable: { control: "boolean" },
+    fullWidth: { control: "boolean" },
+    disabled: { control: "boolean" },
+    loading: { control: "boolean" },
+    required: { control: "boolean" },
+    messagePosition: {
+      control: "select",
+      options: ["top", "bottom"],
     },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof Select>
+export default meta;
+type Story = StoryObj<typeof Select>;
 
-// Sample data sets
-const basicOptions: SelectOption[] = [
-  { value: 'apple', label: 'Apple' },
-  { value: 'banana', label: 'Banana' },
-  { value: 'orange', label: 'Orange' },
-  { value: 'grape', label: 'Grape' },
-  { value: 'mango', label: 'Mango' },
-]
+const frameworks = [
+  { label: "React", value: "react" },
+  { label: "Vue", value: "vue" },
+  { label: "Angular", value: "angular" },
+  { label: "Svelte", value: "svelte" },
+  { label: "Solid", value: "solid" },
+];
 
-const countryOptions: SelectOption[] = [
-  { value: 'us', label: 'United States' },
-  { value: 'uk', label: 'United Kingdom' },
-  { value: 'ca', label: 'Canada' },
-  { value: 'au', label: 'Australia' },
-  { value: 'de', label: 'Germany' },
-  { value: 'fr', label: 'France' },
-  { value: 'jp', label: 'Japan' },
-  { value: 'cn', label: 'China' },
-  { value: 'in', label: 'India' },
-  { value: 'br', label: 'Brazil' },
-]
+const countries = [
+  { label: "United States", value: "us" },
+  { label: "United Kingdom", value: "uk" },
+  { label: "Germany", value: "de" },
+  { label: "France", value: "fr" },
+  { label: "Japan", value: "jp" },
+  { label: "Australia", value: "au" },
+  { label: "Canada", value: "ca" },
+  { label: "Brazil", value: "br" },
+];
 
-const groupedOptions: SelectOption[] = [
-  { value: 'apple', label: 'Apple', group: 'Fruits' },
-  { value: 'banana', label: 'Banana', group: 'Fruits' },
-  { value: 'orange', label: 'Orange', group: 'Fruits' },
-  { value: 'carrot', label: 'Carrot', group: 'Vegetables' },
-  { value: 'broccoli', label: 'Broccoli', group: 'Vegetables' },
-  { value: 'spinach', label: 'Spinach', group: 'Vegetables' },
-  { value: 'chicken', label: 'Chicken', group: 'Protein' },
-  { value: 'beef', label: 'Beef', group: 'Protein' },
-  { value: 'fish', label: 'Fish', group: 'Protein' },
-]
+const groupedOptions = [
+  { label: "New York", value: "ny", group: "United States" },
+  { label: "Los Angeles", value: "la", group: "United States" },
+  { label: "Chicago", value: "chi", group: "United States" },
+  { label: "London", value: "lon", group: "United Kingdom" },
+  { label: "Manchester", value: "man", group: "United Kingdom" },
+  { label: "Berlin", value: "ber", group: "Germany" },
+  { label: "Munich", value: "mun", group: "Germany" },
+];
 
-const optionsWithDisabled: SelectOption[] = [
-  { value: 'option1', label: 'Available Option 1' },
-  { value: 'option2', label: 'Disabled Option', disabled: true },
-  { value: 'option3', label: 'Available Option 2' },
-  { value: 'option4', label: 'Another Disabled', disabled: true },
-  { value: 'option5', label: 'Available Option 3' },
-]
-
-// Generate large dataset for virtualization
-const largeOptions: SelectOption[] = Array.from({ length: 1000 }, (_, i) => ({
-  value: `item-${i}`,
-  label: `Item ${i + 1}`,
-}))
-
-export const Primary: Story = {
+export const Playground: Story = {
   args: {
-    placeholder: 'Select an option',
-    options: basicOptions,
-    size: 'md',
+    label: "Framework",
+    placeholder: "Select a framework",
+    options: frameworks,
+    variant: "outline",
+    size: "md",
+    color: "primary",
   },
-}
+};
 
-export const WithLabel: Story = {
+export const Showcase: Story = {
   render: () => (
-    <div className="flex flex-col gap-4">
-      <Select
-        label="Choose a fruit"
-        placeholder="Select fruit"
-        options={basicOptions}
-      />
-      <Select
-        label="Country"
-        placeholder="Select country"
-        options={countryOptions}
-        required
-      />
+    <div className="space-y-10 max-w-md">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Variants</h3>
+        <div className="space-y-3">
+          <Select variant="outline" label="Outline" placeholder="Select option" options={frameworks} />
+          <Select variant="filled" label="Filled" placeholder="Select option" options={frameworks} />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="space-y-3">
+          <Select size="xs" placeholder="Extra small" options={frameworks} />
+          <Select size="sm" placeholder="Small" options={frameworks} />
+          <Select size="md" placeholder="Medium" options={frameworks} />
+          <Select size="lg" placeholder="Large" options={frameworks} />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Validation States</h3>
+        <div className="space-y-3">
+          <Select label="Error" placeholder="Select option" options={frameworks} error="Please select a framework" />
+          <Select label="Warning" placeholder="Select option" options={frameworks} warning="This framework is deprecated" />
+          <Select label="Success" placeholder="Select option" options={frameworks} success="Great choice!" defaultValue="react" />
+          <Select label="Info" placeholder="Select option" options={frameworks} info="We support all major frameworks" />
+          <Select label="Helper text" placeholder="Select option" options={frameworks} helperText="Choose the framework for your project" />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">States</h3>
+        <div className="space-y-3">
+          <Select label="Disabled" placeholder="Select option" options={frameworks} disabled />
+          <Select label="Loading" placeholder="Loading options..." options={[]} loading />
+          <Select label="Clearable" placeholder="Select option" options={frameworks} clearable defaultValue="react" />
+          <Select label="Required" placeholder="Select option" options={frameworks} required />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Grouped Options</h3>
+        <Select label="City" placeholder="Select a city" options={groupedOptions} />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="space-y-3">
+          {(["primary", "secondary", "accent", "success"] as const).map((color) => (
+            <Select key={color} color={color} label={color} placeholder={`${color} focus color`} options={frameworks} />
+          ))}
+        </div>
+      </section>
     </div>
   ),
-}
+};
 
-export const WithSearch: Story = {
+export const WithGroups: Story = {
   render: () => (
-    <div className="flex flex-col gap-4">
+    <div className="max-w-sm">
       <Select
-        label="Search countries"
-        placeholder="Type to search..."
-        options={countryOptions}
-        helperText="Click and start typing to filter options"
-      />
-    </div>
-  ),
-}
-
-export const Clearable: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <Select
-        label="Clearable select"
-        placeholder="Select an option"
-        options={basicOptions}
-        defaultValue="banana"
-        clearable
-        helperText="Click the X icon to clear selection"
-      />
-    </div>
-  ),
-}
-
-export const GroupedOptions: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <Select
-        label="Food categories"
-        placeholder="Select food"
+        label="City"
+        placeholder="Select a city"
         options={groupedOptions}
-        helperText="Options are grouped by category"
+        helperText="Options are grouped by country"
       />
     </div>
   ),
-}
-
-export const WithDisabledOptions: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <Select
-        label="Select option"
-        placeholder="Some options are disabled"
-        options={optionsWithDisabled}
-        helperText="Try selecting the disabled options"
-      />
-    </div>
-  ),
-}
+};
 
 export const ValidationStates: Story = {
   render: () => (
-    <div className="flex flex-col gap-4">
-      <Select
-        label="Success state"
-        placeholder="Select option"
-        options={basicOptions}
-        defaultValue="apple"
-        success="Great choice!"
-      />
-      <Select
-        label="Error state"
-        placeholder="Select option"
-        options={basicOptions}
-        error="This field is required"
-      />
+    <div className="space-y-4 max-w-sm">
+      <Select label="Error state" placeholder="Select option" options={frameworks} error="This field is required" />
+      <Select label="Warning state" placeholder="Select option" options={frameworks} warning="Consider using React instead" defaultValue="angular" />
+      <Select label="Success state" placeholder="Select option" options={frameworks} success="Perfect choice!" defaultValue="react" />
+      <Select label="Info state" placeholder="Select option" options={countries} info="Select your country of residence" />
     </div>
   ),
-}
-
-export const KeyboardScrollDemo: Story = {
-  name: 'Keyboard Navigation (Scroll into View)',
-  render: () => {
-    const manyOptions: SelectOption[] = Array.from({ length: 30 }, (_, i) => ({
-      value: `option-${i + 1}`,
-      label: `Option ${i + 1}${i === 0 ? ' (start)' : i === 29 ? ' (end)' : ''}`,
-    }))
-
-    return (
-      <div className="flex flex-col gap-4 max-w-sm">
-        <p className="text-sm text-text-secondary">
-          Open the dropdown, then use <kbd className="px-1 py-0.5 bg-surface border border-border rounded text-xs">↑</kbd> <kbd className="px-1 py-0.5 bg-surface border border-border rounded text-xs">↓</kbd> arrow keys — the highlighted option scrolls into view.
-        </p>
-        <Select
-          label="30 Options"
-          placeholder="Open and press arrow keys"
-          options={manyOptions}
-        />
-      </div>
-    )
-  },
-}
-
-export const VirtualizedList: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <Select
-        label="Large dataset (1000 items)"
-        placeholder="Search through 1000 items"
-        options={largeOptions}
-        helperText="Uses virtualization for optimal performance"
-        virtualizeThreshold={50}
-      />
-    </div>
-  ),
-}
-
-export const ControlledExample: Story = {
-  render: function ControlledSelect() {
-    const [value, setValue] = useState('')
-
-    return (
-      <div className="flex flex-col gap-4">
-        <Select
-          label="Controlled select"
-          placeholder="Select an option"
-          options={basicOptions}
-          value={value}
-          onChange={setValue}
-          helperText="Current value is controlled by React state"
-        />
-        <div className="p-4 bg-surface rounded-md">
-          <p className="text-sm text-text-secondary">
-            Selected value: <span className="font-mono text-primary">{value || 'none'}</span>
-          </p>
-          <button
-            type="button"
-            onClick={() => setValue('orange')}
-            className="mt-2 px-3 py-1 bg-primary text-background rounded text-sm"
-          >
-            Set to Orange
-          </button>
-        </div>
-      </div>
-    )
-  },
-}
-
-export const ComplexExample: Story = {
-  render: function ComplexSelect() {
-    const [country, setCountry] = useState('')
-    const [food, setFood] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
-
-    const handleCountryChange = (value: string) => {
-      setCountry(value)
-      setIsLoading(true)
-      // Simulate API call
-      setTimeout(() => setIsLoading(false), 1000)
-    }
-
-    return (
-      <div className="flex flex-col gap-4 max-w-md">
-        <Select
-          label="Select your country"
-          placeholder="Choose country"
-          options={countryOptions}
-          value={country}
-          onChange={handleCountryChange}
-          clearable
-          required
-          helperText="Select your country of residence"
-        />
-        <Select
-          label="Favorite food"
-          placeholder="Choose food category"
-          options={groupedOptions}
-          value={food}
-          onChange={setFood}
-          clearable
-          loading={isLoading}
-          disabled={!country}
-          helperText={
-            !country
-              ? 'Please select a country first'
-              : isLoading
-                ? 'Loading food options...'
-                : 'Select your favorite food'
-          }
-          error={country && !food ? 'Please select a food option' : undefined}
-        />
-        {country && food && (
-          <div className="p-4 bg-surface rounded-md">
-            <h3 className="font-semibold text-text-primary mb-2">Selection Summary</h3>
-            <p className="text-sm text-text-secondary">
-              Country:{' '}
-              <span className="font-mono text-primary">
-                {countryOptions.find((o) => o.value === country)?.label}
-              </span>
-            </p>
-            <p className="text-sm text-text-secondary">
-              Food:{' '}
-              <span className="font-mono text-primary">
-                {groupedOptions.find((o) => o.value === food)?.label}
-              </span>
-            </p>
-          </div>
-        )}
-      </div>
-    )
-  },
-}
+};

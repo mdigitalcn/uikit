@@ -1,16 +1,21 @@
 'use client'
 
 import { cva } from 'class-variance-authority'
-import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react'
+import React, { useState, useRef, useCallback, useMemo, useEffect, useId } from 'react'
 
 import { useControllable } from '../hooks/useControllable'
-import { cn, statusMessageVariants } from '../utils'
+import { cn, getValidationStatus, statusMessageVariants } from '../utils'
+import { colorVars } from '../variants'
 import type { MentionOption, MentionsProps } from './types'
 
 const textareaVariants = cva(
-  'w-full rounded-md border bg-background text-text-primary placeholder:text-text-secondary/50 outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default',
+  'w-full [--_radius:var(--radius-input)] rounded-slot bg-background text-text-primary placeholder:text-text-secondary/50 outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default',
   {
     variants: {
+      variant: {
+        outline: 'border border-border hover:border-slot-50 focus:border-slot focus:ring-2 focus:ring-slot-30',
+        filled: 'border border-transparent bg-surface hover:border-slot-30 focus:border-slot focus:ring-2 focus:ring-slot-30',
+      },
       size: {
         xs: 'px-(--input-padding-x-xs) py-1.5 text-xs',
         sm: 'px-(--input-padding-x-sm) py-2 text-sm',
@@ -18,11 +23,14 @@ const textareaVariants = cva(
         lg: 'px-(--input-padding-x-lg) py-2.5 text-base',
       },
       status: {
-        default: 'border-border focus:border-primary',
-        error: 'border-error focus:border-error',
+        default: '',
+        error: 'border-error',
+        warning: 'border-warning',
+        info: 'border-info',
+        success: 'border-success',
       },
     },
-    defaultVariants: { size: 'md', status: 'default' },
+    defaultVariants: { variant: 'outline', size: 'md', status: 'default' },
   },
 )
 
@@ -64,6 +72,7 @@ const Mentions = React.memo<MentionsProps>(
     options = [],
     triggers = ['@'],
     loading = false,
+    variant = 'outline',
     size = 'md',
     color = 'primary',
     disabled = false,
@@ -72,11 +81,16 @@ const Mentions = React.memo<MentionsProps>(
     rows = 3,
     label,
     error,
+    warning,
+    info,
+    success,
     helperText,
     fullWidth = true,
     className,
     classNames,
   }) => {
+    const textareaId = useId()
+    const { status, message: statusMessage } = getValidationStatus({ error, warning, info, success, helperText })
     const [currentValue, setCurrentValue] = useControllable({ value, defaultValue: defaultValue ?? '', onChange })
     const [showDropdown, setShowDropdown] = useState(false)
     const [query, setQuery] = useState('')
@@ -180,18 +194,20 @@ const Mentions = React.memo<MentionsProps>(
           'mentions_root',
           'flex flex-col gap-1.5',
           fullWidth ? 'w-full' : 'inline-flex',
+          colorVars[status !== 'default' ? status : color],
           classNames?.root,
           className,
         )}
       >
         {label && (
-          <label data-slot="label" className="text-sm font-medium text-text-primary">
+          <label htmlFor={textareaId} data-slot="label" className="text-sm font-medium text-text-primary">
             {label}
           </label>
         )}
 
         <div className="relative">
           <textarea
+            id={textareaId}
             ref={textareaRef}
             value={currentValue}
             onChange={handleChange}
@@ -208,7 +224,7 @@ const Mentions = React.memo<MentionsProps>(
             data-slot="textarea"
             className={cn(
               'mentions_textarea',
-              textareaVariants({ size, status: error ? 'error' : 'default' }),
+              textareaVariants({ variant, size, status }),
               'resize-y',
               classNames?.textarea,
             )}
@@ -220,7 +236,7 @@ const Mentions = React.memo<MentionsProps>(
               role="listbox"
               className={cn(
                 'mentions_dropdown',
-                'absolute z-[var(--z-popover)] rounded-md border border-border bg-background shadow-md max-h-[200px] overflow-auto min-w-[180px]',
+                'absolute z-[var(--z-popover)] [--_radius:var(--radius-dropdown)] rounded-slot border border-border bg-background shadow-(--dropdown-shadow) max-h-(--dropdown-max-height) overflow-auto min-w-(--dropdown-min-width)',
                 classNames?.dropdown,
               )}
               style={{ top: dropdownPos.top, left: Math.min(dropdownPos.left, 200) }}
@@ -258,9 +274,9 @@ const Mentions = React.memo<MentionsProps>(
           )}
         </div>
 
-        {(error || helperText) && (
-          <p data-slot="message" className={cn('text-xs', error ? statusMessageVariants({ status: 'error' }) : 'text-text-secondary')}>
-            {error || helperText}
+        {statusMessage && (
+          <p data-slot="message" className={cn('text-xs', statusMessageVariants({ status }))}>
+            {typeof statusMessage === 'boolean' ? undefined : statusMessage}
           </p>
         )}
       </div>

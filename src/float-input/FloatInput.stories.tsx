@@ -1,239 +1,123 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { Search, Mail, Lock, User } from 'lucide-react'
-import { useState } from 'react'
-import FloatInput from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import { Mail, Lock, User, Search, Phone, Globe } from "lucide-react";
+import React from "react";
+import FloatInput from "./index";
 
 const meta: Meta<typeof FloatInput> = {
-  title: 'Data Entry/FloatInput',
+  title: "Data Entry/FloatInput",
   component: FloatInput,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Input size',
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    color: {
+      control: "select",
+      options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    loading: {
-      control: 'boolean',
-      description: 'Loading state',
-    },
-    clearable: {
-      control: 'boolean',
-      description: 'Show clear button',
-    },
-    fullWidth: {
-      control: 'boolean',
-      description: 'Full width input',
-    },
+    clearable: { control: "boolean" },
+    loading: { control: "boolean" },
+    disabled: { control: "boolean" },
+    fullWidth: { control: "boolean" },
+    messagePosition: { control: "select", options: ["top", "bottom"] },
+    label: { control: "text" },
+    error: { control: "text" },
+    warning: { control: "text" },
+    info: { control: "text" },
+    success: { control: "text" },
+    helperText: { control: "text" },
   },
-}
+};
+export default meta;
+type Story = StoryObj<typeof FloatInput>;
 
-export default meta
-type Story = StoryObj<typeof FloatInput>
-
-export const Primary: Story = {
+export const Playground: Story = {
   args: {
-    label: 'Email',
-    placeholder: ' ',
-    size: 'md',
+    label: "Email address",
+    size: "md",
+    color: "primary",
+    clearable: false,
+    loading: false,
+    disabled: false,
+    fullWidth: true,
   },
-}
+};
 
-export const WithValue: Story = {
+export const Showcase: Story = {
   render: () => (
-    <div className="flex flex-col gap-6">
-      <FloatInput label="SKU" defaultValue="12345342312" />
-      <FloatInput label="Product Name" defaultValue="Example Product" />
-      <FloatInput label="Email Address" defaultValue="user@example.com" type="email" />
+    <div className="space-y-10 p-6 max-w-md">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Sizes
+        </h3>
+        <div className="space-y-3">
+          {(["xs", "sm", "md", "lg"] as const).map((s) => (
+            <FloatInput key={s} size={s} label={`Size ${s}`} />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Colors
+        </h3>
+        <div className="space-y-3">
+          {(["primary", "secondary", "accent"] as const).map((c) => (
+            <FloatInput key={c} color={c} label={`${c.charAt(0).toUpperCase() + c.slice(1)} color`} />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          With Icons
+        </h3>
+        <div className="space-y-3">
+          <FloatInput label="Email" leftIcon={<Mail className="w-4 h-4" />} />
+          <FloatInput label="Password" leftIcon={<Lock className="w-4 h-4" />} type="password" />
+          <FloatInput label="Phone" leftIcon={<Phone className="w-4 h-4" />} type="tel" />
+          <FloatInput
+            label="Website"
+            leftIcon={<Globe className="w-4 h-4" />}
+            rightIcon={<User className="w-4 h-4" />}
+          />
+          <FloatInput label="Search" leftIcon={<Search className="w-4 h-4" />} clearable defaultValue="Clearable with icon" />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Validation States
+        </h3>
+        <div className="space-y-3">
+          <FloatInput label="Error field" error="This field is required." />
+          <FloatInput label="Warning field" warning="Double-check this value." />
+          <FloatInput label="Success field" success="Looks good!" defaultValue="valid@example.com" />
+          <FloatInput label="Info field" info="Must be at least 8 characters." />
+          <FloatInput label="Helper text" helperText="We will never share your email." />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Message Position
+        </h3>
+        <div className="space-y-3">
+          <FloatInput label="Message on top" error="Error above the input." messagePosition="top" />
+          <FloatInput label="Message on bottom" error="Error below the input." messagePosition="bottom" />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          States
+        </h3>
+        <div className="space-y-3">
+          <FloatInput label="Clearable" clearable defaultValue="Click X to clear me" />
+          <FloatInput label="Loading" loading />
+          <FloatInput label="Disabled" disabled defaultValue="Cannot edit this" />
+          <FloatInput label="Read only" readOnly defaultValue="Read only value" />
+          <FloatInput label="Required field" required />
+        </div>
+      </section>
     </div>
   ),
-}
-
-export const InteractiveDemo: Story = {
-  render: () => {
-    const [value, setValue] = useState('')
-    return (
-      <div className="flex flex-col gap-4 max-w-md">
-        <FloatInput
-          label="Type to see the label animate"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <p className="text-sm text-text-secondary">
-          Current value: {value || '(empty)'}
-        </p>
-      </div>
-    )
-  },
-}
-
-export const WithLeftIcons: Story = {
-  render: () => (
-    <div className="flex flex-col gap-6">
-      <FloatInput label="Search" leftIcon={<Search size={16} />} />
-      <FloatInput label="Email" leftIcon={<Mail size={16} />} type="email" />
-      <FloatInput label="Password" leftIcon={<Lock size={16} />} type="password" />
-      <FloatInput label="Username" leftIcon={<User size={16} />} />
-    </div>
-  ),
-}
-
-export const WithRightIcons: Story = {
-  render: () => (
-    <div className="flex flex-col gap-6">
-      <FloatInput label="Search" rightIcon={<Search size={16} />} />
-      <FloatInput label="Email" rightIcon={<Mail size={16} />} type="email" />
-      <FloatInput label="Username" rightIcon={<User size={16} />} />
-    </div>
-  ),
-}
-
-export const WithBothIcons: Story = {
-  render: () => (
-    <div className="flex flex-col gap-6">
-      <FloatInput label="Search" leftIcon={<Search size={16} />} rightIcon={<Mail size={16} />} />
-      <FloatInput label="Email" leftIcon={<Mail size={16} />} rightIcon={<Lock size={16} />} type="email" />
-    </div>
-  ),
-}
-
-export const IconSizes: Story = {
-  render: () => (
-    <div className="flex flex-col gap-6">
-      <FloatInput label="Extra Small" leftIcon={<Search size={12} />} rightIcon={<Mail size={12} />} size="xs" />
-      <FloatInput label="Small" leftIcon={<Search size={14} />} rightIcon={<Mail size={14} />} size="sm" />
-      <FloatInput label="Medium" leftIcon={<Search size={16} />} rightIcon={<Mail size={16} />} size="md" />
-      <FloatInput label="Large" leftIcon={<Search size={20} />} rightIcon={<Mail size={20} />} size="lg" />
-    </div>
-  ),
-}
-
-export const Clearable: Story = {
-  render: () => (
-    <div className="flex flex-col gap-6">
-      <FloatInput
-        label="SKU"
-        clearable
-        defaultValue="12345342312"
-      />
-      <FloatInput
-        label="Search"
-        leftIcon={<Search size={16} />}
-        clearable
-        defaultValue="Search term"
-      />
-    </div>
-  ),
-}
-
-export const ValidationStates: Story = {
-  render: () => (
-    <div className="flex flex-col gap-6">
-      <FloatInput
-        label="Success"
-        success="Input is valid!"
-        defaultValue="valid@email.com"
-        type="email"
-      />
-      <FloatInput
-        label="Error"
-        error="This field is required"
-      />
-      <FloatInput
-        label="Warning"
-        warning="This value might be incorrect"
-        defaultValue="suspicious value"
-      />
-      <FloatInput
-        label="Info"
-        info="Please use lowercase letters only"
-        defaultValue="UPPERCASE"
-      />
-    </div>
-  ),
-}
-
-export const ComplexExample: Story = {
-  render: () => (
-    <div className="flex flex-col gap-6 max-w-md">
-      <FloatInput
-        label="Email Address"
-        type="email"
-        leftIcon={<Mail size={16} />}
-        clearable
-        helperText="We'll send confirmation to this email"
-        required
-      />
-      <FloatInput
-        label="Password"
-        type="password"
-        leftIcon={<Lock size={16} />}
-        clearable
-        helperText="Must contain at least 8 characters"
-        required
-      />
-      <FloatInput
-        label="Product SKU"
-        clearable
-        defaultValue="12345342312"
-        helperText="Unique product identifier"
-      />
-    </div>
-  ),
-}
-
-export const FormExample: Story = {
-  render: () => {
-    const [formData, setFormData] = useState({
-      sku: '12345342312',
-      name: '',
-      email: '',
-      password: '',
-    })
-
-    const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData(prev => ({ ...prev, [field]: e.target.value }))
-    }
-
-    return (
-      <div className="flex flex-col gap-6 max-w-md">
-        <FloatInput
-          label="Product SKU"
-          value={formData.sku}
-          onChange={handleChange('sku')}
-          clearable
-          required
-        />
-        <FloatInput
-          label="Product Name"
-          value={formData.name}
-          onChange={handleChange('name')}
-          clearable
-          required
-        />
-        <FloatInput
-          label="Email Address"
-          type="email"
-          value={formData.email}
-          onChange={handleChange('email')}
-          leftIcon={<Mail size={16} />}
-          clearable
-          required
-        />
-        <FloatInput
-          label="Password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange('password')}
-          leftIcon={<Lock size={16} />}
-          clearable
-          required
-        />
-      </div>
-    )
-  },
-}
+};

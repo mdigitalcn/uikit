@@ -1,357 +1,234 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { AlignLeft, AlignCenter, AlignRight, AlignJustify, Bold, Italic, Underline, List, ListOrdered, Check } from 'lucide-react'
-import { useState } from 'react'
-import ToggleGroup from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
+  Bold,
+  Columns,
+  Grid3X3,
+  Italic,
+  LayoutGrid,
+  List,
+  Rows,
+  Underline,
+} from "lucide-react";
+import React, { useState } from "react";
+import ToggleGroup from "./index";
+import type { ToggleGroupOption } from "./types";
 
 const meta: Meta<typeof ToggleGroup> = {
-  title: 'Data Entry/ToggleGroup',
+  title: "Data Entry/ToggleGroup",
   component: ToggleGroup,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    color: {
-      control: 'select',
-      options: ['default', 'primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'],
-      description: 'Theme color',
-    },
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Toggle size',
-    },
-    variant: {
-      control: 'select',
-      options: ['default', 'solid', 'soft'],
-      description: 'Visual style variant',
-    },
-    multiple: {
-      control: 'boolean',
-      description: 'Allow multiple selections',
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    fullWidth: {
-      control: 'boolean',
-      description: 'Full width layout',
-    },
-    centered: {
-      control: 'boolean',
-      description: 'Center align content',
-    },
+    variant: { control: "select", options: ["default", "solid", "soft"] },
+    color: { control: "select", options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"] },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    orientation: { control: "select", options: ["horizontal", "vertical"] },
+    multiple: { control: "boolean" },
+    disabled: { control: "boolean" },
+    fullWidth: { control: "boolean" },
+    centered: { control: "boolean" },
   },
-}
+};
+export default meta;
+type Story = StoryObj<typeof ToggleGroup>;
 
-export default meta
-type Story = StoryObj<typeof ToggleGroup>
+const alignOptions: ToggleGroupOption[] = [
+  { label: "Left", value: "left", icon: <AlignLeft size={14} /> },
+  { label: "Center", value: "center", icon: <AlignCenter size={14} /> },
+  { label: "Right", value: "right", icon: <AlignRight size={14} /> },
+  { label: "Justify", value: "justify", icon: <AlignJustify size={14} /> },
+];
 
-const basicOptions = [
-  { label: 'Option 1', value: 'opt1' },
-  { label: 'Option 2', value: 'opt2' },
-  { label: 'Option 3', value: 'opt3' },
-]
+const formatOptions: ToggleGroupOption[] = [
+  { label: "Bold", value: "bold", icon: <Bold size={14} /> },
+  { label: "Italic", value: "italic", icon: <Italic size={14} /> },
+  { label: "Underline", value: "underline", icon: <Underline size={14} /> },
+];
 
-const alignmentOptions = [
-  { label: 'Left', value: 'left', icon: <AlignLeft size={16} /> },
-  { label: 'Center', value: 'center', icon: <AlignCenter size={16} /> },
-  { label: 'Right', value: 'right', icon: <AlignRight size={16} /> },
-  { label: 'Justify', value: 'justify', icon: <AlignJustify size={16} /> },
-]
+const viewOptions: ToggleGroupOption[] = [
+  { label: "List", value: "list", icon: <List size={14} /> },
+  { label: "Grid", value: "grid", icon: <Grid3X3 size={14} /> },
+  { label: "Columns", value: "columns", icon: <Columns size={14} /> },
+];
 
-const formattingOptions = [
-  { label: 'Bold', value: 'bold', icon: <Bold size={16} /> },
-  { label: 'Italic', value: 'italic', icon: <Italic size={16} /> },
-  { label: 'Underline', value: 'underline', icon: <Underline size={16} /> },
-]
+const layoutOptions: ToggleGroupOption[] = [
+  { label: "List", value: "list", icon: <Rows size={14} /> },
+  { label: "Grid", value: "grid", icon: <LayoutGrid size={14} /> },
+];
 
-const listOptions = [
-  { label: 'Bullet', value: 'bullet', icon: <List size={16} /> },
-  { label: 'Numbered', value: 'numbered', icon: <ListOrdered size={16} /> },
-]
+const textOnlyOptions: ToggleGroupOption[] = [
+  { label: "Daily", value: "daily" },
+  { label: "Weekly", value: "weekly" },
+  { label: "Monthly", value: "monthly" },
+  { label: "Yearly", value: "yearly" },
+];
 
-export const Primary: Story = {
+const withDisabled: ToggleGroupOption[] = [
+  { label: "Option A", value: "a" },
+  { label: "Option B", value: "b" },
+  { label: "Option C", value: "c", disabled: true },
+  { label: "Option D", value: "d", disabled: true },
+];
+
+export const Playground: Story = {
   args: {
-    options: basicOptions,
-    color: 'primary',
-    size: 'md',
-    variant: 'default',
+    options: alignOptions,
+    defaultValue: "left",
+    variant: "default",
+    color: "primary",
+    size: "md",
+    orientation: "horizontal",
+    multiple: false,
+    disabled: false,
   },
-}
+};
 
-export const SingleSelection: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold">Text Alignment (Single Selection)</h3>
-      <ToggleGroup
-        options={alignmentOptions}
-        defaultValue="left"
-        multiple={false}
-      />
-    </div>
-  ),
-}
-
-export const MultipleSelection: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold">Text Formatting (Multiple Selection)</h3>
-      <ToggleGroup
-        options={formattingOptions}
-        defaultValue={['bold']}
-        multiple={true}
-      />
-    </div>
-  ),
-}
-
-export const WithIcons: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold">Text Alignment</h3>
-      <ToggleGroup
-        options={alignmentOptions}
-        defaultValue="left"
-      />
-    </div>
-  ),
-}
-
-export const IconOnly: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold">Icon Only Toggles</h3>
-      <ToggleGroup
-        options={[
-          { value: 'left', icon: <AlignLeft size={16} /> },
-          { value: 'center', icon: <AlignCenter size={16} /> },
-          { value: 'right', icon: <AlignRight size={16} /> },
-          { value: 'justify', icon: <AlignJustify size={16} /> },
-        ]}
-        defaultValue="left"
-      />
-    </div>
-  ),
-}
-
-export const Disabled: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <div>
-        <h3 className="text-sm font-semibold mb-2">All Disabled</h3>
-        <ToggleGroup
-          options={alignmentOptions}
-          defaultValue="left"
-          disabled
-        />
-      </div>
-      <div>
-        <h3 className="text-sm font-semibold mb-2">Individual Items Disabled</h3>
-        <ToggleGroup
-          options={[
-            { label: 'Enabled', value: 'enabled' },
-            { label: 'Disabled', value: 'disabled', disabled: true },
-            { label: 'Enabled', value: 'enabled2' },
-            { label: 'Disabled', value: 'disabled2', disabled: true },
-          ]}
-          defaultValue="enabled"
-        />
-      </div>
-    </div>
-  ),
-}
-
-export const FullWidth: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold">Full Width Toggle Group</h3>
-      <ToggleGroup
-        options={basicOptions}
-        fullWidth
-        defaultValue="opt1"
-      />
-    </div>
-  ),
-}
-
-export const Controlled: Story = {
+export const Showcase: Story = {
   render: () => {
-    const [singleValue, setSingleValue] = useState('left')
-    const [multipleValue, setMultipleValue] = useState<string[]>(['bold'])
+    const [multiValue, setMultiValue] = useState<string | string[]>(["bold"]);
+    const [singleValue, setSingleValue] = useState<string | string[]>("weekly");
 
     return (
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-sm font-semibold mb-2">Single Selection (Controlled)</h3>
-          <ToggleGroup
-            options={alignmentOptions}
-            value={singleValue}
-            onChange={(value) => setSingleValue(value as string)}
-          />
-          <p className="text-sm text-text-secondary mt-2">Selected: {singleValue}</p>
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold mb-2">Multiple Selection (Controlled)</h3>
-          <ToggleGroup
-            options={formattingOptions}
-            value={multipleValue}
-            onChange={(value) => setMultipleValue(value as string[])}
-            multiple
-          />
-          <p className="text-sm text-text-secondary mt-2">
-            Selected: {multipleValue.length > 0 ? multipleValue.join(', ') : 'none'}
-          </p>
-        </div>
-      </div>
-    )
-  },
-}
+      <div className="space-y-10 p-6 max-w-3xl">
+        <section>
+          <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Variants</h3>
+          <div className="space-y-4">
+            {(["default", "solid", "soft"] as const).map((variant) => (
+              <div key={variant} className="flex items-center gap-4">
+                <span className="text-xs text-text-secondary w-16 capitalize">{variant}</span>
+                <ToggleGroup options={alignOptions} defaultValue="left" variant={variant} color="primary" />
+              </div>
+            ))}
+          </div>
+        </section>
 
-export const TextEditorExample: Story = {
-  render: () => {
-    const [alignment, setAlignment] = useState('left')
-    const [formatting, setFormatting] = useState<string[]>([])
+        <section>
+          <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Colors</h3>
+          <div className="space-y-4">
+            {(["default", "primary", "secondary", "accent", "success", "error", "warning", "info"] as const).map((color) => (
+              <div key={color} className="flex items-center gap-4">
+                <span className="text-xs text-text-secondary w-20 capitalize">{color}</span>
+                <ToggleGroup options={layoutOptions} defaultValue="list" color={color} />
+              </div>
+            ))}
+          </div>
+        </section>
 
-    return (
-      <div className="space-y-6 max-w-2xl">
-        <h3 className="text-lg font-semibold">Text Editor Toolbar</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="text-sm font-medium mb-2 block">Alignment</label>
+        <section>
+          <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Sizes</h3>
+          <div className="space-y-4">
+            {(["xs", "sm", "md", "lg"] as const).map((size) => (
+              <div key={size} className="flex items-center gap-4">
+                <span className="text-xs text-text-secondary w-8 uppercase">{size}</span>
+                <ToggleGroup options={alignOptions} defaultValue="left" size={size} color="primary" />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Multiple Selection</h3>
+          <div className="space-y-3">
             <ToggleGroup
-              options={alignmentOptions}
-              value={alignment}
-              onChange={(value) => setAlignment(value as string)}
+              options={formatOptions}
+              multiple
+              value={multiValue}
+              onChange={setMultiValue}
               color="primary"
             />
-          </div>
-          <div>
-            <label className="text-sm font-medium mb-2 block">Formatting</label>
-            <ToggleGroup
-              options={formattingOptions}
-              value={formatting}
-              onChange={(value) => setFormatting(value as string[])}
-              multiple
-              color="accent"
-            />
-          </div>
-          <div className="p-4 border border-border rounded-md bg-surface">
-            <p className="text-sm">
-              <strong>Alignment:</strong> {alignment}
-            </p>
-            <p className="text-sm">
-              <strong>Formatting:</strong> {formatting.length > 0 ? formatting.join(', ') : 'none'}
+            <p className="text-xs text-text-secondary">
+              Selected: {Array.isArray(multiValue) ? multiValue.join(", ") || "none" : multiValue}
             </p>
           </div>
-        </div>
-      </div>
-    )
-  },
-}
+        </section>
 
-export const ViewModeExample: Story = {
-  render: () => {
-    const [viewMode, setViewMode] = useState('grid')
+        <section>
+          <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Text Only</h3>
+          <ToggleGroup
+            options={textOnlyOptions}
+            value={singleValue}
+            onChange={setSingleValue}
+            color="primary"
+          />
+        </section>
 
-    const viewOptions = [
-      { label: 'List', value: 'list' },
-      { label: 'Grid', value: 'grid' },
-      { label: 'Table', value: 'table' },
-    ]
-
-    return (
-      <div className="space-y-4 max-w-md">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold">View Mode</h3>
+        <section>
+          <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Vertical Orientation</h3>
           <ToggleGroup
             options={viewOptions}
-            value={viewMode}
-            onChange={(value) => setViewMode(value as string)}
+            defaultValue="list"
+            orientation="vertical"
             color="primary"
-            size="sm"
           />
-        </div>
-        <div className="p-6 border border-border rounded-md bg-surface text-center">
-          <p className="text-text-secondary">Current view: <strong>{viewMode}</strong></p>
-        </div>
+        </section>
+
+        <section>
+          <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Full Width</h3>
+          <ToggleGroup
+            options={textOnlyOptions}
+            defaultValue="daily"
+            fullWidth
+            color="primary"
+          />
+        </section>
+
+        <section>
+          <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">States</h3>
+          <div className="space-y-4">
+            <div>
+              <p className="text-xs text-text-secondary mb-2">Disabled (entire group)</p>
+              <ToggleGroup options={alignOptions} defaultValue="left" disabled color="primary" />
+            </div>
+            <div>
+              <p className="text-xs text-text-secondary mb-2">Partially disabled options</p>
+              <ToggleGroup options={withDisabled} defaultValue="a" color="primary" />
+            </div>
+          </div>
+        </section>
       </div>
-    )
+    );
   },
-}
+};
 
-export const FilterExample: Story = {
+export const MultipleSelection: Story = {
   render: () => {
-    const [statusFilters, setStatusFilters] = useState<string[]>(['active'])
-
-    const statusOptions = [
-      { label: 'All', value: 'all' },
-      { label: 'Active', value: 'active' },
-      { label: 'Pending', value: 'pending' },
-      { label: 'Completed', value: 'completed' },
-    ]
-
+    const [value, setValue] = useState<string | string[]>(["bold", "italic"]);
     return (
-      <div className="space-y-4 max-w-2xl">
-        <h3 className="text-lg font-semibold">Status Filters</h3>
+      <div className="p-4 space-y-3">
         <ToggleGroup
-          options={statusOptions}
-          value={statusFilters}
-          onChange={(value) => setStatusFilters(value as string[])}
+          options={formatOptions}
           multiple
-          color="info"
-          variant="soft"
+          value={value}
+          onChange={setValue}
+          color="primary"
+          aria-label="Text formatting"
         />
-        <div className="p-4 border border-border rounded-md bg-surface">
-          <p className="text-sm">
-            <strong>Active filters:</strong> {statusFilters.length > 0 ? statusFilters.join(', ') : 'none'}
-          </p>
-        </div>
+        <p className="text-xs text-text-secondary">
+          Active: {Array.isArray(value) ? value.join(", ") || "none" : value}
+        </p>
       </div>
-    )
+    );
   },
-}
+};
 
-export const ColorSizeMatrix: Story = {
-  render: () => {
-    const colors = ['default', 'primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'] as const
-    const sizes = ['xs', 'sm', 'md', 'lg'] as const
-
-    return (
-      <div className="space-y-6">
-        <div className="overflow-x-auto">
-          <table className="border-collapse">
-            <thead>
-              <tr>
-                <th className="p-2 text-left text-sm text-gray-500">Color \ Size</th>
-                {sizes.map(size => (
-                  <th key={size} className="p-2 text-center text-sm text-gray-500">{size}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {colors.map(color => (
-                <tr key={color}>
-                  <td className="p-2 text-sm font-medium">{color}</td>
-                  {sizes.map(size => (
-                    <td key={size} className="p-2">
-                      <ToggleGroup
-                        options={[
-                          { label: 'A', value: 'a' },
-                          { label: 'B', value: 'b' },
-                          { label: 'C', value: 'c' },
-                        ]}
-                        color={color}
-                        size={size}
-                        defaultValue="b"
-                      />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    )
+export const VerticalOrientation: Story = {
+  args: {
+    options: viewOptions,
+    defaultValue: "list",
+    orientation: "vertical",
+    color: "primary",
+    variant: "default",
   },
-}
+};
 
+export const Disabled: Story = {
+  args: {
+    options: alignOptions,
+    defaultValue: "left",
+    disabled: true,
+    color: "primary",
+  },
+};

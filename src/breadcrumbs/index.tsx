@@ -10,6 +10,7 @@ import { cn, iconSizes } from '../utils'
 import { colorVars } from '../variants'
 import type {
   BreadcrumbEllipsisProps,
+  BreadcrumbItemData,
   BreadcrumbItemProps,
   BreadcrumbLinkProps,
   BreadcrumbListProps,
@@ -31,6 +32,7 @@ interface BreadcrumbContextValue {
     link?: string
     separator?: string
     current?: string
+    ellipsis?: string
   }
 }
 
@@ -50,16 +52,52 @@ const breadcrumbVariants = cva('', {
   },
 })
 
+/**
+ * Collapse middle items when maxItems is set.
+ * Always keeps first `itemsBefore` and last `itemsAfter` items,
+ * replaces middle with an ellipsis carrying collapsed items in dropdown.
+ */
+function collapseItems(
+  items: BreadcrumbItemData[],
+  maxItems: number,
+): BreadcrumbItemData[] {
+  if (items.length <= maxItems) return items
+
+  const itemsBefore = 1
+  const itemsAfter = maxItems - itemsBefore - 1 // -1 for the ellipsis itself
+
+  const before = items.slice(0, itemsBefore)
+  const after = items.slice(items.length - Math.max(itemsAfter, 1))
+  const collapsed = items.slice(itemsBefore, items.length - Math.max(itemsAfter, 1))
+
+  const ellipsisItem: BreadcrumbItemData = {
+    label: '...',
+    ellipsis: true,
+    ellipsisItems: collapsed.map((item) => ({
+      label: item.label,
+      href: item.href,
+      onClick: item.onClick,
+    })),
+  }
+
+  return [...before, ellipsisItem, ...after]
+}
+
 const Breadcrumb = React.memo<BreadcrumbProps>(
   ({
     children,
-    items,
+    items: rawItems,
     color = 'default',
     size = 'md',
     separator,
+    maxItems,
     className,
     classNames,
   }) => {
+    const items = rawItems?.length
+      ? maxItems ? collapseItems(rawItems, maxItems) : rawItems
+      : undefined
+
     const content = items?.length ? (
       <BreadcrumbList>
         {items.map((item, index) => {
@@ -75,8 +113,8 @@ const Breadcrumb = React.memo<BreadcrumbProps>(
                   />
                 ) : isLast ? (
                   <BreadcrumbPage
-                    leftIcon={item.leftIcon}
-                    rightIcon={item.rightIcon}
+                    startSection={item.startSection}
+                    endSection={item.endSection}
                   >
                     {item.label}
                   </BreadcrumbPage>
@@ -84,8 +122,8 @@ const Breadcrumb = React.memo<BreadcrumbProps>(
                   <BreadcrumbLink
                     href={item.href || ''}
                     onClick={item.onClick}
-                    leftIcon={item.leftIcon}
-                    rightIcon={item.rightIcon}
+                    startSection={item.startSection}
+                    endSection={item.endSection}
                   >
                     {item.label}
                   </BreadcrumbLink>
@@ -133,6 +171,7 @@ export const BreadcrumbList = React.memo<BreadcrumbListProps>(
 
     return (
       <ol
+        data-slot="list"
         className={cn(
           'breadcrumbs_list',
           'flex items-center gap-1.5',
@@ -154,6 +193,7 @@ export const BreadcrumbItem = React.memo<BreadcrumbItemProps>(
 
     return (
       <li
+        data-slot="item"
         className={cn(
           'breadcrumbs_item',
           'inline-flex items-center gap-1.5',
@@ -170,7 +210,7 @@ export const BreadcrumbItem = React.memo<BreadcrumbItemProps>(
 BreadcrumbItem.displayName = 'BreadcrumbItem'
 
 export const BreadcrumbLink = React.memo<BreadcrumbLinkProps>(
-  ({ children, href, onClick, leftIcon, rightIcon, className }) => {
+  ({ children, href, onClick, startSection, endSection, className }) => {
     const { classNames } = React.useContext(BreadcrumbContext)
 
     const handleClick = (e: React.MouseEvent) => {
@@ -182,19 +222,20 @@ export const BreadcrumbLink = React.memo<BreadcrumbLinkProps>(
 
     const content = (
       <>
-        {leftIcon && (
-          <span className="inline-flex items-center">{leftIcon}</span>
+        {startSection && (
+          <span className="inline-flex items-center">{startSection}</span>
         )}
         {children}
-        {rightIcon && (
-          <span className="inline-flex items-center">{rightIcon}</span>
+        {endSection && (
+          <span className="inline-flex items-center">{endSection}</span>
         )}
       </>
     )
 
     const linkClasses = cn(
       'breadcrumbs_link',
-      'inline-flex items-center gap-1.5 transition-colors hover:underline cursor-pointer',
+      'inline-flex items-center gap-1.5 transition-colors hover:underline cursor-pointer rounded-sm',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background',
       classNames?.link,
       className,
     )
@@ -204,6 +245,7 @@ export const BreadcrumbLink = React.memo<BreadcrumbLinkProps>(
         <a
           href={href}
           onClick={handleClick}
+          data-slot="link"
           className={linkClasses}
         >
           {content}
@@ -216,6 +258,7 @@ export const BreadcrumbLink = React.memo<BreadcrumbLinkProps>(
         <button
           type="button"
           onClick={handleClick}
+          data-slot="link"
           className={linkClasses}
         >
           {content}
@@ -225,6 +268,7 @@ export const BreadcrumbLink = React.memo<BreadcrumbLinkProps>(
 
     return (
       <span
+        data-slot="link"
         className={cn(
           'breadcrumbs_link',
           'inline-flex items-center gap-1.5',
@@ -241,12 +285,13 @@ export const BreadcrumbLink = React.memo<BreadcrumbLinkProps>(
 BreadcrumbLink.displayName = 'BreadcrumbLink'
 
 export const BreadcrumbPage = React.memo<BreadcrumbPageProps>(
-  ({ children, leftIcon, rightIcon, className }) => {
+  ({ children, startSection, endSection, className }) => {
     const { classNames } = React.useContext(BreadcrumbContext)
 
     return (
       <span
         aria-current="page"
+        data-slot="current"
         className={cn(
           'breadcrumbs_current',
           'inline-flex items-center gap-1.5 font-medium',
@@ -254,12 +299,12 @@ export const BreadcrumbPage = React.memo<BreadcrumbPageProps>(
           className,
         )}
       >
-        {leftIcon && (
-          <span className="inline-flex items-center">{leftIcon}</span>
+        {startSection && (
+          <span className="inline-flex items-center">{startSection}</span>
         )}
         {children}
-        {rightIcon && (
-          <span className="inline-flex items-center">{rightIcon}</span>
+        {endSection && (
+          <span className="inline-flex items-center">{endSection}</span>
         )}
       </span>
     )
@@ -275,6 +320,7 @@ export const BreadcrumbSeparator = React.memo<BreadcrumbSeparatorProps>(
     return (
       <span
         aria-hidden="true"
+        data-slot="separator"
         className={cn(
           'breadcrumbs_separator',
           'text-text-secondary',
@@ -295,35 +341,31 @@ BreadcrumbSeparator.displayName = 'BreadcrumbSeparator'
  * Only allows relative URLs or same-origin URLs
  */
 const isValidNavigationUrl = (href: string): boolean => {
-  // Allow relative URLs starting with / or #
   if (href.startsWith('/') || href.startsWith('#') || href.startsWith('?')) {
     return true
   }
 
-  // Block javascript: and other dangerous protocols
   const dangerousProtocols = ['javascript:', 'data:', 'vbscript:']
   const lowerHref = href.toLowerCase()
   if (dangerousProtocols.some(protocol => lowerHref.startsWith(protocol))) {
     return false
   }
 
-  // For absolute URLs, verify same origin
   if (typeof window !== 'undefined') {
     try {
       const url = new URL(href, window.location.origin)
       return url.origin === window.location.origin
     } catch {
-      // If URL parsing fails, allow it (likely a relative URL)
       return true
     }
   }
 
-  // SSR fallback - allow relative-looking URLs
   return true
 }
 
 export const BreadcrumbEllipsis = React.memo<BreadcrumbEllipsisProps>(
   ({ orientation = 'horizontal', items, children, className, size = 'md' }) => {
+    const { classNames } = React.useContext(BreadcrumbContext)
     const Icon = orientation === 'horizontal' ? MoreHorizontal : MoreVertical
     const isInteractive = !!(items?.length || children)
 
@@ -337,9 +379,12 @@ export const BreadcrumbEllipsis = React.memo<BreadcrumbEllipsisProps>(
         {...(!isInteractive && {
           'aria-hidden': true,
         })}
+        data-slot="ellipsis"
         className={cn(
+          'breadcrumbs_ellipsis',
           'flex items-center justify-center',
           isInteractive && 'cursor-pointer',
+          classNames?.ellipsis,
           className,
         )}
       >
@@ -348,7 +393,6 @@ export const BreadcrumbEllipsis = React.memo<BreadcrumbEllipsisProps>(
       </span>
     )
 
-    // If items or children are provided, wrap in Dropdown
     if (items || children) {
       const dropdownItems = (items || []).map((item) => ({
         label: item.label || '',
@@ -356,7 +400,6 @@ export const BreadcrumbEllipsis = React.memo<BreadcrumbEllipsisProps>(
         onClick:
           item.onClick ||
           (() => {
-            // Validate URL before navigation to prevent open redirect
             if (item.href && isValidNavigationUrl(item.href)) {
               window.location.href = item.href
             }

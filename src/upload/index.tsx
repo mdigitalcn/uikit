@@ -19,6 +19,7 @@ import {
   iconSizes,
   statusMessageVariants,
 } from '../utils'
+import { colorVars } from '../variants'
 import type { UploadFile, UploadProps } from './types'
 import {
   formatFileSize,
@@ -325,7 +326,7 @@ const Upload = React.memo<UploadProps>(
                 data-slot="upload_fileItem"
                 className={cn(
                   'upload_fileItem',
-                  'relative w-24 h-24 rounded-md border border-border overflow-hidden group',
+                  'relative w-24 h-24 [--_radius:var(--radius-input)] rounded-slot border border-border overflow-hidden group',
                   classNames?.fileItem,
                 )}
               >
@@ -404,7 +405,7 @@ const Upload = React.memo<UploadProps>(
               <div className="flex items-center gap-2">
                 {file.status === 'uploading' && (
                   <Loader2
-                    className={cn('text-primary animate-spin', iconSizes[size])}
+                    className={cn('text-slot animate-spin', iconSizes[size])}
                   />
                 )}
                 {file.status === 'done' && (
@@ -490,7 +491,7 @@ const Upload = React.memo<UploadProps>(
               className={cn(
                 'upload_dropzone',
                 uploadDropzoneVariants({ status: dragStatus, size }),
-                'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none',
+                'focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 outline-none',
                 classNames?.dropzone,
                 className,
               )}
@@ -550,14 +551,14 @@ const Upload = React.memo<UploadProps>(
               className={cn(
                 'upload_dropzone',
                 uploadDraggerVariants({ status: dragStatus, size }),
-                'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none',
+                'focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 outline-none',
                 classNames?.dropzone,
                 className,
               )}
             >
               <UploadIcon
                 data-slot="upload_icon"
-                className={cn('upload_icon', 'w-10 h-10 text-primary', classNames?.icon)}
+                className={cn('upload_icon', 'w-10 h-10 text-slot', classNames?.icon)}
               />
               <p
                 data-slot="upload_text"
@@ -601,7 +602,7 @@ const Upload = React.memo<UploadProps>(
               className={cn(
                 'upload_dropzone',
                 uploadAvatarVariants({ status: dragStatus, size }),
-                'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none',
+                'focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 outline-none',
                 classNames?.dropzone,
                 className,
               )}
@@ -642,7 +643,7 @@ const Upload = React.memo<UploadProps>(
               className={cn(
                 'upload_dropzone',
                 uploadPictureVariants({ status: dragStatus, size }),
-                'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none',
+                'focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 outline-none',
                 classNames?.dropzone,
                 className,
               )}
@@ -676,7 +677,7 @@ const Upload = React.memo<UploadProps>(
         ref={ref}
         data-slot="upload_root"
         aria-busy={fileList?.some(f => f.status === 'uploading') || undefined}
-        className={cn('upload_root', 'w-full', classNames?.root)}
+        className={cn('upload_root', 'w-full', colorVars[color], classNames?.root)}
       >
         <input
           ref={inputRef}

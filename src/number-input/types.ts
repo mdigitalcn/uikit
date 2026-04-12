@@ -6,6 +6,8 @@ export interface NumberInputClassNames extends CreateClassNames<
   'root' | 'wrapper' | 'input' | 'label' | 'helper' | 'error' | 'increment' | 'decrement' | 'controls'
 > {}
 
+export type NumberInputVariant = 'outline' | 'filled'
+
 export interface NumberInputProps extends ValidationMessages {
   value?: number
   defaultValue?: number
@@ -14,7 +16,11 @@ export interface NumberInputProps extends ValidationMessages {
   max?: number
   step?: number
   precision?: number
+  /** @default 'outline' */
+  variant?: NumberInputVariant
   size?: NumberInputSize
+  /** @default 'bottom' */
+  messagePosition?: 'top' | 'bottom'
   /** Color for focus ring and active border
    * @default 'primary'
    */

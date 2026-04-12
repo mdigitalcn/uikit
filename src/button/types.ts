@@ -14,9 +14,8 @@ export type ButtonShape = "rounded" | "pill" | "square";
 
 export interface ButtonClassNames {
   root?: string;
-  icon?: string;
-  leftIcon?: string;
-  rightIcon?: string;
+  startSection?: string;
+  endSection?: string;
   spinner?: string;
   ripple?: string;
 }
@@ -44,56 +43,55 @@ export interface ButtonProps
    */
   shape?: ButtonShape;
   /**
-   * Whether button is in loading state
+   * Whether button is in loading state.
+   * Shows a spinner in the start section position and disables interactions.
    * @default false
    */
   loading?: boolean;
   /**
-   * Text to display while loading (replaces children)
+   * Text to display while loading (replaces children).
+   * When omitted, children remain visible alongside the spinner.
    */
   loadingText?: string;
   /**
-   * Position of loading spinner when loadingText is provided
-   * @default 'left'
+   * Content rendered before the label (icon, badge, avatar, etc.).
+   * Replaced by a spinner when `loading` is true.
+   *
+   * @example
+   * ```tsx
+   * <Button startSection={<Mail size={16} />}>Send</Button>
+   * ```
    */
-  loadingPosition?: "left" | "right";
+  startSection?: React.ReactNode;
   /**
-   * Icon element (use with iconPlacement for position control)
-   * When both icon and leftIcon/rightIcon are provided, leftIcon/rightIcon take precedence
+   * Content rendered after the label (icon, arrow, badge, etc.).
+   *
+   * @example
+   * ```tsx
+   * <Button endSection={<ArrowRight size={16} />}>Next</Button>
+   * ```
    */
-  icon?: React.ReactNode;
-  /**
-   * Position of the icon prop
-   * @default 'left'
-   */
-  iconPlacement?: "left" | "right";
-  /**
-   * Icon to display on the left side (takes precedence over icon + iconPlacement)
-   */
-  leftIcon?: React.ReactNode;
-  /**
-   * Icon to display on the right side (takes precedence over icon + iconPlacement)
-   */
-  rightIcon?: React.ReactNode;
+  endSection?: React.ReactNode;
   /**
    * Whether button takes full width of container
    * @default false
    */
   fullWidth?: boolean;
   /**
-   * Whether this is an icon-only button (square aspect ratio)
+   * Whether this is an icon-only button (square aspect ratio, no label).
+   * When true, ensure you provide `aria-label` or `aria-labelledby`.
    * @default false
    */
-  iconOnly?: boolean;
+  isIconOnly?: boolean;
   /**
    * Render as child element (polymorphic). When true, button styles are
-   * merged onto the single child element (e.g. <a>, <Link>).
+   * merged onto the single child element (e.g. `<a>`, `<Link>`).
    * @default false
    */
   asChild?: boolean;
   /**
    * Toggle/pressed state for toggle buttons. When provided, renders
-   * aria-pressed and a visual pressed indicator.
+   * `aria-pressed` and a visual pressed indicator.
    */
   pressed?: boolean;
   /**

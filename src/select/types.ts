@@ -21,10 +21,16 @@ export interface SelectOption extends BaseOption {
   group?: string
 }
 
+export type SelectVariant = 'outline' | 'filled'
+
 export interface SelectProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'size' | 'onChange'>,
     ValidationMessages {
+  /** @default 'outline' */
+  variant?: SelectVariant
   size?: SelectSize
+  /** @default 'bottom' */
+  messagePosition?: 'top' | 'bottom'
   /** Color for focus ring, selected option, and active border
    * @default 'primary'
    */

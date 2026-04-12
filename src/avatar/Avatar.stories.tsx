@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { User, Building2, Camera, Bell, Star } from "lucide-react";
+import { Bell, Shield, Star } from "lucide-react";
+import React from "react";
+
 import { Avatar, AvatarGroup } from "./index";
 
 const meta: Meta<typeof Avatar> = {
@@ -7,224 +9,199 @@ const meta: Meta<typeof Avatar> = {
   component: Avatar,
   tags: ["autodocs"],
   argTypes: {
-    src: {
-      control: "text",
-      description: "Image source URL",
-    },
-    alt: {
-      control: "text",
-      description: "Alternative text for the image",
-    },
-    fallback: {
-      control: "text",
-      description: "Fallback text (initials) when image fails to load",
-    },
-    name: {
-      control: "text",
-      description: "User name - auto-generates initials",
-    },
+    src: { control: "text" },
+    alt: { control: "text" },
+    name: { control: "text" },
+    fallback: { control: "text" },
     size: {
       control: "select",
       options: ["xs", "sm", "md", "lg"],
-      description: "Avatar size",
     },
     shape: {
       control: "select",
       options: ["circle", "square"],
-      description: "Avatar shape",
     },
     status: {
       control: "select",
-      options: [undefined, "online", "offline", "away", "busy"],
-      description: "Status indicator",
+      options: ["online", "offline", "away", "busy"],
     },
     color: {
       control: "select",
-      options: [
-        "default",
-        "primary",
-        "secondary",
-        "accent",
-        "success",
-        "error",
-        "warning",
-        "info",
-      ],
-      description: "Background color for fallback",
+      options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
-    bordered: {
-      control: "boolean",
-      description: "Show border/ring around avatar",
-    },
-    disabled: {
-      control: "boolean",
-      description: "Disabled state",
-    },
+    bordered: { control: "boolean" },
+    disabled: { control: "boolean" },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Avatar>;
 
-// Basic Examples
-
-export const Default: Story = {
+export const Playground: Story = {
   args: {
-    src: "https://i.pravatar.cc/150?img=1",
-    alt: "User avatar",
+    name: "John Doe",
     size: "md",
     shape: "circle",
+    color: "primary",
+    bordered: false,
+    disabled: false,
   },
 };
 
-export const WithNameAutoInitials: Story = {
-  render: () => (
-    <div className="flex gap-4 items-center flex-wrap">
-      <Avatar name="John Doe" size="lg" />
-      <Avatar name="Alice" size="lg" />
-      <Avatar name="Robert James Smith" size="lg" />
-      <Avatar name="李明" size="lg" />
-    </div>
-  ),
-};
+const colors = ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"] as const;
+const sizes = ["xs", "sm", "md", "lg"] as const;
 
-export const WithCustomIcon: Story = {
+export const Showcase: Story = {
   render: () => (
-    <div className="flex gap-4 items-center flex-wrap">
-      <Avatar
-        icon={<User className="w-full h-full" />}
-        size="lg"
-        color="primary"
-      />
-      <Avatar
-        icon={<Building2 className="w-full h-full" />}
-        size="lg"
-        color="secondary"
-      />
-      <Avatar
-        icon={<Camera className="w-full h-full" />}
-        size="lg"
-        color="accent"
-      />
-      <Avatar
-        icon={<Star className="w-full h-full" />}
-        size="lg"
-        color="warning"
-      />
-    </div>
-  ),
-};
+    <div className="space-y-10">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Types (initials / icon / fallback)</h3>
+        <div className="flex items-center gap-4">
+          <Avatar name="John Doe" color="primary" />
+          <Avatar name="AB" color="secondary" />
+          <Avatar icon={<Star />} color="warning" />
+          <Avatar icon={<Shield />} color="info" shape="square" />
+          <Avatar color="default" />
+        </div>
+      </section>
 
-export const WithStatus: Story = {
-  render: () => (
-    <div className="flex gap-6 items-center flex-wrap">
-      <div className="text-center">
-        <Avatar
-          src="https://i.pravatar.cc/150?img=3"
-          status="online"
-          size="lg"
-        />
-        <p className="text-xs mt-2 text-text-secondary">Online</p>
-      </div>
-      <div className="text-center">
-        <Avatar src="https://i.pravatar.cc/150?img=4" status="away" size="lg" />
-        <p className="text-xs mt-2 text-text-secondary">Away</p>
-      </div>
-      <div className="text-center">
-        <Avatar src="https://i.pravatar.cc/150?img=5" status="busy" size="lg" />
-        <p className="text-xs mt-2 text-text-secondary">Busy</p>
-      </div>
-      <div className="text-center">
-        <Avatar
-          src="https://i.pravatar.cc/150?img=6"
-          status="offline"
-          size="lg"
-        />
-        <p className="text-xs mt-2 text-text-secondary">Offline</p>
-      </div>
-    </div>
-  ),
-};
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="flex items-end gap-4">
+          {sizes.map((s) => (
+            <div key={s} className="flex flex-col items-center gap-2">
+              <Avatar size={s} name="AB" color="primary" />
+              <span className="text-xs text-text-secondary">{s}</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
-export const WithBadge: Story = {
-  render: () => (
-    <div className="flex gap-6 items-center flex-wrap">
-      <Avatar src="https://i.pravatar.cc/150?img=12" badge={3} size="lg" />
-      <Avatar src="https://i.pravatar.cc/150?img=13" badge={99} size="lg" />
-      <Avatar src="https://i.pravatar.cc/150?img=14" badge="99+" size="lg" />
-      <Avatar
-        fallback="JD"
-        badge={<Bell className="w-3 h-3" />}
-        size="lg"
-        color="primary"
-      />
-    </div>
-  ),
-};
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="flex flex-wrap gap-3">
+          {colors.map((c) => (
+            <Avatar key={c} name={c.slice(0, 2).toUpperCase()} color={c} />
+          ))}
+        </div>
+      </section>
 
-export const Disabled: Story = {
-  render: () => (
-    <div className="flex gap-4 items-center flex-wrap">
-      <Avatar src="https://i.pravatar.cc/150?img=18" disabled size="lg" />
-      <Avatar fallback="JD" disabled size="lg" color="primary" />
-    </div>
-  ),
-};
-
-export const AvatarGroupWithMax: Story = {
-  render: () => (
-    <AvatarGroup max={3}>
-      <Avatar src="https://i.pravatar.cc/150?img=26" />
-      <Avatar src="https://i.pravatar.cc/150?img=27" />
-      <Avatar src="https://i.pravatar.cc/150?img=28" />
-      <Avatar src="https://i.pravatar.cc/150?img=29" />
-      <Avatar src="https://i.pravatar.cc/150?img=30" />
-      <Avatar src="https://i.pravatar.cc/150?img=31" />
-    </AvatarGroup>
-  ),
-};
-
-export const TeamMembers: Story = {
-  render: () => (
-    <div className="space-y-3">
-      {[
-        {
-          name: "Alice Smith",
-          role: "Product Manager",
-          status: "online" as const,
-          img: 54,
-        },
-        {
-          name: "Mike Johnson",
-          role: "Developer",
-          status: "away" as const,
-          img: 55,
-        },
-        {
-          name: "Sarah Williams",
-          role: "Designer",
-          status: "busy" as const,
-          img: 56,
-        },
-        {
-          name: "Tom King",
-          role: "QA Engineer",
-          status: "offline" as const,
-          img: 57,
-        },
-      ].map((member) => (
-        <div key={member.name} className="flex items-center gap-3">
-          <Avatar
-            src={`https://i.pravatar.cc/150?img=${member.img}`}
-            status={member.status}
-            size="md"
-          />
-          <div>
-            <p className="font-medium text-sm">{member.name}</p>
-            <p className="text-xs text-text-secondary">{member.role}</p>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Shapes</h3>
+        <div className="flex gap-4 items-center">
+          <div className="flex flex-col items-center gap-2">
+            <Avatar name="Circle" shape="circle" color="primary" size="lg" />
+            <span className="text-xs text-text-secondary">circle</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <Avatar name="Square" shape="square" color="accent" size="lg" />
+            <span className="text-xs text-text-secondary">square</span>
           </div>
         </div>
-      ))}
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Status Indicators</h3>
+        <div className="flex gap-6 items-center">
+          {(["online", "offline", "away", "busy"] as const).map((s) => (
+            <div key={s} className="flex flex-col items-center gap-2">
+              <Avatar name={s.slice(0, 2).toUpperCase()} color="primary" status={s} />
+              <span className="text-xs text-text-secondary">{s}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Badge</h3>
+        <div className="flex gap-6 items-center">
+          <Avatar name="JD" badge={3} color="primary" />
+          <Avatar name="MK" badge={99} color="secondary" />
+          <Avatar name="AL" badge={<Bell className="size-2.5" />} color="accent" size="lg" />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Bordered</h3>
+        <div className="flex gap-3 items-center p-4 bg-surface rounded-lg">
+          {sizes.map((s) => (
+            <Avatar key={s} size={s} name="AB" color="primary" bordered />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Disabled</h3>
+        <div className="flex gap-4 items-center">
+          <Avatar name="JD" color="primary" disabled />
+          <Avatar name="AL" color="success" disabled status="online" />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Avatar Group</h3>
+        <div className="space-y-4">
+          <AvatarGroup max={4} bordered>
+            <Avatar name="Alice Smith" color="primary" />
+            <Avatar name="Bob Jones" color="secondary" />
+            <Avatar name="Carol White" color="accent" />
+            <Avatar name="Dan Brown" color="success" />
+            <Avatar name="Eve Davis" color="warning" />
+            <Avatar name="Frank Lee" color="error" />
+          </AvatarGroup>
+
+          <AvatarGroup max={3} size="sm" bordered showTotal>
+            <Avatar name="Alice Smith" color="primary" />
+            <Avatar name="Bob Jones" color="secondary" />
+            <Avatar name="Carol White" color="accent" />
+            <Avatar name="Dan Brown" color="success" />
+            <Avatar name="Eve Davis" color="warning" />
+          </AvatarGroup>
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Group — All Sizes</h3>
+        <div className="space-y-4">
+          {sizes.map((size) => (
+            <div key={size} className="flex items-center gap-4">
+              <span className="text-xs text-text-secondary w-6">{size}</span>
+              <AvatarGroup size={size} max={4} bordered>
+                <Avatar name="Alice Smith" color="primary" />
+                <Avatar name="Bob Jones" color="secondary" />
+                <Avatar name="Carol White" color="accent" />
+                <Avatar name="Dan Brown" color="success" />
+                <Avatar name="Eve Davis" color="warning" />
+              </AvatarGroup>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  ),
+};
+
+export const WithSvgImage: Story = {
+  render: () => (
+    <div className="flex items-center gap-4">
+      <Avatar
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' rx='32' fill='%236366f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='white' font-size='24' font-family='sans-serif'%3EAJ%3C/text%3E%3C/svg%3E"
+        alt="Alex Johnson"
+        size="lg"
+      />
+      <Avatar
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' rx='8' fill='%2310b981'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='white' font-size='24' font-family='sans-serif'%3EBJ%3C/text%3E%3C/svg%3E"
+        alt="Bob Jones"
+        shape="square"
+        size="lg"
+      />
+      <Avatar
+        src="invalid-image.jpg"
+        alt="Fallback Demo"
+        name="Fallback Demo"
+        color="warning"
+        size="lg"
+      />
     </div>
   ),
 };

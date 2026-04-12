@@ -22,7 +22,7 @@ const src = readFileSync('src/styles/global.css', 'utf8');
 const out = src
   // Remove the dev-only comment block + @import "tailwindcss"
   .replace(/\/\*[\s\S]*?Build strips this line[\s\S]*?\*\/\n@import "tailwindcss";\n/, '')
-  // Fix @source path for consumer (node_modules/@fmlj/uikit/styles/ → ../dist/)
+  // Fix @source path for consumer (node_modules/@mdigitalcn/uikit/styles/ → ../dist/)
   .replace('@source "../../dist"', '@source "../dist"');
 
 writeFileSync('styles/global.css', out);

@@ -9,7 +9,7 @@ import { colorVars } from '../variants'
 import type { ToggleGroupProps } from './types'
 
 const toggleGroupVariants = cva(
-  'inline-flex border rounded-md overflow-hidden',
+  'inline-flex border [--_radius:var(--radius-input)] rounded-slot overflow-clip',
 )
 
 const toggleItemVariants = cva(

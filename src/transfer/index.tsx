@@ -197,7 +197,7 @@ const TransferList = React.memo<TransferListProps>(
     )
 
     return (
-      <div className={cn("flex flex-1 flex-col border border-border rounded-lg bg-card overflow-hidden min-w-0 transfer_list", classNames?.list)}>
+      <div className={cn("flex flex-1 flex-col border border-border [--_radius:var(--radius-card)] rounded-slot bg-card overflow-hidden min-w-0 transfer_list", classNames?.list)}>
         {/* Header */}
         <div className={cn(transferHeaderVariants(), "transfer_header", classNames?.header)}>
           <div className="flex items-center gap-2 flex-1">
@@ -226,7 +226,7 @@ const TransferList = React.memo<TransferListProps>(
               <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-text-secondary" />
               <input
                 type="text"
-                className={cn("w-full pl-8 pr-3 py-1.5 text-sm text-text-primary placeholder:text-text-muted bg-background border border-border rounded-md outline-none focus:border-primary transition-colors transfer_search", classNames?.search)}
+                className={cn("w-full pl-8 pr-3 py-1.5 text-sm text-text-primary placeholder:text-text-muted bg-background border border-border [--_radius:var(--radius-input)] rounded-slot outline-none hover:border-slot-50 focus:border-slot transition-colors transfer_search", classNames?.search)}
                 placeholder={searchPlaceholder}
                 value={searchValue}
                 onChange={handleSearchChange}
@@ -455,7 +455,7 @@ export const Transfer = React.memo<TransferProps>(
           </label>
         )}
 
-        <div data-slot="root" className={cn('flex items-start gap-4 transfer_root', colorVars.primary, classNames?.root, className)}>
+        <div data-slot="root" className={cn('flex items-start gap-4 transfer_root', colorVars[color], classNames?.root, className)}>
           {/* Left List */}
           <TransferList
             title={titles[0]}

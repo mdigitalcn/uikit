@@ -12,6 +12,7 @@ export interface BreadcrumbsClassNames {
   link?: string
   separator?: string
   current?: string
+  ellipsis?: string
 }
 
 export interface BreadcrumbItemData {
@@ -21,8 +22,18 @@ export interface BreadcrumbItemData {
    * Click handler (used instead of href for custom navigation)
    */
   onClick?: () => void
-  leftIcon?: ReactNode
-  rightIcon?: ReactNode
+  /**
+   * Content rendered before the label (icon, etc.)
+   */
+  startSection?: ReactNode
+  /**
+   * Content rendered after the label (icon, etc.)
+   */
+  endSection?: ReactNode
+  /**
+   * Render this item as an ellipsis indicator.
+   * @default false
+   */
   ellipsis?: boolean
   ellipsisOrientation?: 'horizontal' | 'vertical'
   /**
@@ -44,6 +55,14 @@ export interface BreadcrumbProps {
   color?: BreadcrumbsColor
   size?: BreadcrumbsSize
   separator?: ReactNode
+  /**
+   * Maximum number of visible items. When exceeded, middle items
+   * collapse into an ellipsis. First and last items are always shown.
+   *
+   * @example
+   * // 5 items with maxItems=3 → "Home / ... / Current"
+   */
+  maxItems?: number
   className?: string
   classNames?: BreadcrumbsClassNames
 }
@@ -62,15 +81,15 @@ export interface BreadcrumbLinkProps {
   children: ReactNode
   href?: string
   onClick?: () => void
-  leftIcon?: ReactNode
-  rightIcon?: ReactNode
+  startSection?: ReactNode
+  endSection?: ReactNode
   className?: string
 }
 
 export interface BreadcrumbPageProps {
   children: ReactNode
-  leftIcon?: ReactNode
-  rightIcon?: ReactNode
+  startSection?: ReactNode
+  endSection?: ReactNode
   className?: string
 }
 

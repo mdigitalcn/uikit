@@ -1,4 +1,4 @@
-import type { ComponentColor, ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages } from '../types'
 import type { TreeNode } from '../tree/types'
 
 export type TreeSelectSize = ComponentSize
@@ -13,22 +13,19 @@ export interface TreeSelectClassNames {
   label?: string
 }
 
+export type TreeSelectVariant = 'outline' | 'filled'
+
 export interface TreeSelectProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  /**
-   * Size variant (tree-select only supports xs, sm, md, lg)
-   */
-  /** Color accent
-   * @default 'primary'
-   */
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
+    ValidationMessages {
+  /** @default 'outline' */
+  variant?: TreeSelectVariant
+  /** @default 'bottom' */
+  messagePosition?: 'top' | 'bottom'
+  /** @default 'primary' */
   color?: ComponentColor
   size?: TreeSelectSize
   label?: string
-  helperText?: string
-  error?: string
-  warning?: string
-  info?: string
-  success?: string
   data?: TreeNode[]
   placeholder?: string
   loading?: boolean

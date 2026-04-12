@@ -1,181 +1,151 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 
-import NumberInput from '.'
+import NumberInput from "./index";
 
-const meta = {
-  title: 'Data Entry/NumberInput',
+const meta: Meta<typeof NumberInput> = {
+  title: "Form/NumberInput",
   component: NumberInput,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
+    variant: {
+      control: "select",
+      options: ["outline", "filled"],
+    },
     size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
+      control: "select",
+      options: ["xs", "sm", "md", "lg"],
+    },
+    color: {
+      control: "select",
+      options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
     controlsPosition: {
-      control: 'select',
-      options: ['right', 'sides'],
+      control: "select",
+      options: ["right", "sides"],
     },
+    messagePosition: {
+      control: "select",
+      options: ["top", "bottom"],
+    },
+    label: { control: "text" },
+    placeholder: { control: "text" },
+    helperText: { control: "text" },
+    error: { control: "text" },
+    warning: { control: "text" },
+    info: { control: "text" },
+    success: { control: "text" },
+    min: { control: "number" },
+    max: { control: "number" },
+    step: { control: "number" },
+    precision: { control: "number" },
+    controls: { control: "boolean" },
+    clampOnBlur: { control: "boolean" },
+    fullWidth: { control: "boolean" },
+    disabled: { control: "boolean" },
+    readOnly: { control: "boolean" },
+    required: { control: "boolean" },
+    loading: { control: "boolean" },
   },
-} satisfies Meta<typeof NumberInput>
+};
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof NumberInput>;
 
-export const Primary: Story = {
+export const Playground: Story = {
   args: {
-    placeholder: 'Enter a number',
-  },
-}
-
-export const WithMinMax: Story = {
-  args: {
+    label: "Quantity",
+    placeholder: "0",
+    variant: "outline",
+    size: "md",
+    color: "primary",
+    controls: true,
+    defaultValue: 1,
     min: 0,
     max: 100,
-    defaultValue: 50,
-    placeholder: 'Value between 0 and 100',
+    step: 1,
   },
-}
+};
 
-export const WithStep: Story = {
-  args: {
-    step: 0.1,
-    defaultValue: 0,
-    placeholder: 'Step by 0.1',
-    label: 'Decimals',
-  },
-}
-
-export const ControlsOnSides: Story = {
-  args: {
-    controlsPosition: 'sides',
-    defaultValue: 5,
-    placeholder: 'Controls on sides',
-  },
-}
-
-export const WithValidation: Story = {
-  args: {
-    label: 'Error Example',
-    defaultValue: 10,
-    error: 'Value is too low',
-  },
-}
-
-export const ValidationStates: Story = {
-  name: 'All Validation States (Border Consistency)',
+export const Showcase: Story = {
   render: () => (
-    <div className="flex flex-col gap-4 w-72">
-      <NumberInput label="Default" defaultValue={10} />
-      <NumberInput label="Error" defaultValue={10} error="Value is too low" />
-      <NumberInput label="Warning" defaultValue={10} warning="Value seems unusual" />
-      <NumberInput label="Success" defaultValue={10} success="Value is valid" />
-      <NumberInput label="Info" defaultValue={10} info="Enter a value between 0-100" />
-      <NumberInput label="Error (sides)" defaultValue={10} error="Invalid" controlsPosition="sides" />
+    <div className="space-y-10 max-w-md">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Variants</h3>
+        <div className="space-y-3">
+          <NumberInput variant="outline" label="Outline" placeholder="0" controls />
+          <NumberInput variant="filled" label="Filled" placeholder="0" controls />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="space-y-3">
+          <NumberInput size="xs" placeholder="xs" controls />
+          <NumberInput size="sm" placeholder="sm" controls />
+          <NumberInput size="md" placeholder="md" controls />
+          <NumberInput size="lg" placeholder="lg" controls />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Controls Position</h3>
+        <div className="space-y-3">
+          <NumberInput label="Controls on right (default)" controls controlsPosition="right" defaultValue={5} />
+          <NumberInput label="Controls on sides" controls controlsPosition="sides" defaultValue={5} />
+          <NumberInput label="No controls" defaultValue={10} placeholder="No stepper buttons" />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Min / Max / Step</h3>
+        <div className="space-y-3">
+          <NumberInput label="Range 0-10, step 1" min={0} max={10} step={1} defaultValue={5} controls helperText="Range: 0–10" />
+          <NumberInput label="Range 0-100, step 5" min={0} max={100} step={5} defaultValue={50} controls helperText="Increments of 5" />
+          <NumberInput label="Decimal step (0.1)" min={0} max={1} step={0.1} precision={1} defaultValue={0.5} controls helperText="Range: 0.0–1.0" />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Validation States</h3>
+        <div className="space-y-3">
+          <NumberInput label="Error" placeholder="0" error="Value must be greater than 0" />
+          <NumberInput label="Warning" placeholder="0" warning="High values may cause performance issues" defaultValue={9999} />
+          <NumberInput label="Success" placeholder="0" success="Valid quantity" defaultValue={5} />
+          <NumberInput label="Info" placeholder="0" info="Enter quantity in units" />
+          <NumberInput label="Helper text" placeholder="0" helperText="Must be between 1 and 99" min={1} max={99} />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">States</h3>
+        <div className="space-y-3">
+          <NumberInput label="Disabled" disabled defaultValue={5} controls />
+          <NumberInput label="Read only" readOnly defaultValue={42} />
+          <NumberInput label="Loading" loading controls />
+          <NumberInput label="Required" required placeholder="Required" controls />
+          <NumberInput label="Clamp on blur" min={0} max={10} clampOnBlur defaultValue={5} controls helperText="Value clamps to range on blur" />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="space-y-3">
+          {(["primary", "secondary", "accent", "success"] as const).map((color) => (
+            <NumberInput key={color} color={color} label={color} defaultValue={5} controls />
+          ))}
+        </div>
+      </section>
     </div>
   ),
-}
+};
 
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-    defaultValue: 42,
-    placeholder: 'Disabled input',
-  },
-}
-
-export const Controlled: Story = {
-  render: () => {
-    const [value, setValue] = useState<number | undefined>(10)
-
-    return (
-      <div className="flex flex-col gap-4 w-64">
-        <NumberInput
-          label="Controlled Input"
-          value={value}
-          onChange={setValue}
-          min={0}
-          max={100}
-        />
-        <div className="text-sm text-text-secondary">
-          Current value: <span className="font-mono font-bold">{value ?? 'undefined'}</span>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setValue(0)}
-            className="px-3 py-1 text-sm bg-primary text-white rounded hover:bg-primary/90"
-          >
-            Set to 0
-          </button>
-          <button
-            onClick={() => setValue(50)}
-            className="px-3 py-1 text-sm bg-primary text-white rounded hover:bg-primary/90"
-          >
-            Set to 50
-          </button>
-          <button
-            onClick={() => setValue(100)}
-            className="px-3 py-1 text-sm bg-primary text-white rounded hover:bg-primary/90"
-          >
-            Set to 100
-          </button>
-        </div>
-      </div>
-    )
-  },
-}
-
-export const WithLoading: Story = {
-  args: {
-    loading: true,
-    defaultValue: 42,
-    placeholder: 'Loading...',
-  },
-}
-
-export const Complex: Story = {
-  render: () => {
-    const [price, setPrice] = useState<number | undefined>(19.99)
-    const [quantity, setQuantity] = useState<number | undefined>(1)
-    const total = price && quantity ? price * quantity : 0
-
-    return (
-      <div className="flex flex-col gap-4 w-80 p-6 bg-surface rounded-lg border border-border">
-        <h3 className="text-lg font-semibold text-text-primary">Order Form</h3>
-
-        <NumberInput
-          label="Price"
-          value={price}
-          onChange={setPrice}
-          min={0}
-          step={0.01}
-          precision={2}
-          placeholder="0.00"
-          required
-        />
-
-        <NumberInput
-          label="Quantity"
-          value={quantity}
-          onChange={setQuantity}
-          min={1}
-          max={999}
-          controlsPosition="sides"
-          required
-        />
-
-        <div className="pt-4 border-t border-border">
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-text-secondary">Total:</span>
-            <span className="text-xl font-bold text-text-primary">
-              ${total.toFixed(2)}
-            </span>
-          </div>
-        </div>
-      </div>
-    )
-  },
-}
+export const PrecisionDecimals: Story = {
+  render: () => (
+    <div className="space-y-3 max-w-sm">
+      <NumberInput label="Price" placeholder="0.00" step={0.01} precision={2} min={0} controls helperText="USD" />
+      <NumberInput label="Percentage" placeholder="0.0" step={0.1} precision={1} min={0} max={100} controls helperText="%" />
+      <NumberInput label="Rating" placeholder="0.0" step={0.5} precision={1} min={0} max={5} controls helperText="Out of 5.0" />
+    </div>
+  ),
+};

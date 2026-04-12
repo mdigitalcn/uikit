@@ -34,7 +34,7 @@ Link to a minimal reproduction (CodeSandbox, StackBlitz, or repo):
 
 ## Environment
 
-- **@fmlj/uikit version**: 
+- **@mdigitalcn/uikit version**: 
 - **React version**: 
 - **Tailwind CSS version**: 
 - **Browser**: 

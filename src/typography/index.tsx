@@ -11,6 +11,19 @@ const levelElements: Record<TypographyLevel, string> = {
   h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6',
 }
 
+const lineClampClasses: Record<number, string> = {
+  1: 'line-clamp-1',
+  2: 'line-clamp-2',
+  3: 'line-clamp-3',
+  4: 'line-clamp-4',
+  5: 'line-clamp-5',
+  6: 'line-clamp-6',
+  7: 'line-clamp-7',
+  8: 'line-clamp-8',
+  9: 'line-clamp-9',
+  10: 'line-clamp-10',
+}
+
 const titleVariants = cva('', {
   variants: {
     level: {
@@ -155,7 +168,7 @@ const Text = React.memo<TextProps>(
 
     const truncateClass = !expanded && truncate
       ? typeof truncate === 'number'
-        ? `line-clamp-${truncate}`
+        ? (lineClampClasses[truncate] ?? 'line-clamp-6')
         : 'truncate'
       : ''
 
@@ -218,7 +231,7 @@ const Paragraph = React.memo<ParagraphProps>(
 
     const truncateClass = !expanded && truncate
       ? typeof truncate === 'number'
-        ? `line-clamp-${truncate}`
+        ? (lineClampClasses[truncate] ?? 'line-clamp-6')
         : 'truncate'
       : ''
 

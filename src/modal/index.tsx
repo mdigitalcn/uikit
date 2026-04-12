@@ -6,6 +6,7 @@ import { XIcon } from "lucide-react";
 import * as React from "react";
 
 import { cn } from "../utils";
+import { colorVars } from "../variants";
 import type {
   ComposedModalProps,
   ModalClassNames,
@@ -52,7 +53,7 @@ function ModalClose({
 }
 
 const modalOverlayVariants = cva(
-  "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-[var(--z-modal)] backdrop-blur-sm",
+  "[--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-[var(--z-modal)] backdrop-blur-sm",
   {
     variants: {
       opacity: {
@@ -92,7 +93,7 @@ function ModalOverlay({
 }
 
 const modalContentVariants = cva(
-  "bg-background will-change-[transform,_opacity] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] rounded-md border duration-200",
+  "bg-background will-change-[transform,_opacity] [--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] [--_radius:var(--radius-modal)] rounded-slot border",
   {
     variants: {
       size: {
@@ -101,16 +102,6 @@ const modalContentVariants = cva(
         md: "max-w-(--modal-max-width-md) gap-(--modal-gap-md) p-(--modal-padding-md) sm:max-w-(--modal-max-width-md)",
         lg: "max-w-(--modal-max-width-lg) gap-(--modal-gap-lg) p-(--modal-padding-lg) sm:max-w-(--modal-max-width-lg)",
       },
-      color: {
-        default: "border-border",
-        primary: "border-primary border-l-4",
-        secondary: "border-secondary border-l-4",
-        accent: "border-accent border-l-4",
-        success: "border-success border-l-4",
-        error: "border-error border-l-4",
-        warning: "border-warning border-l-4",
-        info: "border-info border-l-4",
-      },
       centered: {
         true: "text-center",
         false: "",
@@ -118,14 +109,13 @@ const modalContentVariants = cva(
     },
     defaultVariants: {
       size: "md",
-      color: "default",
       centered: false,
     },
   },
 );
 
 const modalCloseVariants = cva(
-  "absolute right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-hidden cursor-pointer disabled:pointer-events-none text-text-secondary hover:text-text-primary [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "absolute right-4 rounded-sm opacity-70 transition-[opacity,colors] hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background cursor-pointer disabled:pointer-events-none text-text-secondary hover:text-text-primary [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       size: {
@@ -164,7 +154,9 @@ function ModalContent({
         data-slot="modal-content"
         className={cn(
           "modal_content",
-          modalContentVariants({ size, color, centered }),
+          modalContentVariants({ size, centered }),
+          colorVars[color],
+          color !== "default" && "border-slot border-l-4",
           classNames?.content,
           className,
         )}
@@ -353,6 +345,7 @@ function ComposedModal({
   onEscapeKeyDown,
   className,
   contentClassName,
+  headerClassName,
   classNames,
 }: ComposedModalProps) {
   return (
@@ -364,13 +357,13 @@ function ComposedModal({
         showCloseButton={showCloseButton}
         onInteractOutside={onInteractOutside}
         onEscapeKeyDown={onEscapeKeyDown}
-        className={contentClassName}
+        className={contentClassName ?? className}
         classNames={classNames}
       >
         {!hideHeader && (title || description) && (
           <ModalHeader
             size={size}
-            className={className}
+            className={headerClassName}
             classNames={classNames}
           >
             {title && (

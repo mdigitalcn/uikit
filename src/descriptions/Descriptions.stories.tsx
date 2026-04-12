@@ -1,478 +1,226 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { User, Mail, Phone, MapPin, Calendar, Briefcase, DollarSign } from 'lucide-react'
-import Descriptions from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+import Descriptions from "./index";
+import type { DescriptionsItem } from "./types";
 
 const meta: Meta<typeof Descriptions> = {
-  title: 'Data Display/Descriptions',
+  title: "Data Display/Descriptions",
   component: Descriptions,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    column: {
-      control: { type: 'number', min: 1, max: 6 },
-      description: 'Number of columns for layout',
-    },
+    variant: { control: "select", options: ["default", "solid", "soft"] },
     color: {
-      control: 'select',
-      options: ['default', 'primary', 'secondary', 'accent', 'success', 'error', 'warning', 'info'],
-      description: 'Theme color for labels',
+      control: "select",
+      options: ["default", "primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
-      description: 'Size of the descriptions',
-    },
-    layout: {
-      control: 'select',
-      options: ['horizontal', 'vertical'],
-      description: 'Layout orientation',
-    },
-    bordered: {
-      control: 'boolean',
-      description: 'Show borders',
-    },
-    rounded: {
-      control: 'boolean',
-      description: 'Rounded corners',
-    },
-    variant: {
-      control: 'select',
-      options: ['default', 'solid', 'soft'],
-      description: 'Visual style variant',
-    },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    layout: { control: "select", options: ["horizontal", "vertical"] },
+    column: { control: "number" },
+    bordered: { control: "boolean" },
+    rounded: { control: "boolean" },
+    colon: { control: "boolean" },
   },
-}
+};
+export default meta;
+type Story = StoryObj<typeof Descriptions>;
 
-export default meta
-type Story = StoryObj<typeof Descriptions>
+const StatusBadge = ({ color, label }: { color: string; label: string }) => (
+  <span
+    className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
+    style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
+  >
+    {label}
+  </span>
+);
 
-const basicItems = [
-  {
-    key: 'name',
-    label: 'Name',
-    children: 'John Doe',
-  },
-  {
-    key: 'email',
-    label: 'Email',
-    children: 'john.doe@example.com',
-  },
-  {
-    key: 'phone',
-    label: 'Phone',
-    children: '+1 (555) 123-4567',
-  },
-  {
-    key: 'location',
-    label: 'Location',
-    children: 'San Francisco, CA',
-  },
-  {
-    key: 'joined',
-    label: 'Joined Date',
-    children: 'January 15, 2024',
-  },
-  {
-    key: 'status',
-    label: 'Status',
-    children: <span className="text-success font-semibold">Active</span>,
-  },
-]
+const userItems: DescriptionsItem[] = [
+  { key: "name", label: "Full Name", children: "Alice Johnson" },
+  { key: "email", label: "Email", children: "alice@example.com" },
+  { key: "phone", label: "Phone", children: "+1 (555) 234-5678" },
+  { key: "dept", label: "Department", children: "Engineering" },
+  { key: "status", label: "Status", children: <StatusBadge color="success" label="Active" /> },
+  { key: "location", label: "Location", children: "San Francisco, CA" },
+];
 
-export const Default: Story = {
+const orderItems: DescriptionsItem[] = [
+  { key: "id", label: "Order ID", children: "#ORD-2024-8821" },
+  { key: "product", label: "Product", children: "Premium Subscription" },
+  { key: "amount", label: "Amount", children: "$99.00 / year" },
+  { key: "status", label: "Status", children: <StatusBadge color="info" label="Processing" /> },
+  { key: "date", label: "Created", children: "Jan 15, 2024" },
+  { key: "payment", label: "Payment", children: "Visa ending in 4242" },
+];
+
+const serverItems: DescriptionsItem[] = [
+  { key: "hostname", label: "Hostname", children: "prod-server-01.example.com", span: 2 },
+  { key: "os", label: "Operating System", children: "Ubuntu 22.04 LTS" },
+  { key: "cpu", label: "CPU", children: "8-core Intel Xeon @ 3.6 GHz" },
+  { key: "ram", label: "Memory", children: "64 GB DDR4" },
+  { key: "disk", label: "Disk", children: "2 TB NVMe SSD" },
+  { key: "ip", label: "IP Address", children: "192.168.1.100", span: 2 },
+  { key: "region", label: "Region", children: "us-east-1" },
+];
+
+export const Playground: Story = {
   args: {
-    items: basicItems,
+    title: "User Information",
+    items: userItems,
     column: 3,
-    color: 'default',
-    size: 'md',
-    variant: 'default',
-    layout: 'horizontal',
+    variant: "default",
+    color: "primary",
+    size: "md",
+    layout: "horizontal",
     bordered: true,
     rounded: true,
+    colon: false,
   },
-}
+};
 
-export const LayoutComparison: Story = {
+export const Showcase: Story = {
   render: () => (
-    <div className="space-y-8">
-      <div>
-        <h3 className="text-sm font-semibold mb-3">Horizontal Layout</h3>
+    <div className="space-y-10 p-6 max-w-3xl">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Horizontal Layout (default)
+        </h3>
         <Descriptions
-          items={basicItems}
+          title="User Information"
+          items={userItems}
           column={3}
-          layout="horizontal"
-          color="primary"
+          bordered
         />
-      </div>
-      <div>
-        <h3 className="text-sm font-semibold mb-3">Vertical Layout</h3>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Vertical Layout
+        </h3>
         <Descriptions
-          items={basicItems}
-          column={3}
+          title="Order Details"
+          items={orderItems}
           layout="vertical"
+          column={3}
+          bordered
+        />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Variants
+        </h3>
+        <div className="space-y-6">
+          {(["default", "solid", "soft"] as const).map((v) => (
+            <div key={v}>
+              <p className="text-xs text-text-secondary mb-2">{v}</p>
+              <Descriptions
+                items={userItems.slice(0, 3)}
+                variant={v}
+                color="primary"
+                column={3}
+                bordered
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Colors
+        </h3>
+        <div className="space-y-4">
+          {(["primary", "secondary", "accent", "success", "error"] as const).map((c) => (
+            <div key={c}>
+              <p className="text-xs text-text-secondary mb-2">{c}</p>
+              <Descriptions
+                items={userItems.slice(0, 3)}
+                color={c}
+                column={3}
+                bordered
+                variant="soft"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Sizes
+        </h3>
+        <div className="space-y-4">
+          {(["xs", "sm", "md", "lg"] as const).map((s) => (
+            <div key={s}>
+              <p className="text-xs text-text-secondary mb-2">{s}</p>
+              <Descriptions items={orderItems.slice(0, 3)} size={s} column={3} bordered />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Column Counts
+        </h3>
+        <div className="space-y-6">
+          {([1, 2, 3] as const).map((col) => (
+            <div key={col}>
+              <p className="text-xs text-text-secondary mb-2">{col} column{col > 1 ? "s" : ""}</p>
+              <Descriptions items={userItems.slice(0, 4)} column={col} bordered />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          With Span
+        </h3>
+        <Descriptions
+          title="Server Configuration"
+          items={serverItems}
+          column={3}
+          bordered
           color="primary"
         />
-      </div>
-    </div>
-  ),
-}
+      </section>
 
-export const WithSpan: Story = {
-  render: () => (
-    <div className="space-y-8">
-      <div>
-        <h3 className="text-sm font-semibold mb-3">Mixed Span (3 columns)</h3>
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          With Colon
+        </h3>
         <Descriptions
-          items={[
-            {
-              key: 'name',
-              label: 'Name',
-              children: 'John Doe',
-            },
-            {
-              key: 'email',
-              label: 'Email',
-              children: 'john.doe@example.com',
-            },
-            {
-              key: 'phone',
-              label: 'Phone',
-              children: '+1 (555) 123-4567',
-            },
-            {
-              key: 'address',
-              label: 'Address',
-              children: '123 Main Street, San Francisco, CA 94102',
-              span: 2, // Takes 2 columns
-            },
-            {
-              key: 'status',
-              label: 'Status',
-              children: <span className="text-success font-semibold">Active</span>,
-            },
-            {
-              key: 'bio',
-              label: 'Bio',
-              children: 'Software engineer with 10+ years of experience in building scalable web applications.',
-              span: 3, // Takes full row
-            },
-          ]}
+          items={userItems.slice(0, 4)}
+          column={2}
+          bordered
+          colon
+        />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          Without Border
+        </h3>
+        <Descriptions items={userItems} column={3} bordered={false} rounded={false} />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
+          With Title and Extra Action
+        </h3>
+        <Descriptions
+          title="Profile Details"
+          extra={
+            <button className="text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary transition-colors">
+              Edit
+            </button>
+          }
+          items={userItems}
           column={3}
+          bordered
           color="primary"
         />
-      </div>
+      </section>
     </div>
   ),
-}
-
-export const WithIcons: Story = {
-  args: {
-    items: [
-      {
-        key: 'name',
-        label: (
-          <span className="flex items-center gap-2">
-            <User className="w-4 h-4" />
-            Name
-          </span>
-        ),
-        children: 'John Doe',
-      },
-      {
-        key: 'email',
-        label: (
-          <span className="flex items-center gap-2">
-            <Mail className="w-4 h-4" />
-            Email
-          </span>
-        ),
-        children: 'john.doe@example.com',
-      },
-      {
-        key: 'phone',
-        label: (
-          <span className="flex items-center gap-2">
-            <Phone className="w-4 h-4" />
-            Phone
-          </span>
-        ),
-        children: '+1 (555) 123-4567',
-      },
-      {
-        key: 'location',
-        label: (
-          <span className="flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
-            Location
-          </span>
-        ),
-        children: 'San Francisco, CA',
-      },
-      {
-        key: 'joined',
-        label: (
-          <span className="flex items-center gap-2">
-            <Calendar className="w-4 h-4" />
-            Joined
-          </span>
-        ),
-        children: 'January 15, 2024',
-      },
-      {
-        key: 'role',
-        label: (
-          <span className="flex items-center gap-2">
-            <Briefcase className="w-4 h-4" />
-            Role
-          </span>
-        ),
-        children: 'Senior Developer',
-      },
-    ],
-    column: 3,
-    color: 'primary',
-  },
-}
-
-export const UserProfile: Story = {
-  render: () => (
-    <div className="max-w-4xl space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold mb-4">User Profile</h2>
-        <Descriptions
-          items={[
-            {
-              key: 'name',
-              label: 'Full Name',
-              children: 'John Michael Doe',
-            },
-            {
-              key: 'username',
-              label: 'Username',
-              children: '@johndoe',
-            },
-            {
-              key: 'email',
-              label: 'Email Address',
-              children: 'john.doe@example.com',
-            },
-            {
-              key: 'phone',
-              label: 'Phone Number',
-              children: '+1 (555) 123-4567',
-            },
-            {
-              key: 'location',
-              label: 'Location',
-              children: 'San Francisco, California, USA',
-            },
-            {
-              key: 'timezone',
-              label: 'Timezone',
-              children: 'Pacific Time (PT)',
-            },
-            {
-              key: 'role',
-              label: 'Role',
-              children: <span className="inline-flex px-2 py-1 bg-primary/10 text-primary rounded text-sm">Senior Developer</span>,
-            },
-            {
-              key: 'department',
-              label: 'Department',
-              children: 'Engineering',
-            },
-            {
-              key: 'joined',
-              label: 'Joined Date',
-              children: 'January 15, 2024',
-            },
-            {
-              key: 'bio',
-              label: 'Bio',
-              children: 'Passionate software engineer with 10+ years of experience in building scalable web applications and leading development teams.',
-              span: 3,
-            },
-          ]}
-          column={3}
-          color="primary"
-          layout="horizontal"
-        />
-      </div>
-    </div>
-  ),
-}
-
-export const OrderDetails: Story = {
-  render: () => (
-    <div className="max-w-4xl space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Order Details</h2>
-        <Descriptions
-          items={[
-            {
-              key: 'orderId',
-              label: 'Order ID',
-              children: <span className="font-mono">#ORD-2024-0001</span>,
-            },
-            {
-              key: 'status',
-              label: 'Status',
-              children: <span className="inline-flex px-2 py-1 bg-success/10 text-success rounded text-sm font-medium">Delivered</span>,
-            },
-            {
-              key: 'date',
-              label: 'Order Date',
-              children: 'January 15, 2024',
-            },
-            {
-              key: 'customer',
-              label: 'Customer',
-              children: 'John Doe',
-            },
-            {
-              key: 'email',
-              label: 'Email',
-              children: 'john.doe@example.com',
-            },
-            {
-              key: 'phone',
-              label: 'Phone',
-              children: '+1 (555) 123-4567',
-            },
-            {
-              key: 'shipping',
-              label: 'Shipping Address',
-              children: '123 Main Street, Apt 4B, San Francisco, CA 94102',
-              span: 2,
-            },
-            {
-              key: 'payment',
-              label: 'Payment Method',
-              children: 'Credit Card (**** 4242)',
-            },
-            {
-              key: 'subtotal',
-              label: 'Subtotal',
-              children: (
-                <span className="flex items-center gap-1">
-                  <DollarSign className="w-4 h-4" />
-                  249.99
-                </span>
-              ),
-            },
-            {
-              key: 'shipping-cost',
-              label: 'Shipping',
-              children: (
-                <span className="flex items-center gap-1">
-                  <DollarSign className="w-4 h-4" />
-                  10.00
-                </span>
-              ),
-            },
-            {
-              key: 'tax',
-              label: 'Tax',
-              children: (
-                <span className="flex items-center gap-1">
-                  <DollarSign className="w-4 h-4" />
-                  25.00
-                </span>
-              ),
-            },
-            {
-              key: 'total',
-              label: 'Total',
-              children: (
-                <span className="flex items-center gap-1 font-bold text-lg">
-                  <DollarSign className="w-5 h-5" />
-                  284.99
-                </span>
-              ),
-            },
-            {
-              key: 'notes',
-              label: 'Order Notes',
-              children: 'Please leave the package at the front door. Ring the doorbell upon delivery.',
-              span: 3,
-            },
-          ]}
-          column={3}
-          color="accent"
-          layout="horizontal"
-        />
-      </div>
-    </div>
-  ),
-}
-
-export const CompanyInfo: Story = {
-  render: () => (
-    <div className="max-w-4xl">
-      <h2 className="text-2xl font-bold mb-4">Company Information</h2>
-      <Descriptions
-        items={[
-          {
-            key: 'name',
-            label: 'Company Name',
-            children: 'TechCorp Solutions Inc.',
-          },
-          {
-            key: 'industry',
-            label: 'Industry',
-            children: 'Software Development',
-          },
-          {
-            key: 'founded',
-            label: 'Founded',
-            children: '2010',
-          },
-          {
-            key: 'employees',
-            label: 'Employees',
-            children: '500-1000',
-          },
-          {
-            key: 'revenue',
-            label: 'Annual Revenue',
-            children: '$50M - $100M',
-          },
-          {
-            key: 'headquarters',
-            label: 'Headquarters',
-            children: 'San Francisco, CA',
-          },
-          {
-            key: 'website',
-            label: 'Website',
-            children: (
-              <a href="https://example.com" className="text-primary hover:underline">
-                www.techcorp.com
-              </a>
-            ),
-          },
-          {
-            key: 'email',
-            label: 'Contact Email',
-            children: 'contact@techcorp.com',
-          },
-          {
-            key: 'phone',
-            label: 'Phone',
-            children: '+1 (555) 987-6543',
-          },
-          {
-            key: 'description',
-            label: 'Description',
-            children:
-              'TechCorp Solutions is a leading provider of enterprise software solutions, specializing in cloud-based applications, AI-powered analytics, and digital transformation services.',
-            span: 3,
-          },
-        ]}
-        column={3}
-        color="secondary"
-        layout="vertical"
-      />
-    </div>
-  ),
-}
-
+};

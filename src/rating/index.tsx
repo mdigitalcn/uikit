@@ -7,6 +7,7 @@ import { useControllable } from '../hooks/useControllable'
 import { Star } from 'lucide-react'
 
 import { cn } from '../utils'
+import { colorVars } from '../variants'
 import type { RatingProps } from './types'
 
 const ratingVariants = cva('inline-flex items-center gap-1', {
@@ -30,65 +31,26 @@ const starSizes = {
   lg: 24,
 }
 
-/**
- * Color mappings for Tailwind JIT compatibility
- */
-const fillColorClasses: Record<string, string> = {
-  default: 'fill-border',
-  primary: 'fill-primary',
-  secondary: 'fill-secondary',
-  accent: 'fill-accent',
-  success: 'fill-success',
-  error: 'fill-error',
-  warning: 'fill-warning',
-  info: 'fill-info',
-}
-
-const strokeColorClasses: Record<string, string> = {
-  default: 'stroke-border',
-  primary: 'stroke-primary',
-  secondary: 'stroke-secondary',
-  accent: 'stroke-accent',
-  success: 'stroke-success',
-  error: 'stroke-error',
-  warning: 'stroke-warning',
-  info: 'stroke-info',
-}
-
 const getStarClasses = (
   color: string,
   variant: string,
   isFilled: boolean,
   isHovered: boolean,
 ) => {
-  const state = isFilled || isHovered ? 'filled' : 'empty'
-  const strokeClass = strokeColorClasses[color] || strokeColorClasses.default
-  const fillClass = fillColorClasses[color] || fillColorClasses.default
+  const filled = isFilled || isHovered
 
-  if (state === 'empty') {
-    if (variant === 'solid') {
-      if (color === 'default') return 'fill-transparent stroke-border'
-      return `fill-transparent ${strokeClass} opacity-20`
-    }
-    if (variant === 'soft') {
-      if (color === 'default') return 'fill-transparent stroke-border/50'
-      return `fill-transparent ${strokeClass} opacity-20`
-    }
-    if (color === 'default') return 'fill-transparent stroke-border'
-    return `fill-transparent ${strokeClass} opacity-20`
+  if (!filled) {
+    if (color === 'default') return variant === 'soft' ? 'fill-transparent stroke-border opacity-50' : 'fill-transparent stroke-border'
+    return 'fill-transparent stroke-slot opacity-20'
   }
 
   // filled state
-  if (variant === 'solid') {
-    if (color === 'default') return 'fill-border stroke-border'
-    return `${fillClass} ${strokeClass}`
-  }
   if (variant === 'soft') {
-    if (color === 'default') return 'fill-border/50 stroke-border'
-    return `${fillClass} opacity-20 ${strokeClass}`
+    if (color === 'default') return 'fill-border opacity-50 stroke-border'
+    return 'fill-slot opacity-20 stroke-slot'
   }
   if (color === 'default') return 'fill-border stroke-border'
-  return `${fillClass} ${strokeClass}`
+  return 'fill-slot stroke-slot'
 }
 
 const Rating = React.memo<RatingProps>(
@@ -187,7 +149,7 @@ const Rating = React.memo<RatingProps>(
     }, [displayValue])
 
     return (
-      <div data-slot="root" className={cn(ratingVariants({ size }), 'rating_root', classNames?.root, className)}>
+      <div data-slot="root" className={cn(ratingVariants({ size }), 'rating_root', colorVars[color], classNames?.root, className)}>
         <div
           id={`rating-${uniqueId}`}
           role="radiogroup"
@@ -200,7 +162,7 @@ const Rating = React.memo<RatingProps>(
             'inline-flex items-center gap-0.5 outline-none',
             'rating_label',
             classNames?.label,
-            isInteractive && 'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded',
+            isInteractive && 'focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded',
           )}
         >
           {Array.from({ length: count }, (_, index) => {

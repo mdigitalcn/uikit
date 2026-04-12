@@ -10,6 +10,15 @@ export type BadgeShape = 'rounded' | 'pill' | 'circle'
 
 export type BadgePlacement = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
 
+export interface BadgeClassNames {
+  /** The badge element itself */
+  root?: string
+  /** The wrapper element (when floating over children) */
+  wrapper?: string
+  /** Icon element inside the badge */
+  icon?: string
+}
+
 export interface BadgeProps {
   /**
    * Content to wrap with the badge (when provided, badge floats over it)
@@ -93,9 +102,15 @@ export interface BadgeProps {
   className?: string
 
   /**
-   * Additional CSS class for the badge wrapper (when floating)
+   * Additional CSS class for the badge wrapper (when floating).
+   * @deprecated Use `classNames.wrapper` instead.
    */
   wrapperClassName?: string
+
+  /**
+   * Class names for sub-parts of the badge.
+   */
+  classNames?: BadgeClassNames
 
   ref?: React.Ref<HTMLSpanElement>
 }

@@ -1,118 +1,152 @@
-import type { Meta, StoryObj } from '@storybook/react'
-
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from './index'
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./index";
 
 const meta: Meta<typeof ResizablePanelGroup> = {
-  title: 'Layout/Resizable',
+  title: "Layout/Resizable",
   component: ResizablePanelGroup,
-  tags: ['autodocs'],
-}
+  tags: ["autodocs"],
+  argTypes: {
+    direction: { control: "select", options: ["horizontal", "vertical"] },
+  },
+};
+export default meta;
+type Story = StoryObj<typeof ResizablePanelGroup>;
 
-export default meta
-type Story = StoryObj<typeof ResizablePanelGroup>
+const PanelContent = ({
+  label,
+  muted = false,
+}: {
+  label: string;
+  muted?: boolean;
+}) => (
+  <div
+    className={`flex h-full w-full items-center justify-center text-sm ${
+      muted ? "bg-surface/60 text-text-secondary" : "text-text-secondary"
+    }`}
+  >
+    {label}
+  </div>
+);
 
-export const Horizontal: Story = {
+export const Playground: Story = {
   render: () => (
-    <ResizablePanelGroup direction="horizontal" className="max-w-2xl rounded-lg border border-border">
+    <ResizablePanelGroup direction="horizontal" className="min-h-[200px] rounded-lg border border-border">
       <ResizablePanel defaultSize={50}>
-        <div className="flex h-48 items-center justify-center p-6">
-          <span className="font-semibold text-text-primary">Left Panel</span>
-        </div>
-      </ResizablePanel>
-      <ResizableHandle />
-      <ResizablePanel defaultSize={50}>
-        <div className="flex h-48 items-center justify-center p-6">
-          <span className="font-semibold text-text-primary">Right Panel</span>
-        </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
-  ),
-}
-
-export const Vertical: Story = {
-  render: () => (
-    <ResizablePanelGroup direction="vertical" className="max-w-md rounded-lg border border-border">
-      <ResizablePanel defaultSize={40}>
-        <div className="flex h-24 items-center justify-center p-6">
-          <span className="font-semibold text-text-primary">Top</span>
-        </div>
-      </ResizablePanel>
-      <ResizableHandle />
-      <ResizablePanel defaultSize={60}>
-        <div className="flex h-36 items-center justify-center p-6">
-          <span className="font-semibold text-text-primary">Bottom</span>
-        </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
-  ),
-}
-
-export const WithHandle: Story = {
-  render: () => (
-    <ResizablePanelGroup direction="horizontal" className="max-w-2xl rounded-lg border border-border">
-      <ResizablePanel defaultSize={30}>
-        <div className="flex h-48 items-center justify-center p-6">
-          <span className="font-semibold text-text-primary">Sidebar</span>
-        </div>
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={70}>
-        <div className="flex h-48 items-center justify-center p-6">
-          <span className="font-semibold text-text-primary">Content</span>
-        </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
-  ),
-}
-
-export const ThreePanels: Story = {
-  render: () => (
-    <ResizablePanelGroup direction="horizontal" className="max-w-3xl rounded-lg border border-border">
-      <ResizablePanel defaultSize={20} minSize={10}>
-        <div className="flex h-48 items-center justify-center p-4 bg-surface/50">
-          <span className="text-sm font-medium text-text-secondary">Nav</span>
-        </div>
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={55}>
-        <div className="flex h-48 items-center justify-center p-4">
-          <span className="font-semibold text-text-primary">Main Content</span>
-        </div>
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={25} minSize={15}>
-        <div className="flex h-48 items-center justify-center p-4 bg-surface/50">
-          <span className="text-sm font-medium text-text-secondary">Inspector</span>
-        </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
-  ),
-}
-
-export const Nested: Story = {
-  render: () => (
-    <ResizablePanelGroup direction="horizontal" className="max-w-2xl rounded-lg border border-border">
-      <ResizablePanel defaultSize={50}>
-        <div className="flex h-64 items-center justify-center p-6">
-          <span className="font-semibold text-text-primary">Left</span>
-        </div>
+        <PanelContent label="Left Panel" />
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={50}>
-        <ResizablePanelGroup direction="vertical">
-          <ResizablePanel defaultSize={40}>
-            <div className="flex h-full items-center justify-center p-6">
-              <span className="font-semibold text-text-primary">Top Right</span>
-            </div>
+        <PanelContent label="Right Panel" />
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  ),
+};
+
+export const Showcase: Story = {
+  render: () => (
+    <div className="space-y-10 p-6 max-w-3xl">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Horizontal — Two Panels</h3>
+        <ResizablePanelGroup direction="horizontal" className="min-h-[160px] rounded-lg border border-border">
+          <ResizablePanel defaultSize={30} minSize={15}>
+            <PanelContent label="Sidebar (30%)" muted />
           </ResizablePanel>
-          <ResizableHandle />
-          <ResizablePanel defaultSize={60}>
-            <div className="flex h-full items-center justify-center p-6">
-              <span className="font-semibold text-text-primary">Bottom Right</span>
-            </div>
+          <ResizableHandle withHandle />
+          <ResizablePanel>
+            <PanelContent label="Main Content" />
           </ResizablePanel>
         </ResizablePanelGroup>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Horizontal — Three Panels</h3>
+        <ResizablePanelGroup direction="horizontal" className="min-h-[160px] rounded-lg border border-border">
+          <ResizablePanel defaultSize={20} minSize={12}>
+            <PanelContent label="Navigation" muted />
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={55}>
+            <PanelContent label="Editor" />
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={25} minSize={12}>
+            <PanelContent label="Preview" muted />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Vertical</h3>
+        <ResizablePanelGroup direction="vertical" className="min-h-[280px] rounded-lg border border-border">
+          <ResizablePanel defaultSize={65}>
+            <PanelContent label="Main Area" />
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={35} minSize={20}>
+            <PanelContent label="Terminal / Output" muted />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Without Handle Grip</h3>
+        <ResizablePanelGroup direction="horizontal" className="min-h-[120px] rounded-lg border border-border">
+          <ResizablePanel defaultSize={50}>
+            <PanelContent label="Left" />
+          </ResizablePanel>
+          <ResizableHandle />
+          <ResizablePanel defaultSize={50}>
+            <PanelContent label="Right" />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Nested — IDE Layout</h3>
+        <ResizablePanelGroup direction="horizontal" className="min-h-[320px] rounded-lg border border-border">
+          <ResizablePanel defaultSize={18} minSize={10}>
+            <PanelContent label="File Tree" muted />
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel>
+            <ResizablePanelGroup direction="vertical">
+              <ResizablePanel defaultSize={70}>
+                <PanelContent label="Code Editor" />
+              </ResizablePanel>
+              <ResizableHandle withHandle />
+              <ResizablePanel defaultSize={30} minSize={15}>
+                <PanelContent label="Output / Terminal" muted />
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={22} minSize={12}>
+            <PanelContent label="Inspector" muted />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">Dashboard Layout</h3>
+        <ResizablePanelGroup direction="horizontal" className="min-h-[260px] rounded-lg border border-border">
+          <ResizablePanel defaultSize={25} minSize={15}>
+            <ResizablePanelGroup direction="vertical">
+              <ResizablePanel defaultSize={50}>
+                <PanelContent label="Stats A" muted />
+              </ResizablePanel>
+              <ResizableHandle withHandle />
+              <ResizablePanel defaultSize={50}>
+                <PanelContent label="Stats B" muted />
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel>
+            <PanelContent label="Chart / Main Content" />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </section>
+    </div>
   ),
-}
+};

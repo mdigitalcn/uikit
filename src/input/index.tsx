@@ -17,19 +17,19 @@ import { colorVars } from "../variants";
 import type { InputProps } from "./types";
 
 const inputVariants = cva(
-  "w-full placeholder:text-text-secondary/50 rounded-md disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none text-text-primary transition-colors",
+  "w-full placeholder:text-text-secondary/50 [--_radius:var(--radius-input)] rounded-slot disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none text-text-primary transition-colors",
   {
     variants: {
       variant: {
-        outline: "bg-background border border-border focus:border-primary",
-        filled: "bg-surface border border-transparent focus:border-primary",
+        outline: "bg-background border border-border hover:border-slot-50 focus:border-slot focus:ring-2 focus:ring-slot-30",
+        filled: "bg-surface border border-transparent hover:border-slot-30 focus:border-slot focus:ring-2 focus:ring-slot-30",
       },
       status: {
         default: "",
-        error: "border-error focus:border-error",
-        warning: "border-warning focus:border-warning",
-        info: "border-info focus:border-info",
-        success: "border-success focus:border-success",
+        error: "border-error",
+        warning: "border-warning",
+        info: "border-info",
+        success: "border-success",
       },
       size: {
         xs: "h-(--input-height-xs) px-(--input-padding-x-xs) text-xs",
@@ -126,9 +126,9 @@ const Input = React.memo<InputProps>(
     const wrapperClass = cn(
       "input_wrapper",
       "relative w-full",
-      color !== "primary" && colorVars[color],
+      colorVars[status !== 'default' ? status : color],
       wrapperClassName,
-      loading && "opacity-50 cursor-not-allowed",
+      loading && "opacity-50 pointer-events-none cursor-not-allowed",
       classNames?.wrapper,
     );
 
@@ -185,7 +185,7 @@ const Input = React.memo<InputProps>(
 
     const clearButtonClass = cn(
       "input_clearButton",
-      "flex items-center h-full top-0 text-text-secondary hover:text-text-primary",
+      "flex items-center justify-center rounded-sm p-0.5 cursor-pointer text-text-secondary hover:text-text-primary transition-colors focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       classNames?.clearButton,
     );
 

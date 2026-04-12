@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useId } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -46,6 +46,7 @@ const DatePickerComponent = React.memo<DatePickerProps>(
     maxDate,
     dateFormat = 'MM/dd/yyyy',
   }) => {
+    const triggerId = useId()
     const [currentValue, setCurrentValue] = useControllable<Date | null>({
       value,
       defaultValue: defaultValue || null,
@@ -137,7 +138,7 @@ const DatePickerComponent = React.memo<DatePickerProps>(
     )
 
     return (
-      <PickerWrapper label={label} error={error} warning={warning} info={info} success={success} helperText={helperText} messagePosition={messagePosition} required={required} fullWidth={fullWidth} classNames={classNames}>
+      <PickerWrapper label={label} triggerId={triggerId} error={error} warning={warning} info={info} success={success} helperText={helperText} messagePosition={messagePosition} required={required} fullWidth={fullWidth} classNames={classNames}>
         <div ref={ref} className={cn('datePicker_root', 'relative w-full', classNames?.root)} data-slot="root">
           <div className={cn('absolute flex items-center h-full top-0 text-text-secondary pointer-events-none z-10', pickerIconLeft[size], classNames?.icon)} data-slot="icon">
             <Calendar className={iconSizes[size]} />
@@ -146,12 +147,13 @@ const DatePickerComponent = React.memo<DatePickerProps>(
           <Popover open={isOpen} onOpenChange={(open: boolean) => { setIsOpen(open); if (!open) { setShowMonthSelector(false); setShowYearSelector(false); setHoverDate(null) } }}>
             <PopoverTrigger asChild>
               <button
+                id={triggerId}
                 type="button"
                 disabled={disabled}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-expanded={isOpen}
                 aria-haspopup="dialog"
-                className={cn('datePicker_trigger', pickerInputVariants({ variant, status, size, fullWidth }), colorVars[color], 'focus-visible:ring-slot', 'flex items-center justify-start cursor-pointer', pickerPaddingLeft[size], showClear && pickerPaddingRight[size], className, classNames?.trigger)}
+                className={cn('datePicker_trigger', pickerInputVariants({ variant, status, size, fullWidth }), colorVars[status !== 'default' ? status : color], 'focus-visible:ring-slot', 'flex items-center justify-start cursor-pointer', pickerPaddingLeft[size], showClear && pickerPaddingRight[size], className, classNames?.trigger)}
                 data-slot="trigger"
               >
                 {confirmed || preview ? (
@@ -190,7 +192,7 @@ const DatePickerComponent = React.memo<DatePickerProps>(
           </Popover>
 
           {showClear && (
-            <button type="button" onClick={handleClear} className={cn('absolute flex items-center h-full top-0 text-text-secondary hover:text-text-primary z-10', pickerIconRight[size], classNames?.clear)} aria-label="Clear date" data-slot="clear">
+            <button type="button" onClick={handleClear} className={cn('absolute top-1/2 -translate-y-1/2 flex items-center justify-center rounded-sm p-0.5 cursor-pointer text-text-secondary hover:text-text-primary z-10 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-slot/50', pickerIconRight[size], classNames?.clear)} aria-label="Clear date" data-slot="clear">
               <X className={iconSizes[size]} />
             </button>
           )}

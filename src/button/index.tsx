@@ -13,7 +13,7 @@ import { useRipple, RippleContainer } from "../hooks/useRipple";
 const buttonVariants = cva(
   [
     "inline-flex cursor-pointer text-center font-medium items-center justify-center",
-    "transition-[opacity] duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+    "[--_ease:var(--ease-spring)] transition-[opacity] duration-slot ease-slot",
     "disabled:opacity-50 disabled:pointer-events-none",
     "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-slot",
     // Accessibility: respect prefers-reduced-motion
@@ -37,7 +37,7 @@ const buttonVariants = cva(
         lg: "h-(--button-height-lg) px-(--button-padding-x-lg) text-lg gap-2.5",
       },
       shape: {
-        rounded: "rounded-md",
+        rounded: "[--_radius:var(--radius-button)] rounded-slot",
         pill: "rounded-full",
         square: "rounded-none",
       },
@@ -45,16 +45,16 @@ const buttonVariants = cva(
         true: "w-full",
         false: "",
       },
-      iconOnly: {
+      isIconOnly: {
         true: "",
         false: "",
       },
     },
     compoundVariants: [
-      { iconOnly: true, size: "xs", class: "w-(--button-height-xs) px-0" },
-      { iconOnly: true, size: "sm", class: "w-(--button-height-sm) px-0" },
-      { iconOnly: true, size: "md", class: "w-(--button-height-md) px-0" },
-      { iconOnly: true, size: "lg", class: "w-(--button-height-lg) px-0" },
+      { isIconOnly: true, size: "xs", class: "w-(--button-height-xs) px-0" },
+      { isIconOnly: true, size: "sm", class: "w-(--button-height-sm) px-0" },
+      { isIconOnly: true, size: "md", class: "w-(--button-height-md) px-0" },
+      { isIconOnly: true, size: "lg", class: "w-(--button-height-lg) px-0" },
     ],
     defaultVariants: {
       variant: "solid",
@@ -62,7 +62,7 @@ const buttonVariants = cva(
       size: "md",
       shape: "rounded",
       fullWidth: false,
-      iconOnly: false,
+      isIconOnly: false,
     },
   },
 );
@@ -95,13 +95,10 @@ const Button = React.memo<ButtonProps>(
     shape = "rounded",
     loading = false,
     loadingText,
-    loadingPosition = "left",
-    icon,
-    iconPlacement = "left",
-    leftIcon: leftIconProp,
-    rightIcon: rightIconProp,
+    startSection,
+    endSection,
     fullWidth = false,
-    iconOnly = false,
+    isIconOnly = false,
     asChild = false,
     pressed,
     ripple = false,
@@ -125,25 +122,31 @@ const Button = React.memo<ButtonProps>(
     } = useRipple(ripple && !isDisabled);
 
     // Dev warning for icon-only buttons without aria-label
-    if (import.meta.env?.DEV && iconOnly && !props['aria-label'] && !props['aria-labelledby']) {
+    if (import.meta.env?.DEV && isIconOnly && !props['aria-label'] && !props['aria-labelledby']) {
       console.warn('Button: icon-only buttons should have an aria-label or aria-labelledby prop for accessibility.')
     }
 
-    const leftIcon = leftIconProp ?? (iconPlacement === "left" ? icon : undefined);
-    const rightIcon = rightIconProp ?? (iconPlacement === "right" ? icon : undefined);
+    const spinnerElement = (
+      <span
+        className={cn("button_spinner inline-flex items-center", classNames?.spinner)}
+        data-slot="spinner"
+      >
+        <Spinner size={spinnerSize} color={spinnerColor} />
+      </span>
+    );
 
-    const showLeftIcon = !loading && leftIcon;
-    const showRightIcon = !loading && rightIcon;
-    const showSpinnerLeft = loading && loadingPosition === "left";
-    const showSpinnerRight = loading && loadingPosition === "right";
+    // Loading replaces startSection with spinner
+    const showStartSpinner = loading;
+    const showStartSection = !loading && startSection;
+    const showEndSection = !loading && endSection;
 
     const content = loading && loadingText ? loadingText : children;
 
-    const iconOnlyLoading = iconOnly && loading;
+    const iconOnlyLoading = isIconOnly && loading;
 
     const buttonClassName = cn(
       "button_root",
-      buttonVariants({ color, size, variant, shape, fullWidth, iconOnly }),
+      buttonVariants({ color, size, variant, shape, fullWidth, isIconOnly }),
       pressed && "data-[pressed=true]:ring-2 data-[pressed=true]:ring-current/30",
       ripple && "relative overflow-hidden",
       classNames?.root,
@@ -166,47 +169,27 @@ const Button = React.memo<ButtonProps>(
 
     const innerContent = iconOnlyLoading ? (
       <>
-        <span
-          className={cn("button_spinner inline-flex items-center", classNames?.spinner)}
-          data-slot="spinner"
-        >
-          <Spinner size={spinnerSize} color={spinnerColor} />
-        </span>
+        {spinnerElement}
         <span className="sr-only">Loading</span>
       </>
     ) : (
       <>
-        {showSpinnerLeft && (
+        {showStartSpinner && spinnerElement}
+        {showStartSection && (
           <span
-            className={cn("button_spinner inline-flex items-center", classNames?.spinner)}
-            data-slot="spinner"
+            className={cn("button_section shrink-0", classNames?.startSection)}
+            data-slot="start-section"
           >
-            <Spinner size={spinnerSize} color={spinnerColor} />
-          </span>
-        )}
-        {showLeftIcon && (
-          <span
-            className={cn("button_icon shrink-0", classNames?.icon, classNames?.leftIcon)}
-            data-slot="icon"
-          >
-            {leftIcon}
+            {startSection}
           </span>
         )}
         {content}
-        {showRightIcon && (
+        {showEndSection && (
           <span
-            className={cn("button_icon shrink-0", classNames?.icon, classNames?.rightIcon)}
-            data-slot="icon"
+            className={cn("button_section shrink-0", classNames?.endSection)}
+            data-slot="end-section"
           >
-            {rightIcon}
-          </span>
-        )}
-        {showSpinnerRight && (
-          <span
-            className={cn("button_spinner inline-flex items-center", classNames?.spinner)}
-            data-slot="spinner"
-          >
-            <Spinner size={spinnerSize} color={spinnerColor} />
+            {endSection}
           </span>
         )}
         {loading && <span className="sr-only">Loading</span>}
@@ -241,8 +224,8 @@ const Button = React.memo<ButtonProps>(
     return (
       <button
         ref={ref}
-        type={props.type ?? "button"}
         {...sharedProps}
+        type={props.type ?? "button"}
       >
         {innerContent}
         {rippleElements}

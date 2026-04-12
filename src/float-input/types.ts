@@ -15,6 +15,8 @@ export interface FloatInputProps
    */
   color?: ComponentColor
   size?: FloatInputSize
+  /** @default 'bottom' */
+  messagePosition?: 'top' | 'bottom'
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
   loading?: boolean

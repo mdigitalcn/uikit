@@ -1,4 +1,4 @@
-import type { ComponentSize } from "../types";
+import type { ComponentColor, ComponentSize } from "../types";
 
 /**
  * Size variants for Avatar component
@@ -18,21 +18,14 @@ export type AvatarStatus = "online" | "offline" | "away" | "busy";
 /**
  * Color variants for Avatar background (used with fallback/initials)
  */
-export type AvatarColor =
-  | "default"
-  | "primary"
-  | "secondary"
-  | "accent"
-  | "success"
-  | "error"
-  | "warning"
-  | "info";
+export type AvatarColor = ComponentColor;
 
 export interface AvatarClassNames {
   root?: string;
   image?: string;
   fallback?: string;
   status?: string;
+  badge?: string;
 }
 
 export interface AvatarGroupClassNames {

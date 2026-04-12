@@ -7,7 +7,7 @@ import { cn } from '../utils'
 import { colorVars } from '../variants'
 import type { AnchorItem, AnchorProps } from './types'
 
-const anchorLinkVariants = cva('block transition-colors duration-200 text-text-secondary hover:text-text-primary', {
+const anchorLinkVariants = cva('block transition-colors duration-slot text-text-secondary hover:text-text-primary', {
   variants: {
     size: {
       xs: 'text-xs py-0.5 pl-3',
@@ -175,7 +175,7 @@ const Anchor = React.memo<AnchorProps>(
           data-slot="indicator"
           className={cn(
             'anchor_indicator',
-            'absolute left-0 rounded-full bg-slot transition-all duration-200',
+            'absolute left-0 rounded-full bg-slot transition-[top,height,opacity] duration-slot',
             indicatorWidths[size],
             classNames?.indicator,
           )}

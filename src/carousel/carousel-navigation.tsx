@@ -49,7 +49,7 @@ export function CarouselNavigation({ type, swiper, className }: CarouselNavigati
         }
       }}
       className={cn(
-        'flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background shadow-sm hover:bg-surface transition cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none',
+        'flex items-center justify-center w-9 h-9 rounded-full border border-border bg-background [--_shadow:var(--shadow-sm)] shadow-size-slot hover:bg-surface transition cursor-pointer focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 outline-none',
         className
       )}
     >

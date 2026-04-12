@@ -9,7 +9,7 @@ import { colorVars } from '../variants'
 import type { FloatButtonProps, FloatButtonGroupProps, BackTopProps } from './types'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center shadow-lg transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer',
+  'inline-flex items-center justify-center [--_shadow:var(--shadow-lg)] shadow-size-slot transition-[transform,box-shadow,background-color,color] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer',
   {
     variants: {
       size: {
@@ -118,10 +118,10 @@ const FloatButtonGroup = React.memo<FloatButtonGroupProps>(
     )
 
     const placementClasses = {
-      top: 'flex-col-reverse gap-3 bottom-0',
-      bottom: 'flex-col gap-3 top-0',
-      left: 'flex-row-reverse gap-3 right-0',
-      right: 'flex-row gap-3 left-0',
+      top: 'flex-col-reverse gap-3 bottom-full',
+      bottom: 'flex-col gap-3 top-full',
+      left: 'flex-row-reverse gap-3 right-full',
+      right: 'flex-row gap-3 left-full',
     }
 
     const openIcon = icon ?? <Plus className="w-5 h-5" />
@@ -137,8 +137,8 @@ const FloatButtonGroup = React.memo<FloatButtonGroupProps>(
       >
         <FloatButton
           icon={
-            <span className={cn('transition-transform duration-200', isOpen && 'rotate-45')}>
-              {isOpen ? closedIcon : openIcon}
+            <span className={cn('transition-transform duration-slot', isOpen && 'rotate-45')}>
+              {isOpen && closeIcon ? closedIcon : openIcon}
             </span>
           }
           color={color}

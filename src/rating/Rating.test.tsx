@@ -153,11 +153,11 @@ describe('Rating', () => {
 
   it('supports different color variants', () => {
     const { rerender, container } = render(<Rating color="primary" value={3} onChange={vi.fn()} />);
-    let filledStar = container.querySelector('.fill-primary');
+    let filledStar = container.querySelector('.fill-slot');
     expect(filledStar).toBeInTheDocument();
 
     rerender(<Rating color="warning" value={3} onChange={vi.fn()} />);
-    filledStar = container.querySelector('.fill-warning');
+    filledStar = container.querySelector('.fill-slot');
     expect(filledStar).toBeInTheDocument();
   });
 

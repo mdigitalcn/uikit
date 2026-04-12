@@ -120,7 +120,7 @@ describe('FetchingOverlay', () => {
     const { container } = render(<FetchingOverlay isFetching={true} />)
     const root = container.querySelector('.fetchingOverlay_root')
     expect(root).toHaveClass('transition-opacity')
-    expect(root).toHaveClass('duration-300')
+    expect(root).toHaveClass('duration-slot')
   })
 
   it('passes spinner props to Spinner component', () => {

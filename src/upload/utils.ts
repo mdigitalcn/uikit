@@ -4,7 +4,7 @@ import { buttonColorVars } from '../variants'
 import { UploadFile } from './types'
 
 export const uploadButtonVariants = cva(
-  'inline-flex cursor-pointer outline-none border items-center justify-center gap-2 font-medium rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-slot bg-slot text-slot-fg hover:bg-slot-90',
+  'inline-flex cursor-pointer outline-none border items-center justify-center gap-2 font-medium [--_radius:var(--radius-button)] rounded-slot disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-slot bg-slot text-slot-fg hover:bg-slot-90',
   {
     variants: {
       color: buttonColorVars,
@@ -23,13 +23,13 @@ export const uploadButtonVariants = cva(
 )
 
 export const uploadDropzoneVariants = cva(
-  'relative border-2 border-dashed rounded-lg transition-[colors,border-color] duration-200 cursor-pointer',
+  'relative border-2 border-dashed [--_radius:var(--radius-card)] rounded-slot transition-[colors,border-color] duration-200 cursor-pointer',
   {
     variants: {
       status: {
         default:
-          'border-border bg-surface/50 hover:border-primary hover:bg-primary/5',
-        dragActive: 'border-primary bg-primary/10',
+          'border-border bg-surface/50 hover:border-slot-50 hover:bg-slot-5',
+        dragActive: 'border-slot bg-slot-10',
         error: 'border-error bg-error/5',
         disabled: 'border-border bg-surface/30 cursor-not-allowed opacity-50',
       },
@@ -48,21 +48,21 @@ export const uploadDropzoneVariants = cva(
 )
 
 export const uploadDraggerVariants = cva(
-  'relative border-2 border-dashed rounded-lg transition-[colors,border-color] duration-200 cursor-pointer flex flex-col items-center justify-center gap-2',
+  'relative border-2 border-dashed [--_radius:var(--radius-card)] rounded-slot transition-[colors,border-color] duration-200 cursor-pointer flex flex-col items-center justify-center gap-2',
   {
     variants: {
       status: {
         default:
-          'border-border bg-surface/50 hover:border-primary hover:bg-primary/5',
-        dragActive: 'border-primary bg-primary/10 scale-[1.02]',
+          'border-border bg-surface/50 hover:border-slot-50 hover:bg-slot-5',
+        dragActive: 'border-slot bg-slot-10 scale-[1.02]',
         error: 'border-error bg-error/5',
         disabled: 'border-border bg-surface/30 cursor-not-allowed opacity-50',
       },
       size: {
-        xs: 'min-h-[100px] p-3',
-        sm: 'min-h-[120px] p-4',
-        md: 'min-h-[160px] p-6',
-        lg: 'min-h-[200px] p-8',
+        xs: 'min-h-(--upload-dropzone-height-xs) p-3',
+        sm: 'min-h-(--upload-dropzone-height-sm) p-4',
+        md: 'min-h-(--upload-dropzone-height-md) p-6',
+        lg: 'min-h-(--upload-dropzone-height-lg) p-8',
       },
     },
     defaultVariants: {
@@ -77,8 +77,8 @@ export const uploadAvatarVariants = cva(
   {
     variants: {
       status: {
-        default: 'border-border bg-surface/50 hover:border-primary',
-        dragActive: 'border-primary bg-primary/10',
+        default: 'border-border bg-surface/50 hover:border-slot-50',
+        dragActive: 'border-slot bg-slot-10',
         error: 'border-error bg-error/5',
         disabled: 'border-border bg-surface/30 cursor-not-allowed opacity-50',
       },
@@ -97,12 +97,12 @@ export const uploadAvatarVariants = cva(
 )
 
 export const uploadPictureVariants = cva(
-  'relative overflow-hidden rounded-md border-2 border-dashed cursor-pointer transition-[colors,border-color] duration-200 flex items-center justify-center',
+  'relative overflow-hidden [--_radius:var(--radius-input)] rounded-slot border-2 border-dashed cursor-pointer transition-[colors,border-color] duration-200 flex items-center justify-center',
   {
     variants: {
       status: {
-        default: 'border-border bg-surface/50 hover:border-primary',
-        dragActive: 'border-primary bg-primary/10',
+        default: 'border-border bg-surface/50 hover:border-slot-50',
+        dragActive: 'border-slot bg-slot-10',
         error: 'border-error bg-error/5',
         disabled: 'border-border bg-surface/30 cursor-not-allowed opacity-50',
       },

@@ -1,4 +1,4 @@
-import type { ComponentColor, ComponentSize } from '../types'
+import type { ComponentColor, ComponentSize, ValidationMessages } from '../types'
 
 export interface MentionOption {
   label: string
@@ -15,7 +15,11 @@ export interface MentionsClassNames {
   highlight?: string
 }
 
-export interface MentionsProps {
+export type MentionsVariant = 'outline' | 'filled'
+
+export interface MentionsProps extends ValidationMessages {
+  /** @default 'outline' */
+  variant?: MentionsVariant
   value?: string
   defaultValue?: string
   onChange?: (value: string) => void
@@ -23,19 +27,20 @@ export interface MentionsProps {
   options?: MentionOption[]
   triggers?: string[]
   loading?: boolean
-  /** Color accent
-   * @default 'primary'
-   */
+  /** @default 'primary' */
   color?: ComponentColor
   size?: ComponentSize
   disabled?: boolean
   readOnly?: boolean
+  required?: boolean
   placeholder?: string
   rows?: number
   autoSize?: boolean
   label?: string
-  error?: string
-  helperText?: string
+  /** @default 'bottom' */
+  messagePosition?: 'top' | 'bottom'
+  clearable?: boolean
+  onClear?: () => void
   fullWidth?: boolean
   className?: string
   classNames?: MentionsClassNames

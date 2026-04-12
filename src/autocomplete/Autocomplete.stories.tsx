@@ -1,162 +1,203 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
+import type { Meta, StoryObj } from "@storybook/react";
+import { Search, User } from "lucide-react";
+import React from "react";
+import Autocomplete from "./index";
 
-import Autocomplete from './index'
+const COUNTRY_OPTIONS = [
+  { value: "us", label: "United States" },
+  { value: "uk", label: "United Kingdom" },
+  { value: "ca", label: "Canada" },
+  { value: "au", label: "Australia" },
+  { value: "de", label: "Germany" },
+  { value: "fr", label: "France" },
+  { value: "jp", label: "Japan" },
+  { value: "br", label: "Brazil" },
+  { value: "in", label: "India" },
+  { value: "mx", label: "Mexico" },
+];
+
+const USER_OPTIONS = [
+  { value: "alice", label: "Alice Johnson", description: "Product Designer" },
+  { value: "bob", label: "Bob Williams", description: "Engineer" },
+  { value: "charlie", label: "Charlie Brown", description: "Marketing" },
+  { value: "diana", label: "Diana Prince", description: "Sales" },
+  { value: "evan", label: "Evan Turner", description: "Support", disabled: true },
+];
 
 const meta: Meta<typeof Autocomplete> = {
-  title: 'Data Entry/Autocomplete',
+  title: "Form/Autocomplete",
   component: Autocomplete,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
+    variant: { control: "select", options: ["outline", "filled"] },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    color: {
+      control: "select",
+      options: ["primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
+    disabled: { control: "boolean" },
+    loading: { control: "boolean" },
+    clearable: { control: "boolean" },
+    fullWidth: { control: "boolean" },
+    required: { control: "boolean" },
+    placeholder: { control: "text" },
+    label: { control: "text" },
+    helperText: { control: "text" },
+    error: { control: "text" },
+    warning: { control: "text" },
+    success: { control: "text" },
+    info: { control: "text" },
+    emptyMessage: { control: "text" },
+    limit: { control: "number" },
+    messagePosition: { control: "select", options: ["top", "bottom"] },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof Autocomplete>
+export default meta;
+type Story = StoryObj<typeof Autocomplete>;
 
-const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape', 'Honeydew']
-
-export const Default: Story = {
+export const Playground: Story = {
   args: {
-    options: fruits,
-    placeholder: 'Search fruits...',
-    label: 'Fruit',
+    label: "Select country",
+    placeholder: "Search countries...",
+    options: COUNTRY_OPTIONS,
+    defaultValue: "",
+    variant: "outline",
+    size: "md",
+    color: "primary",
+    clearable: true,
+    fullWidth: true,
   },
-}
+};
 
-export const Controlled: Story = {
-  render: () => {
-    const [value, setValue] = useState('')
+export const Showcase: Story = {
+  render: () => (
+    <div className="space-y-10 max-w-md">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Variants</h3>
+        <div className="space-y-3">
+          <Autocomplete
+            label="Outline"
+            options={COUNTRY_OPTIONS}
+            variant="outline"
+            placeholder="Search countries..."
+          />
+          <Autocomplete
+            label="Filled"
+            options={COUNTRY_OPTIONS}
+            variant="filled"
+            placeholder="Search countries..."
+          />
+        </div>
+      </section>
 
-    return (
-      <div className="space-y-2 max-w-sm">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="space-y-3">
+          {(["xs", "sm", "md", "lg"] as const).map((size) => (
+            <Autocomplete
+              key={size}
+              label={`Size: ${size}`}
+              options={COUNTRY_OPTIONS}
+              size={size}
+              placeholder={`${size} autocomplete...`}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="space-y-3">
+          {(["primary", "secondary", "accent", "success", "error", "warning", "info"] as const).map((color) => (
+            <Autocomplete
+              key={color}
+              label={color}
+              options={COUNTRY_OPTIONS}
+              color={color}
+              placeholder={`${color}...`}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Validation States</h3>
+        <div className="space-y-3">
+          <Autocomplete
+            label="Error state"
+            options={COUNTRY_OPTIONS}
+            error="Please select a valid country"
+          />
+          <Autocomplete
+            label="Warning state"
+            options={COUNTRY_OPTIONS}
+            warning="This country has limited support"
+          />
+          <Autocomplete
+            label="Success state"
+            options={COUNTRY_OPTIONS}
+            defaultValue="United States"
+            success="Country verified"
+          />
+          <Autocomplete
+            label="Info state"
+            options={COUNTRY_OPTIONS}
+            info="Start typing to search"
+          />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Custom Render</h3>
         <Autocomplete
-          options={fruits}
-          value={value}
-          onChange={setValue}
-          label="Fruit"
-          placeholder="Type to search..."
+          label="Assign to user"
+          options={USER_OPTIONS}
+          placeholder="Search users..."
+          renderOption={(option, { highlighted }) => (
+            <div className={`flex items-center gap-2 ${highlighted ? "text-slot" : ""}`}>
+              <User className="w-4 h-4 shrink-0" />
+              <div>
+                <div className="font-medium">{option.label}</div>
+              </div>
+            </div>
+          )}
+        />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">String Options</h3>
+        <Autocomplete
+          label="Framework"
+          options={["React", "Vue", "Angular", "Svelte", "Solid", "Qwik"]}
+          placeholder="Search frameworks..."
           clearable
         />
-        <p className="text-xs text-text-secondary">Value: "{value}"</p>
-      </div>
-    )
-  },
-}
+      </section>
 
-export const WithObjectOptions: Story = {
-  render: () => {
-    const countries = [
-      { label: 'United States', value: 'us' },
-      { label: 'United Kingdom', value: 'uk' },
-      { label: 'Germany', value: 'de' },
-      { label: 'France', value: 'fr' },
-      { label: 'Japan', value: 'jp' },
-      { label: 'Australia', value: 'au' },
-      { label: 'Canada', value: 'ca' },
-      { label: 'Brazil', value: 'br' },
-    ]
-
-    return (
-      <Autocomplete
-        options={countries}
-        label="Country"
-        placeholder="Search countries..."
-        clearable
-        className="max-w-sm"
-      />
-    )
-  },
-}
-
-export const WithHelperAndError: Story = {
-  render: () => (
-    <div className="space-y-4 max-w-sm">
-      <Autocomplete
-        options={fruits}
-        label="With helper text"
-        helperText="Start typing to see suggestions"
-        placeholder="Search..."
-      />
-      <Autocomplete
-        options={fruits}
-        label="With error"
-        error="This field is required"
-        placeholder="Search..."
-      />
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">States</h3>
+        <div className="space-y-3">
+          <Autocomplete
+            label="Loading"
+            options={COUNTRY_OPTIONS}
+            loading
+            placeholder="Loading..."
+          />
+          <Autocomplete
+            label="Disabled"
+            options={COUNTRY_OPTIONS}
+            defaultValue="Canada"
+            disabled
+          />
+          <Autocomplete
+            label="With clear button"
+            options={COUNTRY_OPTIONS}
+            defaultValue="United States"
+            clearable
+          />
+        </div>
+      </section>
     </div>
   ),
-}
-
-export const CustomFilter: Story = {
-  render: () => {
-    const filter = (query: string, option: { label: string; value: string }) =>
-      option.label.toLowerCase().startsWith(query.toLowerCase())
-
-    return (
-      <Autocomplete
-        options={fruits}
-        label="Starts-with filter"
-        placeholder="Type to filter..."
-        filter={filter}
-        className="max-w-sm"
-      />
-    )
-  },
-}
-
-export const Sizes: Story = {
-  render: () => (
-    <div className="space-y-4 max-w-sm">
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-        <Autocomplete
-          key={size}
-          options={fruits}
-          size={size}
-          placeholder={`Size: ${size}`}
-          label={size.toUpperCase()}
-        />
-      ))}
-    </div>
-  ),
-}
-
-export const Loading: Story = {
-  args: {
-    options: fruits,
-    placeholder: 'Loading...',
-    label: 'Fruit',
-    loading: true,
-  },
-}
-
-export const Disabled: Story = {
-  args: {
-    options: fruits,
-    placeholder: 'Disabled',
-    label: 'Fruit',
-    disabled: true,
-    defaultValue: 'Apple',
-  },
-}
-
-export const ManyOptions: Story = {
-  render: () => {
-    const cities = Array.from({ length: 200 }, (_, i) => `City ${i + 1}`)
-
-    return (
-      <Autocomplete
-        options={cities}
-        label="City"
-        placeholder="Search 200 cities..."
-        limit={15}
-        clearable
-        className="max-w-sm"
-      />
-    )
-  },
-}
+};

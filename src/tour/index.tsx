@@ -88,10 +88,10 @@ import { cva } from 'class-variance-authority'
 const tourPopoverVariants = cva('', {
   variants: {
     size: {
-      xs: 'p-3 max-w-[260px]',
-      sm: 'p-3.5 max-w-[300px]',
-      md: 'p-4 max-w-[340px]',
-      lg: 'p-5 max-w-[400px]',
+      xs: 'p-3 max-w-(--tour-max-width-xs)',
+      sm: 'p-3.5 max-w-(--tour-max-width-sm)',
+      md: 'p-4 max-w-(--tour-max-width-md)',
+      lg: 'p-5 max-w-(--tour-max-width-lg)',
     },
   },
   defaultVariants: { size: 'md' },
@@ -113,7 +113,7 @@ const tourDescVariants = cva('text-text-secondary mt-1', {
 
 const tourBtnVariants = cva('', {
   variants: {
-    size: { xs: 'h-6 px-2.5 text-xs', sm: 'h-7 px-3 text-xs', md: 'h-8 px-3 text-sm', lg: 'h-9 px-4 text-sm' },
+    size: { xs: 'h-(--button-height-xs) px-(--button-padding-x-xs) text-xs', sm: 'h-(--button-height-sm) px-(--button-padding-x-sm) text-xs', md: 'h-(--button-height-md) px-(--button-padding-x-md) text-sm', lg: 'h-(--button-height-lg) px-(--button-padding-x-lg) text-sm' },
   },
   defaultVariants: { size: 'md' },
 })
@@ -229,38 +229,47 @@ const Tour = React.memo<TourProps>(
       }
     }, [isOpen, current, step])
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
       step?.onNext?.()
       if (current < steps.length - 1) setCurrent(current + 1)
       else { setOpen(false); onFinish?.() }
-    }
+    }, [step, current, steps.length, setCurrent, setOpen, onFinish])
 
-    const handlePrev = () => {
+    const handlePrev = useCallback(() => {
       step?.onPrev?.()
       if (current > 0) setCurrent(current - 1)
-    }
+    }, [step, current, setCurrent])
 
-    const handleSkip = () => {
+    const handleSkip = useCallback(() => {
       setOpen(false)
       if (controlledCurrent === undefined) setInternalCurrent(0)
       onSkip?.()
-    }
+    }, [setOpen, controlledCurrent, setInternalCurrent, onSkip])
 
     useEffect(() => {
       if (!isOpen) return
-      const handleKeyDown = (e: KeyboardEvent) => {
+      const onKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') handleSkip()
         else if (e.key === 'ArrowRight' || (e.key === 'Enter' && !e.shiftKey)) {
           e.preventDefault()
           handleNext()
         } else if (e.key === 'ArrowLeft' || (e.key === 'Enter' && e.shiftKey)) {
           e.preventDefault()
-          if (current > 0) handlePrev()
+          handlePrev()
         }
       }
-      document.addEventListener('keydown', handleKeyDown)
-      return () => document.removeEventListener('keydown', handleKeyDown)
-    }, [isOpen, current, steps.length])
+      document.addEventListener('keydown', onKeyDown)
+      return () => document.removeEventListener('keydown', onKeyDown)
+    }, [isOpen, handleNext, handlePrev, handleSkip])
+
+    // Move focus into the popover when tour opens or advances to a new step
+    useEffect(() => {
+      if (!isOpen || !popoverRef.current) return
+      const firstFocusable = popoverRef.current.querySelector<HTMLElement>(
+        'button:not([disabled])',
+      )
+      firstFocusable?.focus()
+    }, [isOpen, current])
 
     if (!isOpen || !step) return null
 
@@ -346,14 +355,14 @@ const Tour = React.memo<TourProps>(
           aria-modal="false"
           className={cn(
             'tour_popover',
-            'z-[var(--z-tour)] rounded-lg border border-border bg-background shadow-lg',
+            'z-[var(--z-tour)] [--_radius:var(--radius-popover)] rounded-slot border border-border bg-background [--_shadow:var(--shadow-lg)] shadow-size-slot',
             tourPopoverVariants({ size }),
             classNames?.popover,
           )}
           style={popoverStyle}
         >
           {step.cover && (
-            <div data-slot="cover" className={cn('tour_cover', 'mb-3 rounded-md overflow-hidden', classNames?.cover)}>
+            <div data-slot="cover" className={cn('tour_cover', 'mb-3 [--_radius:var(--radius-input)] rounded-slot overflow-hidden', classNames?.cover)}>
               {step.cover}
             </div>
           )}
@@ -382,7 +391,7 @@ const Tour = React.memo<TourProps>(
                 <button
                   type="button"
                   onClick={handleSkip}
-                  className={cn('inline-flex items-center justify-center rounded-md text-text-secondary hover:text-text-primary transition-colors font-medium cursor-pointer', tourBtnVariants({ size }))}
+                  className={cn('inline-flex items-center justify-center [--_radius:var(--radius-button)] rounded-slot text-text-secondary hover:text-text-primary transition-colors font-medium cursor-pointer', tourBtnVariants({ size }))}
                 >
                   {skipText}
                 </button>
@@ -392,7 +401,7 @@ const Tour = React.memo<TourProps>(
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className={cn('inline-flex items-center justify-center rounded-md border border-border bg-background text-text-primary hover:bg-surface transition-colors font-medium cursor-pointer', tourBtnVariants({ size }))}
+                  className={cn('inline-flex items-center justify-center [--_radius:var(--radius-button)] rounded-slot border border-border bg-background text-text-primary hover:bg-surface transition-colors font-medium cursor-pointer', tourBtnVariants({ size }))}
                 >
                   {step.prevText || prevText}
                 </button>
@@ -401,7 +410,7 @@ const Tour = React.memo<TourProps>(
               <button
                 type="button"
                 onClick={handleNext}
-                className={cn('inline-flex items-center justify-center rounded-md bg-slot text-slot-fg hover:bg-slot-90 transition-colors font-medium cursor-pointer', tourBtnVariants({ size }))}
+                className={cn('inline-flex items-center justify-center [--_radius:var(--radius-button)] rounded-slot bg-slot text-slot-fg hover:bg-slot-90 transition-colors font-medium cursor-pointer', tourBtnVariants({ size }))}
               >
                 {isLast ? finishText : step.nextText || nextText}
               </button>

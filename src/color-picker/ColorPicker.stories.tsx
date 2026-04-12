@@ -1,149 +1,168 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
+import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
+import ColorPicker from "./index";
 
-import { ColorPicker, ColorInput } from './index'
+const PALETTE_SWATCHES = [
+  "#ef4444",
+  "#f97316",
+  "#eab308",
+  "#22c55e",
+  "#3b82f6",
+  "#8b5cf6",
+  "#ec4899",
+  "#06b6d4",
+  "#ffffff",
+  "#000000",
+];
 
 const meta: Meta<typeof ColorPicker> = {
-  title: 'Data Entry/ColorPicker',
+  title: "Form/ColorPicker",
   component: ColorPicker,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg'],
+    format: { control: "select", options: ["hex", "rgb", "hsl"] },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    color: {
+      control: "select",
+      options: ["primary", "secondary", "accent", "success", "error", "warning", "info"],
     },
+    showAlpha: { control: "boolean" },
+    disabled: { control: "boolean" },
+    loading: { control: "boolean" },
+    required: { control: "boolean" },
+    label: { control: "text" },
+    helperText: { control: "text" },
+    error: { control: "text" },
+    warning: { control: "text" },
+    success: { control: "text" },
+    info: { control: "text" },
+    messagePosition: { control: "select", options: ["top", "bottom"] },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof ColorPicker>
+export default meta;
+type Story = StoryObj<typeof ColorPicker>;
 
-export const Default: Story = {
-  render: () => <ColorPicker label="Pick a color" />,
-}
+export const Playground: Story = {
+  args: {
+    label: "Pick a color",
+    defaultValue: "#3b82f6",
+    format: "hex",
+    size: "md",
+    color: "primary",
+    showAlpha: false,
+  },
+};
 
-export const Controlled: Story = {
-  render: () => {
-    const [color, setColor] = useState('#3b82f6')
-
-    return (
-      <div className="space-y-4">
-        <ColorPicker value={color} onChange={setColor} label="Theme color" />
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-lg border border-border" style={{ backgroundColor: color }} />
-          <code className="text-sm font-mono text-text-secondary">{color}</code>
+export const Showcase: Story = {
+  render: () => (
+    <div className="space-y-10 max-w-md">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Color Formats</h3>
+        <div className="space-y-4">
+          <ColorPicker
+            label="HEX format"
+            defaultValue="#3b82f6"
+            format="hex"
+          />
+          <ColorPicker
+            label="RGB format"
+            defaultValue="#22c55e"
+            format="rgb"
+          />
+          <ColorPicker
+            label="HSL format"
+            defaultValue="#ef4444"
+            format="hsl"
+          />
         </div>
-      </div>
-    )
-  },
-}
+      </section>
 
-export const WithSwatches: Story = {
-  render: () => (
-    <ColorPicker
-      label="Brand colors"
-      defaultValue="#ef4444"
-      swatches={[
-        '#ef4444', '#f97316', '#eab308', '#22c55e',
-        '#3b82f6', '#8b5cf6', '#ec4899', '#06b6d4',
-        '#000000', '#6b7280', '#d1d5db', '#ffffff',
-      ]}
-    />
-  ),
-}
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Alpha Channel</h3>
+        <ColorPicker
+          label="With alpha"
+          defaultValue="#3b82f6"
+          format="hex"
+          showAlpha
+        />
+      </section>
 
-export const Sizes: Story = {
-  render: () => (
-    <div className="flex flex-wrap gap-8">
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-        <ColorPicker key={size} size={size} label={size.toUpperCase()} defaultValue="#8b5cf6" />
-      ))}
-    </div>
-  ),
-}
-
-export const Disabled: Story = {
-  render: () => (
-    <ColorPicker label="Disabled" defaultValue="#3b82f6" disabled />
-  ),
-}
-
-// ColorInput stories
-export const InputDefault: Story = {
-  render: () => (
-    <div className="max-w-xs">
-      <ColorInput label="Background color" />
-    </div>
-  ),
-  name: 'ColorInput — Default',
-}
-
-export const InputControlled: Story = {
-  render: () => {
-    const [color, setColor] = useState('#22c55e')
-
-    return (
-      <div className="space-y-4 max-w-xs">
-        <ColorInput value={color} onChange={setColor} label="Accent color" />
-        <p className="text-sm text-text-secondary">Selected: <code className="font-mono">{color}</code></p>
-      </div>
-    )
-  },
-  name: 'ColorInput — Controlled',
-}
-
-export const InputWithSwatches: Story = {
-  render: () => (
-    <div className="max-w-xs">
-      <ColorInput
-        label="Chart color"
-        defaultValue="#3b82f6"
-        swatches={['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899']}
-      />
-    </div>
-  ),
-  name: 'ColorInput — With Swatches',
-}
-
-export const InputSizes: Story = {
-  render: () => (
-    <div className="space-y-4 max-w-xs">
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-        <ColorInput key={size} size={size} label={size.toUpperCase()} defaultValue="#8b5cf6" />
-      ))}
-    </div>
-  ),
-  name: 'ColorInput — Sizes',
-}
-
-export const ThemeEditor: Story = {
-  render: () => {
-    const [primary, setPrimary] = useState('#3b82f6')
-    const [bg, setBg] = useState('#ffffff')
-    const [text, setText] = useState('#111827')
-
-    return (
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-text-primary">Theme Editor</h3>
-        <div className="grid grid-cols-3 gap-4 max-w-2xl">
-          <ColorInput label="Primary" value={primary} onChange={setPrimary} />
-          <ColorInput label="Background" value={bg} onChange={setBg} />
-          <ColorInput label="Text" value={text} onChange={setText} />
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        <div className="space-y-4">
+          {(["xs", "sm", "md", "lg"] as const).map((size) => (
+            <ColorPicker
+              key={size}
+              label={`Size: ${size}`}
+              defaultValue="#8b5cf6"
+              size={size}
+            />
+          ))}
         </div>
-        <div
-          className="p-6 rounded-lg border"
-          style={{ backgroundColor: bg, color: text }}
-        >
-          <h4 className="text-lg font-semibold mb-2">Preview</h4>
-          <p className="mb-4">This is how your theme looks.</p>
-          <button
-            className="px-4 py-2 rounded-md text-white font-medium"
-            style={{ backgroundColor: primary }}
-          >
-            Primary Button
-          </button>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Swatches</h3>
+        <ColorPicker
+          label="Color with swatches"
+          defaultValue="#3b82f6"
+          swatches={PALETTE_SWATCHES}
+        />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="space-y-4">
+          {(["primary", "secondary", "accent", "success", "error", "warning", "info"] as const).map((color) => (
+            <ColorPicker
+              key={color}
+              label={color}
+              defaultValue="#3b82f6"
+              color={color}
+            />
+          ))}
         </div>
-      </div>
-    )
-  },
-}
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Validation States</h3>
+        <div className="space-y-4">
+          <ColorPicker
+            label="Error state"
+            error="Please select a valid color"
+          />
+          <ColorPicker
+            label="Warning state"
+            defaultValue="#eab308"
+            warning="Low contrast ratio for text"
+          />
+          <ColorPicker
+            label="Success state"
+            defaultValue="#22c55e"
+            success="Color meets accessibility standards"
+          />
+          <ColorPicker
+            label="Info state"
+            info="Use hex format for best compatibility"
+          />
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">States</h3>
+        <div className="space-y-4">
+          <ColorPicker
+            label="Disabled"
+            defaultValue="#3b82f6"
+            disabled
+          />
+          <ColorPicker
+            label="Loading"
+            loading
+          />
+        </div>
+      </section>
+    </div>
+  ),
+};

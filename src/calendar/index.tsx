@@ -6,6 +6,7 @@ import React from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useControllable } from '../hooks/useControllable'
 import { cn } from '../utils'
+import { colorVars } from '../variants'
 import type { CalendarProps } from './types'
 
 const calendarVariants = cva('inline-flex flex-col select-none', {
@@ -246,6 +247,7 @@ const Calendar = React.memo<CalendarProps>(
         className={cn(
           'calendar_root',
           calendarVariants({ size }),
+          colorVars[color],
           classNames?.root,
           className,
         )}
@@ -331,8 +333,8 @@ const Calendar = React.memo<CalendarProps>(
                     outside && !showOutsideDays && 'invisible',
                     disabled && 'opacity-30 cursor-not-allowed',
                     !disabled && !isSelected && 'hover:bg-surface',
-                    isToday && !isSelected && 'border border-primary text-primary',
-                    isSelected && 'bg-primary text-primary-foreground',
+                    isToday && !isSelected && 'border border-slot text-slot',
+                    isSelected && 'bg-slot text-slot-fg',
                     classNames?.day,
                     isToday && classNames?.today,
                     isSelected && classNames?.selected,

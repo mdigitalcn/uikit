@@ -9,15 +9,15 @@ const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffec
 
 import { cn, iconSizes } from "../utils";
 import { colorVars } from "../variants";
-import type { AccordionItem as AccordionItemType, AccordionProps, AccordionSize } from "./types";
+import type { AccordionItem as AccordionItemType, AccordionHeadingLevel, AccordionProps, AccordionSize } from "./types";
 
 const accordionContainerVariants = cva("w-full", {
   variants: {
     variant: {
-      default: "space-y-0 divide-y divide-border rounded-lg overflow-hidden",
-      solid: "space-y-0 divide-y divide-border/50 rounded-lg overflow-hidden",
-      soft: "space-y-0 divide-y divide-border/30 rounded-lg overflow-hidden",
-      bordered: "space-y-0 divide-y border border-slot rounded-lg overflow-hidden",
+      default: "space-y-0 divide-y divide-border [--_radius:var(--radius-card)] rounded-slot overflow-clip",
+      solid: "space-y-0 divide-y divide-border/50 [--_radius:var(--radius-card)] rounded-slot overflow-clip",
+      soft: "space-y-0 divide-y divide-border/30 [--_radius:var(--radius-card)] rounded-slot overflow-clip",
+      bordered: "space-y-0 divide-y border border-slot [--_radius:var(--radius-card)] rounded-slot overflow-clip",
       splitted: "space-y-2",
     },
     color: colorVars,
@@ -47,7 +47,7 @@ const accordionItemVariants = cva("", {
       solid: "bg-slot text-slot-fg",
       soft: "bg-slot-10",
       bordered: "bg-transparent border-slot-20",
-      splitted: "border rounded-lg overflow-hidden border-slot",
+      splitted: "border [--_radius:var(--radius-card)] rounded-slot overflow-clip border-slot",
     },
     color: colorVars,
   },
@@ -119,6 +119,8 @@ interface AccordionItemComponentProps {
   expandIcon: AccordionProps["expandIcon"];
   expandIconPosition: NonNullable<AccordionProps["expandIconPosition"]>;
   destroyOnClose: boolean;
+  headingLevel: AccordionHeadingLevel;
+  useRegionRole: boolean;
   onToggle: (key: string, disabled?: boolean) => void;
   classNames?: AccordionProps["classNames"];
   itemClassName?: string;
@@ -136,6 +138,8 @@ const AccordionItemComponent = React.memo<AccordionItemComponentProps>(
     expandIcon,
     expandIconPosition,
     destroyOnClose,
+    headingLevel,
+    useRegionRole,
     onToggle,
     classNames,
     itemClassName,
@@ -208,7 +212,7 @@ const AccordionItemComponent = React.memo<AccordionItemComponentProps>(
         return (
           <span
             className={cn(
-              "shrink-0 transition-transform duration-300",
+              "[--_duration:var(--duration-slow)] shrink-0 transition-transform duration-slot",
               isExpanded && "rotate-180",
             )}
           >
@@ -220,7 +224,7 @@ const AccordionItemComponent = React.memo<AccordionItemComponentProps>(
       return (
         <ChevronDown
           className={cn(
-            "shrink-0 transition-transform duration-300",
+            "[--_duration:var(--duration-slow)] shrink-0 transition-transform duration-slot",
             isExpanded && "rotate-180",
             isSolidColored ? "text-inherit" : getIconColor(color, isExpanded),
             iconSizes[size],
@@ -228,6 +232,8 @@ const AccordionItemComponent = React.memo<AccordionItemComponentProps>(
         />
       );
     };
+
+    const Heading = `h${headingLevel}` as React.ElementType;
 
     return (
       <div
@@ -240,26 +246,30 @@ const AccordionItemComponent = React.memo<AccordionItemComponentProps>(
           itemClassName,
         )}
       >
-        <button
-          type="button"
-          id={headerId}
-          aria-expanded={isItemActive}
-          aria-controls={panelId}
-          aria-disabled={item.disabled}
-          disabled={item.disabled}
-          onClick={() => onToggle(item.key, item.disabled)}
-          onPointerEnter={handlePointerEnter}
-          data-slot="trigger"
-          className={cn(
-            "accordion_trigger",
-            accordionHeaderVariants({
-              size,
-              color,
-              disabled: item.disabled,
-            }),
-            classNames?.trigger,
-          )}
+        <Heading
+          data-slot="heading"
+          className={cn("accordion_heading m-0 p-0", classNames?.heading)}
         >
+          <button
+            type="button"
+            id={headerId}
+            aria-expanded={isItemActive}
+            aria-controls={panelId}
+            aria-disabled={item.disabled}
+            disabled={item.disabled}
+            onClick={() => onToggle(item.key, item.disabled)}
+            onPointerEnter={handlePointerEnter}
+            data-slot="trigger"
+            className={cn(
+              "accordion_trigger",
+              accordionHeaderVariants({
+                size,
+                color,
+                disabled: item.disabled,
+              }),
+              classNames?.trigger,
+            )}
+          >
           {expandIconPosition === "left" && renderExpandIcon(isItemActive)}
 
           {item.icon && (
@@ -307,13 +317,14 @@ const AccordionItemComponent = React.memo<AccordionItemComponentProps>(
           )}
 
           {expandIconPosition === "right" && renderExpandIcon(isItemActive)}
-        </button>
+          </button>
+        </Heading>
 
         <div
           ref={panelRef}
           id={panelId}
-          role="region"
-          aria-labelledby={headerId}
+          role={useRegionRole ? "region" : undefined}
+          aria-labelledby={useRegionRole ? headerId : undefined}
           aria-hidden={!isItemActive}
           className="overflow-hidden"
           style={{ contain: "content" }}
@@ -356,6 +367,7 @@ const Accordion = React.memo<AccordionProps>(
     collapsible = true,
     destroyOnClose = false,
     showDivider = true,
+    headingLevel = 3,
     className,
     itemClassName,
     classNames,
@@ -363,6 +375,10 @@ const Accordion = React.memo<AccordionProps>(
   }) => {
     const isSolidColored = variant === "solid" && color !== "default";
     const baseId = useId();
+
+    // W3C: Avoid role="region" when >6 panels can all expand simultaneously
+    // (landmark proliferation harms screen reader navigation)
+    const useRegionRole = !(multiple && items.length > 6);
     const [internalActiveKey, setInternalActiveKey] = useState<
       string | string[]
     >(
@@ -464,6 +480,8 @@ const Accordion = React.memo<AccordionProps>(
             expandIcon={expandIcon}
             expandIconPosition={expandIconPosition}
             destroyOnClose={destroyOnClose}
+            headingLevel={headingLevel}
+            useRegionRole={useRegionRole}
             onToggle={handleToggle}
             classNames={classNames}
             itemClassName={itemClassName}

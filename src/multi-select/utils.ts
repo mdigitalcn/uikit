@@ -1,11 +1,15 @@
 import { cva } from "class-variance-authority";
 
 export const multiSelectTriggerVariants = cva(
-  "w-full flex items-center justify-between rounded-md bg-background text-text-primary border focus:border-primary outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer gap-1",
+  "w-full flex items-center justify-between [--_radius:var(--radius-input)] rounded-slot text-text-primary outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer gap-1",
   {
     variants: {
+      variant: {
+        outline: "bg-background border border-border focus:border-slot hover:border-slot/50",
+        filled: "bg-surface border border-transparent focus:border-slot",
+      },
       status: {
-        default: "border-border",
+        default: "",
         error: "border-error",
         warning: "border-warning",
         info: "border-info",
@@ -23,6 +27,7 @@ export const multiSelectTriggerVariants = cva(
       },
     },
     defaultVariants: {
+      variant: "outline",
       status: "default",
       size: "md",
       fullWidth: true,
@@ -31,7 +36,7 @@ export const multiSelectTriggerVariants = cva(
 );
 
 export const multiSelectDropdownVariants = cva(
-  "absolute z-[var(--z-dropdown)] mt-1 overflow-auto rounded-md border border-border bg-background",
+  "absolute z-[var(--z-dropdown)] mt-1 overflow-auto [--_radius:var(--radius-dropdown)] rounded-slot border border-border bg-background",
 );
 
 export const multiSelectOptionVariants = cva(

@@ -16,21 +16,21 @@ import { colorVars } from "../variants";
 import type { FloatInputProps } from "./types";
 
 const floatInputVariants = cva(
-  "peer w-full placeholder:text-transparent rounded-md disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none text-text-primary transition-[border-color] duration-200 border border-border focus-visible:border-slot bg-background",
+  "peer w-full placeholder:text-transparent [--_radius:var(--radius-input)] rounded-slot disabled:opacity-50 disabled:cursor-not-allowed read-only:bg-surface read-only:cursor-default outline-none text-text-primary transition-[border-color,box-shadow] duration-slot border border-border hover:border-slot-50 focus-visible:border-slot focus-visible:ring-2 focus-visible:ring-slot-30 bg-background",
   {
     variants: {
       status: {
         default: "",
-        error: "border-error focus-visible:border-error",
-        warning: "border-warning focus-visible:border-warning",
-        info: "border-info focus-visible:border-info",
-        success: "border-success focus-visible:border-success",
+        error: "border-error",
+        warning: "border-warning",
+        info: "border-info",
+        success: "border-success",
       },
       size: {
-        xs: "h-9 pt-3.5 px-2 text-xs",
-        sm: "h-10 pt-4 px-3 text-sm",
-        md: "h-12 pt-5 px-3 text-base",
-        lg: "h-14 pt-5 px-4 text-lg",
+        xs: "h-(--float-input-height-xs) pt-3.5 px-(--input-padding-x-xs) text-xs",
+        sm: "h-(--float-input-height-sm) pt-4 px-(--input-padding-x-sm) text-sm",
+        md: "h-(--float-input-height-md) pt-5 px-(--input-padding-x-md) text-base",
+        lg: "h-(--float-input-height-lg) pt-5 px-(--input-padding-x-lg) text-lg",
       },
       fullWidth: {
         true: "w-full",
@@ -46,7 +46,7 @@ const floatInputVariants = cva(
 );
 
 const floatLabelVariants = cva(
-  "absolute pointer-events-none transition-[top,font-size,color] duration-200 text-text-secondary origin-left",
+  "absolute pointer-events-none transition-[top,font-size,color] duration-slot text-text-secondary origin-left",
   {
     variants: {
       size: {
@@ -107,6 +107,7 @@ const FloatInput = React.memo<FloatInputProps>(
     info,
     success,
     helperText,
+    messagePosition = 'bottom',
     leftIcon,
     rightIcon,
     clearable = false,
@@ -179,8 +180,8 @@ const FloatInput = React.memo<FloatInputProps>(
         cn(
           "float-input_wrapper",
           "relative w-full",
-          status === 'default' && colorVars[color],
-          loading && "opacity-50 cursor-not-allowed",
+          colorVars[status !== 'default' ? status : color],
+          loading && "opacity-50 pointer-events-none cursor-not-allowed",
           classNames?.wrapper,
         ),
       [loading, classNames?.wrapper, status, color],
@@ -267,7 +268,7 @@ const FloatInput = React.memo<FloatInputProps>(
       () =>
         cn(
           "float-input_clearButton",
-          "flex items-center h-full top-0 text-text-secondary hover:text-text-primary transition-colors",
+          "flex items-center justify-center rounded-sm p-0.5 cursor-pointer text-text-secondary hover:text-text-primary transition-colors focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           classNames?.clearButton,
         ),
       [classNames?.clearButton],
@@ -286,8 +287,13 @@ const FloatInput = React.memo<FloatInputProps>(
 
     const iconSize = iconSizes[size];
 
+    const helperEl = helperMessage && (
+      <p id={helperId} data-slot="helper" className={helperClass}>{helperMessage}</p>
+    );
+
     return (
       <div data-slot="root" className={rootClass}>
+        {messagePosition === 'top' && helperEl}
         <div data-slot="wrapper" className={wrapperClass}>
           {leftIcon && (
             <div
@@ -347,11 +353,7 @@ const FloatInput = React.memo<FloatInputProps>(
             </div>
           )}
         </div>
-        {helperMessage && (
-          <p id={helperId} data-slot="helper" className={helperClass}>
-            {helperMessage}
-          </p>
-        )}
+        {messagePosition === 'bottom' && helperEl}
       </div>
     );
   },
