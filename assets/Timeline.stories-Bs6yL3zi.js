@@ -1,0 +1,69 @@
+import{j as e}from"./jsx-runtime-D_zvdyIk.js";import{c as o,i as X,a as G}from"./utils-_uLxnvdl.js";import{R as K}from"./index-ZH-6pyQh.js";import{c as W}from"./variants-CTjkuV9j.js";import{P as Q,T as U}from"./truck-CnWC_3YN.js";import{C as A}from"./clock-BcXKPbe9.js";import{H as Z}from"./house-DCjPrFcn.js";import{C as $}from"./check-CKCh4cDT.js";import{X as N}from"./x-ByohdK2B.js";import"./_commonjsHelpers-CqkleIqs.js";import"./createLucideIcon-BXJdBs6C.js";const g=G("rounded-full shrink-0 flex items-center justify-center z-10 bg-slot",{variants:{size:{xs:"w-2 h-2",sm:"w-3 h-3",md:"w-4 h-4",lg:"w-5 h-5"},color:W},defaultVariants:{size:"md",color:"default"}}),p={xs:{vertical:"w-px",horizontal:"h-px"},sm:{vertical:"w-px",horizontal:"h-px"},md:{vertical:"w-0.5",horizontal:"h-0.5"},lg:{vertical:"w-0.5",horizontal:"h-0.5"}},R={xs:"w-4",sm:"w-5",md:"w-6",lg:"w-7"},a={xs:"text-xs",sm:"text-sm",md:"text-base",lg:"text-lg"},b={xs:"text-[10px]",sm:"text-xs",md:"text-sm",lg:"text-base"},ee={xs:"w-5 h-5",sm:"w-6 h-6",md:"w-8 h-8",lg:"w-10 h-10"},S={xs:"min-h-5",sm:"min-h-6",md:"min-h-8",lg:"min-h-10"},l=K.memo(({items:d,mode:m="left",orientation:M="vertical",size:n="md",color:w="default",pending:x=!1,pendingText:y="Loading...",reverse:E=!1,ariaLabel:k,className:_,classNames:t,ref:I})=>{const J=M==="horizontal",c=E?[...d].reverse():d,T=(i,r)=>i.dot?e.jsx("div",{className:o("timeline_dot","shrink-0 z-10",t==null?void 0:t.dot),"data-slot":"dot",children:i.dot}):i.icon?e.jsx("div",{className:o("timeline_dot","rounded-full shrink-0 flex items-center justify-center z-10 bg-slot text-slot-fg",W[r],ee[n],t==null?void 0:t.dot),"data-slot":"dot",children:e.jsx("span",{className:o("timeline_icon","flex items-center justify-center",X[n],t==null?void 0:t.icon),"data-slot":"icon",children:i.icon})}):e.jsx("div",{className:o("timeline_dot",g({size:n,color:r}),t==null?void 0:t.dot),"data-slot":"dot"}),z=(i,r)=>e.jsxs("div",{className:o("timeline_content",a[n],r==="right"?"text-right":"text-left",t==null?void 0:t.content),"data-slot":"content",children:[e.jsx("div",{className:o("timeline_title","font-semibold text-text-primary -mt-1",i.description&&"mb-1",t==null?void 0:t.title),"data-slot":"title",children:i.title}),i.description&&e.jsx("div",{className:o("timeline_description","text-text-secondary",t==null?void 0:t.description),"data-slot":"description",children:i.description})]}),C=(i,r)=>i.timestamp?e.jsx("div",{className:o("timeline_date","text-text-secondary",b[n],r==="right"?"text-right":"text-left",t==null?void 0:t.date),"data-slot":"date",children:i.timestamp}):null,L=(i,r)=>{const v=r===c.length-1&&!x,j=i.color||w,h=m==="left"||m==="center"&&r%2===0;return e.jsxs("div",{className:o("timeline_item","grid grid-cols-[1fr_auto_1fr]",t==null?void 0:t.item),"data-slot":"item",role:"listitem",children:[e.jsx("div",{className:"pb-8 pr-4",children:h?C(i,"right"):z(i,"right")}),e.jsxs("div",{className:o("timeline_track","relative flex flex-col items-center",R[n]),children:[T(i,j),!v&&e.jsx("div",{className:o("timeline_connector","flex-1 bg-border",p[n].vertical,t==null?void 0:t.connector),"data-slot":"connector"})]}),e.jsx("div",{className:"pb-8 pl-4",children:h?z(i,"left"):C(i,"left")})]},i.key??r)},B=()=>{const i=c.length,r=m==="left"||m==="center"&&i%2===0;return e.jsxs("div",{className:o("timeline_item","grid grid-cols-[1fr_auto_1fr]",t==null?void 0:t.item),"data-slot":"item",role:"listitem",children:[e.jsx("div",{className:"pr-4",children:!r&&e.jsx("div",{className:o("text-text-secondary text-right",a[n]),children:y})}),e.jsx("div",{className:o("timeline_track","relative flex flex-col items-center",R[n]),children:e.jsx("div",{className:o("timeline_dot",g({size:n,color:"default"}),"animate-pulse",t==null?void 0:t.dot),"data-slot":"dot"})}),e.jsx("div",{className:"pl-4",children:r&&e.jsx("div",{className:o("text-text-secondary",a[n],t==null?void 0:t.content),children:y})})]})},Y=(i,r)=>{const v=r===0,j=r===c.length-1&&!x,h=i.color||w;return e.jsxs("div",{className:o("timeline_item","flex-1 flex flex-col items-center min-w-0",t==null?void 0:t.item),"data-slot":"item",role:"listitem",children:[e.jsx("div",{className:o("timeline_date","text-text-secondary text-center mb-2",b[n],t==null?void 0:t.date),"data-slot":"date",children:i.timestamp||" "}),e.jsxs("div",{className:o("flex items-center w-full",S[n]),children:[e.jsx("div",{className:o("flex-1",!v&&o("bg-border",p[n].horizontal))}),T(i,h),e.jsx("div",{className:o("flex-1",!j&&o("bg-border",p[n].horizontal))})]}),e.jsxs("div",{className:o("timeline_content","text-center mt-1.5",a[n],t==null?void 0:t.content),"data-slot":"content",children:[e.jsx("div",{className:o("timeline_title","font-semibold text-text-primary",i.description&&"mb-1",t==null?void 0:t.title),"data-slot":"title",children:i.title}),i.description&&e.jsx("div",{className:o("timeline_description","text-text-secondary",t==null?void 0:t.description),"data-slot":"description",children:i.description})]})]},i.key??r)},F=()=>e.jsxs("div",{className:o("timeline_item","flex-1 flex flex-col items-center min-w-0",t==null?void 0:t.item),"data-slot":"item",role:"listitem",children:[e.jsx("div",{className:o("text-text-secondary text-center mb-2",b[n]),children:" "}),e.jsxs("div",{className:o("flex items-center w-full",S[n]),children:[e.jsx("div",{className:o("flex-1 bg-border",p[n].horizontal)}),e.jsx("div",{className:o("timeline_dot",g({size:n,color:"default"}),"animate-pulse",t==null?void 0:t.dot),"data-slot":"dot"}),e.jsx("div",{className:"flex-1 h-0"})]}),e.jsx("div",{className:o("timeline_content","text-center mt-1.5 text-text-secondary",a[n],t==null?void 0:t.content),"data-slot":"content",children:y})]});return J?e.jsxs("div",{ref:I,className:o("timeline_root","relative flex w-full",t==null?void 0:t.root,_),"data-slot":"root",role:"list","aria-label":k??"Timeline",children:[c.map((i,r)=>Y(i,r)),x&&F()]}):e.jsxs("div",{ref:I,className:o("timeline_root","relative",t==null?void 0:t.root,_),"data-slot":"root",role:"list","aria-label":k??"Timeline",children:[c.map((i,r)=>L(i,r)),x&&B()]})});l.displayName="Timeline";l.__docgenInfo={description:"",methods:[],displayName:"Timeline",props:{mode:{defaultValue:{value:'"left"',computed:!1},required:!1},orientation:{defaultValue:{value:'"vertical"',computed:!1},required:!1},size:{defaultValue:{value:'"md"',computed:!1},required:!1},color:{defaultValue:{value:'"default"',computed:!1},required:!1},pending:{defaultValue:{value:"false",computed:!1},required:!1},pendingText:{defaultValue:{value:'"Loading..."',computed:!1},required:!1},reverse:{defaultValue:{value:"false",computed:!1},required:!1}}};const pe={title:"Data Display/Timeline",component:l,tags:["autodocs"],argTypes:{color:{control:"select",options:["default","primary","secondary","accent","success","error","warning","info"]},size:{control:"select",options:["xs","sm","md","lg"]},orientation:{control:"select",options:["vertical","horizontal"]},mode:{control:"select",options:["left","right","center"]},pending:{control:"boolean"},reverse:{control:"boolean"}}},s=[{key:"placed",title:"Order Placed",description:"Your order has been confirmed.",timestamp:"Jan 1, 09:00",color:"success"},{key:"processing",title:"Processing",description:"We are preparing your order.",timestamp:"Jan 2, 10:30",color:"success"},{key:"shipped",title:"Shipped",description:"Package is on its way.",timestamp:"Jan 3, 14:00",color:"primary"},{key:"delivered",title:"Delivered",description:"Package will arrive soon.",timestamp:"Est. Jan 5",color:"default"}],te=[{key:"order",title:"Order Received",description:"We received your order.",icon:e.jsx(Q,{className:"w-3.5 h-3.5"}),color:"success"},{key:"ship",title:"Dispatched",description:"Your package has been sent.",icon:e.jsx(U,{className:"w-3.5 h-3.5"}),color:"success"},{key:"transit",title:"In Transit",description:"En route to your location.",icon:e.jsx(A,{className:"w-3.5 h-3.5"}),color:"primary"},{key:"home",title:"Delivered",description:"Awaiting delivery.",icon:e.jsx(Z,{className:"w-3.5 h-3.5"}),color:"default"}],ie=[{key:"success",title:"Deployment Succeeded",description:"All checks passed.",icon:e.jsx($,{className:"w-3.5 h-3.5"}),color:"success"},{key:"warn",title:"High Latency Detected",description:"Response time above threshold.",icon:e.jsx(A,{className:"w-3.5 h-3.5"}),color:"warning"},{key:"error",title:"Service Outage",description:"Database connection failed.",icon:e.jsx(N,{className:"w-3.5 h-3.5"}),color:"error"},{key:"info",title:"Rollback Initiated",description:"Rolling back to previous version.",color:"info"}],f={args:{items:s,size:"md",color:"primary",orientation:"vertical",mode:"left"}},u={render:()=>e.jsxs("div",{className:"space-y-10",children:[e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"Basic with Timestamps"}),e.jsx(l,{items:s})]}),e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"With Icons"}),e.jsx(l,{items:te,color:"primary"})]}),e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"Mixed Item Colors"}),e.jsx(l,{items:ie})]}),e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"With Pending Indicator"}),e.jsx(l,{items:s.slice(0,3),pending:!0,pendingText:"Awaiting delivery...",color:"primary"})]}),e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"Reversed"}),e.jsx(l,{items:s,reverse:!0,color:"primary"})]}),e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"Horizontal Orientation"}),e.jsx(l,{items:s,orientation:"horizontal",color:"primary"})]}),e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"Sizes"}),["xs","sm","md","lg"].map(d=>e.jsxs("div",{className:"mb-6",children:[e.jsxs("p",{className:"text-xs text-text-secondary mb-2",children:["size: ",d]}),e.jsx(l,{items:s.slice(0,3),size:d,color:"primary"})]},d))]}),e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"Colors"}),e.jsx("div",{className:"grid grid-cols-2 gap-6",children:["primary","accent","success","error","warning","info"].map(d=>e.jsxs("div",{children:[e.jsx("p",{className:"text-xs text-text-secondary mb-2",children:d}),e.jsx(l,{items:s.slice(0,2),color:d})]},d))})]}),e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"Mode — Right"}),e.jsx(l,{items:s,mode:"right",color:"primary"})]}),e.jsxs("section",{children:[e.jsx("h3",{className:"text-sm font-semibold text-text-secondary mb-3",children:"Mode — Center (Alternating)"}),e.jsx(l,{items:s,mode:"center",color:"primary"})]})]})};var P,V,D;f.parameters={...f.parameters,docs:{...(P=f.parameters)==null?void 0:P.docs,source:{originalSource:`{
+  args: {
+    items: orderItems,
+    size: "md",
+    color: "primary",
+    orientation: "vertical",
+    mode: "left"
+  }
+}`,...(D=(V=f.parameters)==null?void 0:V.docs)==null?void 0:D.source}}};var H,O,q;u.parameters={...u.parameters,docs:{...(H=u.parameters)==null?void 0:H.docs,source:{originalSource:`{
+  render: () => <div className="space-y-10">
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Basic with Timestamps</h3>
+        <Timeline items={orderItems} />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Icons</h3>
+        <Timeline items={iconItems} color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Mixed Item Colors</h3>
+        <Timeline items={mixedColorItems} />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">With Pending Indicator</h3>
+        <Timeline items={orderItems.slice(0, 3)} pending pendingText="Awaiting delivery..." color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Reversed</h3>
+        <Timeline items={orderItems} reverse color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Horizontal Orientation</h3>
+        <Timeline items={orderItems} orientation="horizontal" color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Sizes</h3>
+        {(["xs", "sm", "md", "lg"] as const).map(s => <div key={s} className="mb-6">
+            <p className="text-xs text-text-secondary mb-2">size: {s}</p>
+            <Timeline items={orderItems.slice(0, 3)} size={s} color="primary" />
+          </div>)}
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Colors</h3>
+        <div className="grid grid-cols-2 gap-6">
+          {(["primary", "accent", "success", "error", "warning", "info"] as const).map(c => <div key={c}>
+              <p className="text-xs text-text-secondary mb-2">{c}</p>
+              <Timeline items={orderItems.slice(0, 2)} color={c} />
+            </div>)}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Mode — Right</h3>
+        <Timeline items={orderItems} mode="right" color="primary" />
+      </section>
+
+      <section>
+        <h3 className="text-sm font-semibold text-text-secondary mb-3">Mode — Center (Alternating)</h3>
+        <Timeline items={orderItems} mode="center" color="primary" />
+      </section>
+    </div>
+}`,...(q=(O=u.parameters)==null?void 0:O.docs)==null?void 0:q.source}}};const fe=["Playground","Showcase"];export{f as Playground,u as Showcase,fe as __namedExportsOrder,pe as default};

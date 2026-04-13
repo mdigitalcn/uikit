@@ -1,0 +1,21 @@
+import{j as i}from"./jsx-runtime-D_zvdyIk.js";import{r as s}from"./index-ZH-6pyQh.js";import{d as x}from"./index-DrFu-skq.js";import{a as M}from"./index-CxK8cMMz.js";import"./_commonjsHelpers-CqkleIqs.js";import"./index-C6BiGwLV.js";import"./index-Bo-loign.js";import"./index-BP-xEy0R.js";import"./index-DVyBTwwr.js";import"./index-BH7Jj7fg.js";import"./utils-_uLxnvdl.js";import"./useOverlayContainer-BKheCA97.js";import"./variants-CTjkuV9j.js";const{useParameter:y,addons:L,useEffect:S,useMemo:ie,definePreview:re}=__STORYBOOK_MODULE_PREVIEW_API__,{deprecate:P}=__STORYBOOK_MODULE_CLIENT_LOGGER__;var A=Object.defineProperty,T=(e,o)=>{for(var t in o)A(e,t,{get:o[t],enumerable:!0})},w={};T(w,{initialGlobals:()=>G});var n="themes",D=`storybook/${n}`,b="theme",h={},j={REGISTER_THEMES:`${D}/REGISTER_THEMES`},G={[b]:""},C={};T(C,{initializeThemeState:()=>_,pluckThemeFromContext:()=>v,useThemeParameters:()=>I});function v({globals:e}){return e[b]||""}function I(e){return P(x`The useThemeParameters function is deprecated. Please access parameters via the context directly instead e.g.
+    - const { themeOverride } = context.parameters.themes ?? {};
+    `),e?e.parameters[n]??h:y(n,h)}function _(e,o){L.getChannel().emit(j.REGISTER_THEMES,{defaultTheme:o,themes:e})}var N="html",E=e=>e.split(" ").filter(Boolean),k=({themes:e,defaultTheme:o,parentSelector:t=N})=>(_(Object.keys(e),o),(r,l)=>{let{themeOverride:m}=l.parameters[n]??{},c=v(l);return S(()=>{let u=m||c||o,a=document.querySelector(t);if(!a)return;Object.entries(e).filter(([p])=>p!==u).forEach(([p,O])=>{let f=E(O);f.length>0&&a.classList.remove(...f)});let d=E(e[u]);d.length>0&&a.classList.add(...d)},[m,c]),r()});const g="sb-global-overrides";function R(){if(document.getElementById(g))return;const e=document.createElement("style");e.id=g,e.textContent=`
+    /* Ring off */
+    html.sb-no-ring *:focus,
+    html.sb-no-ring *:focus-visible {
+      outline: none !important;
+      box-shadow: none !important;
+      ring: none !important;
+    }
+
+    /* Reduce motion */
+    html.sb-reduce-motion *,
+    html.sb-reduce-motion *::before,
+    html.sb-reduce-motion *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  `,document.head.appendChild(e)}const B=e=>i.jsx(M,{children:i.jsx(e,{})}),F=(e,o)=>{const t=o.globals.preset||"none";return s.useEffect(()=>{const r=document.documentElement;t==="none"?r.removeAttribute("data-theme"):r.setAttribute("data-theme",t)},[t]),i.jsx(e,{})},H=(e,o)=>{const t=o.globals.focusRing??"on";return s.useEffect(()=>{R(),document.documentElement.classList.toggle("sb-no-ring",t==="off")},[t]),i.jsx(e,{})},Y=(e,o)=>{const t=o.globals.reduceMotion??"on";return s.useEffect(()=>{R(),document.documentElement.classList.toggle("sb-reduce-motion",t==="off")},[t]),i.jsx(e,{})},K=(e,o)=>{const t=o.globals.direction??"ltr";return s.useEffect(()=>(document.documentElement.setAttribute("dir",t),()=>{document.documentElement.setAttribute("dir","ltr")}),[t]),i.jsx(e,{})},ne={globalTypes:{preset:{description:"Theme preset",toolbar:{title:"Preset",icon:"paintbrush",items:[{value:"none",title:"Default"},{value:"corporate",title:"Corporate"},{value:"vibrant",title:"Vibrant"},{value:"minimal",title:"Minimal"},{value:"warm",title:"Warm"},{value:"ocean",title:"Ocean"},{value:"rose",title:"Rose"}],dynamicTitle:!0}},focusRing:{description:"Toggle focus ring visibility",toolbar:{title:"Ring",icon:"circle",items:[{value:"on",title:"Ring: On",right:"on"},{value:"off",title:"Ring: Off",right:"off"}],dynamicTitle:!0}},reduceMotion:{description:"Toggle animations and transitions",toolbar:{title:"Motion",icon:"lightning",items:[{value:"on",title:"Motion: On",right:"on"},{value:"off",title:"Motion: Off (reduce)",right:"off"}],dynamicTitle:!0}},direction:{description:"Text direction",toolbar:{title:"Direction",icon:"transfer",items:[{value:"ltr",title:"LTR",right:"ltr"},{value:"rtl",title:"RTL",right:"rtl"}],dynamicTitle:!0}}},initialGlobals:{preset:"none",focusRing:"on",reduceMotion:"on",direction:"ltr"},parameters:{actions:{argTypesRegex:"^on[A-Z].*"},controls:{matchers:{color:/(background|color)$/i,date:/Date$/}}},decorators:[B,F,H,Y,K,k({themes:{light:"",dark:"dark"},defaultTheme:"light"})]};export{ne as default};
