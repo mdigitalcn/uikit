@@ -469,13 +469,13 @@ const TreeSelect = React.memo<TreeSelectProps>(
                   {selectedNodes.slice(0, visibleChipsCount).map((node) => (
                     <span
                       key={node.key}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-slot-10 text-slot rounded text-sm whitespace-nowrap"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-slot-10 text-slot rounded-tag text-sm whitespace-nowrap"
                     >
                       {node.label}
                       <button
                         type="button"
                         onClick={(e) => handleRemoveItem(e, node.key)}
-                        className="hover:bg-slot-20 rounded-sm"
+                        className="hover:bg-slot-20 rounded-button"
                         disabled={disabled}
                       >
                         <X className="h-3 w-3" />
@@ -499,7 +499,7 @@ const TreeSelect = React.memo<TreeSelectProps>(
                     <span
                       key={node.key}
                       data-hidden-chip
-                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-slot-10 text-slot rounded text-sm whitespace-nowrap"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-slot-10 text-slot rounded-tag text-sm whitespace-nowrap"
                     >
                       {node.label}
                       <X className="h-3 w-3" />

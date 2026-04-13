@@ -335,13 +335,13 @@ const Cascader = React.memo<CascaderProps>(
               const tagLabel = showPath ? selectedOpts.map((o) => o.label).join(pathSeparator) : selectedOpts[selectedOpts.length - 1]?.label || "";
               if (tagRender) return <React.Fragment key={idx}>{tagRender({ label: tagLabel, value: path, closable: !disabled, onClose: () => removeSelection(path, { stopPropagation: () => {} } as React.MouseEvent) })}</React.Fragment>;
               return (
-                <span key={idx} className={cn("inline-flex items-center gap-1 rounded whitespace-nowrap", colorVars[color], 'bg-slot-10 text-slot', tagSizeClasses[size])}>
+                <span key={idx} className={cn("inline-flex items-center gap-1 rounded-tag whitespace-nowrap", colorVars[color], 'bg-slot-10 text-slot', tagSizeClasses[size])}>
                   <span className="truncate max-w-[150px]">{tagLabel}</span>
                   {!disabled && <button type="button" onClick={(e) => removeSelection(path, e)} className="hover:text-error shrink-0"><X className="h-3 w-3" /></button>}
                 </span>
               );
             })}
-            {remainingCount > 0 && <span className={cn("inline-flex items-center bg-surface text-text-secondary rounded whitespace-nowrap", tagSizeClasses[size])}>+{remainingCount}</span>}
+            {remainingCount > 0 && <span className={cn("inline-flex items-center bg-surface text-text-secondary rounded-tag whitespace-nowrap", tagSizeClasses[size])}>+{remainingCount}</span>}
           </div>
         );
       }

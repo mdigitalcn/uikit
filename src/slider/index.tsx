@@ -356,7 +356,7 @@ const Slider = React.memo<SliderProps>(
               >
                 <div
                   className={cn(
-                    'absolute bg-slot text-slot-fg text-xs px-2 py-1 rounded whitespace-nowrap transition-opacity',
+                    'absolute bg-slot text-slot-fg text-xs px-2 py-1 rounded-tooltip whitespace-nowrap transition-opacity',
                     showTooltip && (hoveredThumb === index || isDraggingState && activeThumb.current === index) ? 'opacity-100' : 'opacity-0 pointer-events-none',
                     isVertical
                       ? 'left-full ml-2 top-1/2 -translate-y-1/2'

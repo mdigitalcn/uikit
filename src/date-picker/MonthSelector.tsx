@@ -32,7 +32,7 @@ export const MonthSelector = ({
         <button
           type="button"
           onClick={() => onYearChange(currentYear - 1)}
-          className="p-1 rounded hover:bg-surface text-text-primary transition-colors"
+          className="p-1 rounded-button hover:bg-surface text-text-primary transition-colors"
           aria-label="Previous year"
         >
           <ChevronsLeft className={iconSizes.sm} />
@@ -47,7 +47,7 @@ export const MonthSelector = ({
         <button
           type="button"
           onClick={() => onYearChange(currentYear + 1)}
-          className="p-1 rounded hover:bg-surface text-text-primary transition-colors"
+          className="p-1 rounded-button hover:bg-surface text-text-primary transition-colors"
           aria-label="Next year"
         >
           <ChevronsRight className={iconSizes.sm} />
@@ -60,7 +60,7 @@ export const MonthSelector = ({
             type="button"
             onClick={() => onMonthSelect(index)}
             className={cn(
-              'px-4 py-2 rounded text-sm font-medium transition-colors',
+              'px-4 py-2 rounded-button text-sm font-medium transition-colors',
               index === currentMonth
                 ? pickerSelectedClasses
                 : 'text-text-primary hover:bg-surface',

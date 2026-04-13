@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import React from "react";
+import React, { useRef } from "react";
 import Anchor from "./index";
 import type { AnchorItem } from "./types";
 
@@ -16,7 +16,6 @@ const meta: Meta<typeof Anchor> = {
     affix: { control: "boolean" },
     affixTop: { control: "number" },
     offset: { control: "number" },
-    bounds: { control: "number" },
     targetOffset: { control: "number" },
   },
 };
@@ -60,19 +59,15 @@ const DocSection = ({ id, title }: { id: string; title: string }) => (
   </section>
 );
 
-export const Playground: Story = {
-  args: {
-    items,
-    color: "primary",
-    size: "md",
-    offset: 0,
-  },
-  render: (args) => (
+// Wrapper component so we can use useRef for the local scroll container
+function PlaygroundDemo(args: React.ComponentProps<typeof Anchor>) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  return (
     <div className="flex gap-8 max-w-2xl">
       <div className="shrink-0 w-40">
-        <Anchor {...args} />
+        <Anchor {...args} getContainer={() => scrollRef.current!} />
       </div>
-      <div className="flex-1 max-h-96 overflow-y-auto pr-2">
+      <div ref={scrollRef} className="flex-1 max-h-96 overflow-y-auto pr-2">
         <DocSection id="overview" title="Overview" />
         <DocSection id="installation" title="Installation" />
         <DocSection id="usage" title="Usage" />
@@ -83,8 +78,44 @@ export const Playground: Story = {
         <DocSection id="faq" title="FAQ" />
       </div>
     </div>
-  ),
+  )
+}
+
+export const Playground: Story = {
+  args: {
+    items,
+    color: "primary",
+    size: "md",
+    offset: 0,
+  },
+  render: (args) => <PlaygroundDemo {...args} />,
 };
+
+function ShowcaseNestedDemo() {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  return (
+    <div className="flex gap-8">
+      <div className="shrink-0 w-44">
+        <Anchor
+          items={items}
+          color="primary"
+          size="md"
+          getContainer={() => scrollRef.current!}
+        />
+      </div>
+      <div ref={scrollRef} className="flex-1 max-h-72 overflow-y-auto border border-border rounded-lg p-4">
+        <DocSection id="overview" title="Overview" />
+        <DocSection id="installation" title="Installation" />
+        <DocSection id="usage" title="Usage" />
+        <DocSection id="basic-usage" title="Basic Usage" />
+        <DocSection id="advanced-usage" title="Advanced Usage" />
+        <DocSection id="api" title="API Reference" />
+        <DocSection id="examples" title="Examples" />
+        <DocSection id="faq" title="FAQ" />
+      </div>
+    </div>
+  )
+}
 
 export const Showcase: Story = {
   render: () => (
@@ -93,21 +124,7 @@ export const Showcase: Story = {
         <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">
           With Nested Items (scrollable demo)
         </h3>
-        <div className="flex gap-8">
-          <div className="shrink-0 w-44">
-            <Anchor items={items} color="primary" size="md" />
-          </div>
-          <div className="flex-1 max-h-72 overflow-y-auto border border-border rounded-lg p-4">
-            <DocSection id="overview" title="Overview" />
-            <DocSection id="installation" title="Installation" />
-            <DocSection id="usage" title="Usage" />
-            <DocSection id="basic-usage" title="Basic Usage" />
-            <DocSection id="advanced-usage" title="Advanced Usage" />
-            <DocSection id="api" title="API Reference" />
-            <DocSection id="examples" title="Examples" />
-            <DocSection id="faq" title="FAQ" />
-          </div>
-        </div>
+        <ShowcaseNestedDemo />
       </section>
 
       <section>

@@ -11,7 +11,7 @@ import { colorVars } from '../variants'
 import type { TreeNode, TreeProps } from './types'
 
 const treeItemVariants = cva(
-  'flex items-center gap-2 px-2 rounded cursor-pointer select-none transition-colors duration-slot ease-out',
+  'flex items-center gap-2 px-2 rounded-button cursor-pointer select-none transition-colors duration-slot ease-out',
   {
     variants: {
       size: {

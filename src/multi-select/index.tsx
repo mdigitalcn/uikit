@@ -426,7 +426,7 @@ const MultiSelect = React.memo<MultiSelectProps>(
               <span
                 key={option.value}
                 className={cn(
-                  "multiSelect_tag inline-flex items-center gap-1 px-2 bg-slot-10 text-slot rounded text-sm whitespace-nowrap",
+                  "multiSelect_tag inline-flex items-center gap-1 px-2 bg-slot-10 text-slot rounded-tag text-sm whitespace-nowrap",
                   classNames?.tag,
                 )}
                 data-slot="multiSelect_tag"
@@ -458,7 +458,7 @@ const MultiSelect = React.memo<MultiSelectProps>(
               </span>
             ))}
             {selectedOptions.length > visibleChipsCount && (
-              <span className="inline-flex items-center px-2 py-0.5 bg-surface text-text-secondary rounded text-sm whitespace-nowrap">
+              <span className="inline-flex items-center px-2 py-0.5 bg-surface text-text-secondary rounded-tag text-sm whitespace-nowrap">
                 +{selectedOptions.length - visibleChipsCount}
               </span>
             )}
@@ -472,7 +472,7 @@ const MultiSelect = React.memo<MultiSelectProps>(
             <span
               key={option.value}
               data-hidden-chip
-              className="inline-flex items-center gap-1 px-2 py-0.5 bg-slot-10 text-slot rounded text-sm whitespace-nowrap"
+              className="inline-flex items-center gap-1 px-2 py-0.5 bg-slot-10 text-slot rounded-tag text-sm whitespace-nowrap"
             >
               {option.label}
               <X className="h-3 w-3" />

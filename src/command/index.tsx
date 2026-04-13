@@ -297,7 +297,7 @@ const CommandSeparator = React.memo(({
 CommandSeparator.displayName = 'CommandSeparator'
 
 const commandItemVariants = cva(
-  "relative flex cursor-default items-center gap-2 rounded-sm outline-hidden select-none text-text-primary data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='text-'])]:text-text-secondary transition-colors",
+  "relative flex cursor-default items-center gap-2 rounded-button outline-hidden select-none text-text-primary data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='text-'])]:text-text-secondary transition-colors",
   {
     variants: {
       size: {

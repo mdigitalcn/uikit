@@ -20,7 +20,7 @@ const buttonVariants = cva(
       },
       shape: {
         circle: 'rounded-full',
-        square: 'rounded-lg',
+        square: 'rounded-button',
       },
       variant: {
         default: 'bg-background border border-border text-text-primary hover:bg-surface',

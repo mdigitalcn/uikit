@@ -22,7 +22,7 @@ const calendarVariants = cva('inline-flex flex-col select-none', {
 })
 
 const cellVariants = cva(
-  'flex items-center justify-center rounded-md transition-colors cursor-pointer font-normal',
+  'flex items-center justify-center rounded-button transition-colors cursor-pointer font-normal',
   {
     variants: {
       size: {
@@ -37,7 +37,7 @@ const cellVariants = cva(
 )
 
 const navBtnClass =
-  'inline-flex items-center justify-center rounded-md w-7 h-7 hover:bg-surface transition-colors cursor-pointer text-text-secondary hover:text-text-primary'
+  'inline-flex items-center justify-center rounded-button w-7 h-7 hover:bg-surface transition-colors cursor-pointer text-text-secondary hover:text-text-primary'
 
 function isSameDay(a: Date, b: Date) {
   return (
@@ -119,7 +119,8 @@ const Calendar = React.memo<CalendarProps>(
     className,
     classNames,
   }) => {
-    const today = new Date()
+    // Stable reference — avoid new Date() on every render
+    const today = React.useMemo(() => new Date(), [])
     const onChangeWrapped = React.useMemo(
       () => onChange ? (v: Date | null) => { if (v) onChange(v) } : undefined,
       [onChange],
@@ -151,27 +152,38 @@ const Calendar = React.memo<CalendarProps>(
       return names
     }, [weekStartsOn])
 
-    const navigate = (offset: number) => {
+    const navigate = React.useCallback((offset: number) => {
       const next = new Date(year, monthIdx + offset, 1)
       if (controlledMonth === undefined) setInternalMonth(next)
       onMonthChange?.(next)
-    }
+    }, [year, monthIdx, controlledMonth, onMonthChange])
 
-    const isDisabled = (date: Date) => {
+    const isDisabled = React.useCallback((date: Date) => {
       if (minDate && date < new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()))
         return true
       if (maxDate && date > new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate()))
         return true
       return disabledDates?.(date) ?? false
-    }
+    }, [minDate, maxDate, disabledDates])
 
-    const handleSelect = (date: Date) => {
+    const handleSelect = React.useCallback((date: Date) => {
       if (isDisabled(date)) return
       setSelected(date)
       if (date.getMonth() !== monthIdx) {
         navigate(date.getMonth() - monthIdx)
       }
-    }
+    }, [isDisabled, setSelected, monthIdx, navigate])
+
+    // Delegated handlers: one stable function for all 42 day buttons
+    const handleDayClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+      const dateStr = (e.currentTarget as HTMLButtonElement).dataset.date
+      if (dateStr) handleSelect(new Date(dateStr))
+    }, [handleSelect])
+
+    const handleDayFocus = React.useCallback((e: React.FocusEvent<HTMLButtonElement>) => {
+      const dateStr = (e.currentTarget as HTMLButtonElement).dataset.date
+      if (dateStr) setFocusDate(new Date(dateStr))
+    }, [])
 
     const [focusDate, setFocusDate] = React.useState<Date | null>(null)
     const gridRef = React.useRef<HTMLDivElement>(null)
@@ -317,8 +329,9 @@ const Calendar = React.memo<CalendarProps>(
                   role="gridcell"
                   disabled={disabled}
                   aria-disabled={disabled || undefined}
-                  onClick={() => handleSelect(date)}
-                  onFocus={() => setFocusDate(date)}
+                  data-date={date.toISOString()}
+                  onClick={handleDayClick}
+                  onFocus={handleDayFocus}
                   tabIndex={
                     isSameDay(date, focusDate ?? selected ?? today) && !outside
                       ? 0

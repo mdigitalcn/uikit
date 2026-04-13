@@ -373,7 +373,7 @@ const Upload = React.memo<UploadProps>(
               data-slot="upload_fileItem"
               className={cn(
                 'upload_fileItem',
-                'flex items-center justify-between p-2 rounded-md bg-surface hover:bg-surface/80 transition-colors',
+                'flex items-center justify-between p-2 rounded-input bg-surface hover:bg-surface/80 transition-colors',
                 classNames?.fileItem,
               )}
             >

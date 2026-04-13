@@ -173,8 +173,8 @@ const Text = React.memo<TextProps>(
       : ''
 
     let content: React.ReactNode = children
-    if (code) content = <code className="px-1 py-0.5 rounded bg-surface text-sm font-mono">{content}</code>
-    if (mark) content = <mark className="bg-warning/20 px-0.5 rounded-sm">{content}</mark>
+    if (code) content = <code className="px-1 py-0.5 rounded-tag bg-surface text-sm font-mono">{content}</code>
+    if (mark) content = <mark className="bg-warning/20 px-0.5 rounded-tag">{content}</mark>
     if (deleted) content = <del>{content}</del>
     if (underline) content = <u>{content}</u>
     if (strong) content = <strong>{content}</strong>
@@ -202,7 +202,7 @@ const Text = React.memo<TextProps>(
           <button
             type="button"
             onClick={() => setExpanded(true)}
-            className="text-primary hover:text-primary/80 ml-1 text-inherit cursor-pointer"
+            className="ml-1 cursor-pointer underline opacity-70 hover:opacity-100 transition-opacity"
           >
             more
           </button>
@@ -255,7 +255,7 @@ const Paragraph = React.memo<ParagraphProps>(
           <button
             type="button"
             onClick={() => setExpanded(true)}
-            className="text-primary hover:text-primary/80 ml-1 text-inherit cursor-pointer"
+            className="ml-1 cursor-pointer underline opacity-70 hover:opacity-100 transition-opacity"
           >
             more
           </button>

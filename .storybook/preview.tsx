@@ -20,12 +20,39 @@ import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import "swiper/css/effect-coverflow";
 
-// Custom decorator for theme presets - applies data-theme to html element
+// Inject global override styles for toolbar controls
+const STYLE_ID = "sb-global-overrides";
+function ensureGlobalStyle() {
+  if (document.getElementById(STYLE_ID)) return;
+  const style = document.createElement("style");
+  style.id = STYLE_ID;
+  style.textContent = `
+    /* Ring off */
+    html.sb-no-ring *:focus,
+    html.sb-no-ring *:focus-visible {
+      outline: none !important;
+      box-shadow: none !important;
+      ring: none !important;
+    }
+
+    /* Reduce motion */
+    html.sb-reduce-motion *,
+    html.sb-reduce-motion *::before,
+    html.sb-reduce-motion *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+// Decorator: theme preset
 const withThemePreset: Decorator = (Story, context) => {
   const preset = context.globals.preset || "none";
 
   useEffect(() => {
-    // Apply data-theme to html element (same element that gets .dark class)
     const html = document.documentElement;
     if (preset === "none") {
       html.removeAttribute("data-theme");
@@ -33,6 +60,44 @@ const withThemePreset: Decorator = (Story, context) => {
       html.setAttribute("data-theme", preset);
     }
   }, [preset]);
+
+  return <Story />;
+};
+
+// Decorator: focus ring
+const withFocusRing: Decorator = (Story, context) => {
+  const ring = context.globals.focusRing ?? "on";
+
+  useEffect(() => {
+    ensureGlobalStyle();
+    document.documentElement.classList.toggle("sb-no-ring", ring === "off");
+  }, [ring]);
+
+  return <Story />;
+};
+
+// Decorator: reduce motion
+const withReduceMotion: Decorator = (Story, context) => {
+  const motion = context.globals.reduceMotion ?? "on";
+
+  useEffect(() => {
+    ensureGlobalStyle();
+    document.documentElement.classList.toggle("sb-reduce-motion", motion === "off");
+  }, [motion]);
+
+  return <Story />;
+};
+
+// Decorator: RTL / LTR direction
+const withDirection: Decorator = (Story, context) => {
+  const dir = context.globals.direction ?? "ltr";
+
+  useEffect(() => {
+    document.documentElement.setAttribute("dir", dir);
+    return () => {
+      document.documentElement.setAttribute("dir", "ltr");
+    };
+  }, [dir]);
 
   return <Story />;
 };
@@ -56,10 +121,54 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+
+    focusRing: {
+      description: "Toggle focus ring visibility",
+      toolbar: {
+        title: "Ring",
+        icon: "circle",
+        items: [
+          { value: "on", title: "Ring: On", right: "on" },
+          { value: "off", title: "Ring: Off", right: "off" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+
+    reduceMotion: {
+      description: "Toggle animations and transitions",
+      toolbar: {
+        title: "Motion",
+        icon: "lightning",
+        items: [
+          { value: "on", title: "Motion: On", right: "on" },
+          { value: "off", title: "Motion: Off (reduce)", right: "off" },
+        ],
+        dynamicTitle: true,
+      },
+    },
+
+    direction: {
+      description: "Text direction",
+      toolbar: {
+        title: "Direction",
+        icon: "transfer",
+        items: [
+          { value: "ltr", title: "LTR", right: "ltr" },
+          { value: "rtl", title: "RTL", right: "rtl" },
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
+
   initialGlobals: {
     preset: "none",
+    focusRing: "on",
+    reduceMotion: "on",
+    direction: "ltr",
   },
+
   parameters: {
     actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
@@ -69,8 +178,12 @@ const preview: Preview = {
       },
     },
   },
+
   decorators: [
     withThemePreset,
+    withFocusRing,
+    withReduceMotion,
+    withDirection,
     // Light/Dark mode switcher (applies .dark class to html)
     withThemeByClassName({
       themes: {

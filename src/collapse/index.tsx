@@ -16,7 +16,7 @@ import type { CollapseProps } from './types'
 const collapseVariants = 'w-full border [--_radius:var(--radius-input)] rounded-slot overflow-clip'
 
 const collapseHeaderVariants = cva(
-  'w-full flex items-center justify-between cursor-pointer touch-manipulation font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm',
+  'w-full flex items-center justify-between cursor-pointer touch-manipulation font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm',
   {
     variants: {
       size: {

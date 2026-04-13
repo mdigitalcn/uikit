@@ -18,7 +18,7 @@ import { colorVars } from "../variants";
 import type { DropdownProps } from "./types";
 
 const dropdownItemVariants = cva(
-  "cursor-pointer select-none text-text-primary transition-colors flex items-center gap-2 rounded-sm outline-none",
+  "cursor-pointer select-none text-text-primary transition-colors flex items-center gap-2 rounded-button outline-none",
   {
     variants: {
       size: {

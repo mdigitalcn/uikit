@@ -425,7 +425,7 @@ const QRCode = React.memo<QRCodeProps>(
           "qrCode_root",
           "relative inline-flex flex-col items-center",
           colorVars[color],
-          bordered && "p-3 rounded-lg border border-slot bg-background",
+          bordered && "p-3 rounded-card border border-slot bg-background",
           classNames?.root,
           className,
         )}
@@ -487,7 +487,7 @@ const QRCode = React.memo<QRCodeProps>(
             data-slot="overlay"
             className={cn(
               "qrCode_overlay",
-              "absolute inset-0 flex items-center justify-center bg-background/80 rounded-lg",
+              "absolute inset-0 flex items-center justify-center bg-background/80 rounded-card",
               classNames?.overlay,
             )}
           >
@@ -501,7 +501,7 @@ const QRCode = React.memo<QRCodeProps>(
             data-slot="overlay"
             className={cn(
               "qrCode_overlay",
-              "absolute inset-0 flex flex-col items-center justify-center bg-background/90 rounded-lg gap-2",
+              "absolute inset-0 flex flex-col items-center justify-center bg-background/90 rounded-card gap-2",
               classNames?.overlay,
             )}
           >

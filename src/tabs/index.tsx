@@ -44,10 +44,10 @@ const tabListVariants = cva("flex relative", {
     },
   },
   compoundVariants: [
-    { variant: "pill", radius: "xs", className: "rounded-sm" },
-    { variant: "pill", radius: "sm", className: "rounded-md" },
-    { variant: "pill", radius: "md", className: "rounded-lg" },
-    { variant: "pill", radius: "lg", className: "rounded-xl" },
+    { variant: "pill", radius: "xs", className: "rounded-button" },
+    { variant: "pill", radius: "sm", className: "rounded-dropdown" },
+    { variant: "pill", radius: "md", className: "rounded-card" },
+    { variant: "pill", radius: "lg", className: "rounded-modal" },
     { variant: "pill", radius: "full", className: "rounded-full" },
   ],
   defaultVariants: {
@@ -58,10 +58,10 @@ const tabListVariants = cva("flex relative", {
 });
 
 const indicatorRadiusMap: Record<TabsRadius, string> = {
-  xs: "rounded-xs",
-  sm: "rounded-sm",
-  md: "rounded-md",
-  lg: "rounded-lg",
+  xs: "rounded-button",
+  sm: "rounded-dropdown",
+  md: "rounded-card",
+  lg: "rounded-modal",
   full: "rounded-full",
 };
 
@@ -148,10 +148,10 @@ const tabItemVariants = cva(
       })),
 
       // Pill radius variants
-      { variant: "pill" as const, radius: "xs" as const, className: "rounded-xs" },
-      { variant: "pill" as const, radius: "sm" as const, className: "rounded-sm" },
-      { variant: "pill" as const, radius: "md" as const, className: "rounded-md" },
-      { variant: "pill" as const, radius: "lg" as const, className: "rounded-lg" },
+      { variant: "pill" as const, radius: "xs" as const, className: "rounded-button" },
+      { variant: "pill" as const, radius: "sm" as const, className: "rounded-dropdown" },
+      { variant: "pill" as const, radius: "md" as const, className: "rounded-card" },
+      { variant: "pill" as const, radius: "lg" as const, className: "rounded-modal" },
       { variant: "pill" as const, radius: "full" as const, className: "rounded-full" },
     ],
     defaultVariants: {

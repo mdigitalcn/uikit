@@ -25,7 +25,7 @@ const switchTrackVariants = cva(
       },
       hasError: {
         true: "bg-error/30 peer-checked:bg-error peer-focus-visible:ring-error",
-        false: "",
+        false: "peer-focus-visible:ring-slot",
       },
     },
     defaultVariants: {
@@ -207,7 +207,7 @@ const Switch = React.memo<SwitchProps>(
                   error &&
                     "bg-error/30 peer-checked:bg-error peer-focus-visible:ring-error",
                 )
-              : cn(switchTrackVariants({ color, size, hasError: !!error }), "bg-border peer-checked:bg-slot peer-focus-visible:ring-slot"),
+              : cn(switchTrackVariants({ color, size, hasError: !!error }), "bg-border peer-checked:bg-slot"),
             "switch_track",
             classNames?.track,
             className,

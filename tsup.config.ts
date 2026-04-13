@@ -1,4 +1,15 @@
 import { defineConfig } from 'tsup'
+import babel from 'esbuild-plugin-babel'
+
+const reactCompilerPlugin = babel({
+  config: {
+    plugins: [['babel-plugin-react-compiler']],
+    presets: [
+      ['@babel/preset-typescript', { allExtensions: true, isTSX: true }],
+      ['@babel/preset-react', { runtime: 'automatic' }],
+    ],
+  },
+})
 
 // Shared external dependencies
 // These packages are NOT bundled - consumers must have them installed
@@ -124,6 +135,7 @@ const jsConfig = defineConfig({
   external,
   treeshake: true,
   splitting: true,
+  esbuildPlugins: [reactCompilerPlugin],
 })
 
 // TypeScript declarations are enabled for better developer experience

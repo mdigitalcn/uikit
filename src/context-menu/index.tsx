@@ -121,10 +121,10 @@ const ContextMenuSubMenu = ({
           <ContextMenuItemDiv
             disabled={!!item.disabled}
             className={cn(
-              "contextMenu_item flex items-center justify-between gap-3 px-3 py-2 text-sm cursor-pointer rounded-sm transition-colors mx-1",
+              "contextMenu_item flex items-center justify-between gap-3 px-3 py-2 text-sm cursor-pointer rounded-button transition-colors mx-1",
               item.disabled
                 ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-slot-10 hover:text-slot focus-visible:bg-slot-10 focus-visible:text-slot focus-visible:outline-none",
+                : "hover:bg-slot-10 hover:text-slot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slot/30 focus-visible:rounded-button",
               classNames?.item,
             )}
             onClick={handleClick}
@@ -318,10 +318,10 @@ const ContextMenuContent = ({
             key={item.key}
             disabled={!!item.disabled}
             className={cn(
-              "contextMenu_item flex items-center justify-between gap-3 px-3 py-2 text-sm cursor-pointer rounded-sm transition-colors mx-1",
+              "contextMenu_item flex items-center justify-between gap-3 px-3 py-2 text-sm cursor-pointer rounded-button transition-colors mx-1",
               item.disabled
                 ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-slot-10 hover:text-slot focus-visible:bg-slot-10 focus-visible:text-slot focus-visible:outline-none",
+                : "hover:bg-slot-10 hover:text-slot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slot/30 focus-visible:rounded-button",
               isFocused && !item.disabled && "bg-slot-10 text-slot",
               classNames?.item,
             )}

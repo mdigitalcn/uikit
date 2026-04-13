@@ -12,6 +12,13 @@ const config: StorybookConfig = {
   docs: {
     autodocs: true,
   },
+  // Wire React Compiler into Storybook's babel pipeline
+  babel(config) {
+    return {
+      ...config,
+      plugins: [...(config.plugins ?? []), ['babel-plugin-react-compiler']],
+    }
+  },
   async viteFinal(config) {
     return {
       ...config,

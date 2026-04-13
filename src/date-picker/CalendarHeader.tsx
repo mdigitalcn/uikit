@@ -46,7 +46,7 @@ export const CalendarHeader = ({
           type="button"
           onClick={decreaseYear}
           disabled={prevYearButtonDisabled || showMonthSelector}
-          className="p-1 rounded hover:bg-surface text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="p-1 rounded-button hover:bg-surface text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           aria-label="Previous year"
         >
           <ChevronsLeft className={iconSizes.sm} />
@@ -55,7 +55,7 @@ export const CalendarHeader = ({
           type="button"
           onClick={decreaseMonth}
           disabled={prevMonthButtonDisabled || showMonthSelector}
-          className="p-1 rounded hover:bg-surface text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="p-1 rounded-button hover:bg-surface text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           aria-label="Previous month"
         >
           <ChevronLeft className={iconSizes.sm} />
@@ -66,14 +66,14 @@ export const CalendarHeader = ({
         <button
           type="button"
           onClick={onMonthClick}
-          className="text-sm font-medium text-text-primary hover:text-primary transition-colors"
+          className="text-sm font-medium text-text-primary hover:text-slot transition-colors"
         >
           {monthName}
         </button>
         <button
           type="button"
           onClick={onYearClick}
-          className="text-sm font-medium text-text-primary hover:text-primary transition-colors"
+          className="text-sm font-medium text-text-primary hover:text-slot transition-colors"
         >
           {year}
         </button>
@@ -84,7 +84,7 @@ export const CalendarHeader = ({
           type="button"
           onClick={increaseMonth}
           disabled={nextMonthButtonDisabled || showMonthSelector}
-          className="p-1 rounded hover:bg-surface text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="p-1 rounded-button hover:bg-surface text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           aria-label="Next month"
         >
           <ChevronRight className={iconSizes.sm} />
@@ -93,7 +93,7 @@ export const CalendarHeader = ({
           type="button"
           onClick={increaseYear}
           disabled={nextYearButtonDisabled || showMonthSelector}
-          className="p-1 rounded hover:bg-surface text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="p-1 rounded-button hover:bg-surface text-text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           aria-label="Next year"
         >
           <ChevronsRight className={iconSizes.sm} />

@@ -8,7 +8,7 @@ import { buttonColorVars } from "../variants";
 import type { RadioProps } from "./types";
 
 const radioVariants = cva(
-  "appearance-none rounded-full border cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+  "appearance-none rounded-full border cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed outline-none transition-colors focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background",
   {
     variants: {
       color: buttonColorVars,

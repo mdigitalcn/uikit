@@ -173,10 +173,19 @@ const Pagination = React.memo<PaginationProps>(
       return pages
     }, [current, totalPages])
 
-    const range: [number, number] = [
-      (current - 1) * pageSize + 1,
-      Math.min(current * pageSize, total),
-    ]
+    const range = useMemo<[number, number]>(
+      () => [(current - 1) * pageSize + 1, Math.min(current * pageSize, total)],
+      [current, pageSize, total],
+    )
+
+    // Single delegated handler — reads page from data-page attribute
+    const handlePageButtonClick = useCallback(
+      (e: React.MouseEvent<HTMLButtonElement>) => {
+        const page = parseInt((e.currentTarget as HTMLButtonElement).dataset.page ?? '', 10)
+        if (!isNaN(page)) handlePageChange(page)
+      },
+      [handlePageChange],
+    )
 
     if (totalPages <= 0) {
       return null
@@ -195,7 +204,8 @@ const Pagination = React.memo<PaginationProps>(
           )}
         >
           <PaginationButton
-            onClick={() => handlePageChange(current - 1)}
+            data-page={current - 1}
+            onClick={handlePageButtonClick}
             disabled={disabled || current <= 1}
             className={cn(paginationItemVariants({ size }), colorVars[color], classNames?.button)}
             aria-label="Previous page"
@@ -206,7 +216,8 @@ const Pagination = React.memo<PaginationProps>(
             {current} / {totalPages}
           </span>
           <PaginationButton
-            onClick={() => handlePageChange(current + 1)}
+            data-page={current + 1}
+            onClick={handlePageButtonClick}
             disabled={disabled || current >= totalPages}
             className={cn(paginationItemVariants({ size }), colorVars[color], classNames?.button)}
             aria-label="Next page"
@@ -251,7 +262,8 @@ const Pagination = React.memo<PaginationProps>(
           {showFirstLastButtons && (
             <PaginationButton
               type="button"
-              onClick={() => handlePageChange(1)}
+              data-page={1}
+              onClick={handlePageButtonClick}
               disabled={disabled || current === 1}
               className={cn(
                 'pagination_button',
@@ -271,7 +283,8 @@ const Pagination = React.memo<PaginationProps>(
           {/* Previous Button */}
           <PaginationButton
             type="button"
-            onClick={() => handlePageChange(current - 1)}
+            data-page={current - 1}
+            onClick={handlePageButtonClick}
             disabled={disabled || current === 1}
             className={cn(
               'pagination_button',
@@ -307,7 +320,8 @@ const Pagination = React.memo<PaginationProps>(
               <PaginationButton
                 type="button"
                 key={`slot-${index}`}
-                onClick={() => handlePageChange(page)}
+                data-page={page}
+                onClick={handlePageButtonClick}
                 disabled={disabled}
                 aria-label={`Page ${page} of ${totalPages}`}
                 aria-current={current === page ? 'page' : undefined}
@@ -328,7 +342,8 @@ const Pagination = React.memo<PaginationProps>(
           {/* Next Button */}
           <PaginationButton
             type="button"
-            onClick={() => handlePageChange(current + 1)}
+            data-page={current + 1}
+            onClick={handlePageButtonClick}
             disabled={disabled || current === totalPages}
             className={cn(
               'pagination_button',
@@ -348,7 +363,8 @@ const Pagination = React.memo<PaginationProps>(
           {showFirstLastButtons && (
             <PaginationButton
               type="button"
-              onClick={() => handlePageChange(totalPages)}
+              data-page={totalPages}
+              onClick={handlePageButtonClick}
               disabled={disabled || current === totalPages}
               className={cn(
                 'pagination_button',
@@ -404,8 +420,7 @@ const Pagination = React.memo<PaginationProps>(
                   const inputEl = e.target as HTMLInputElement
                   const value = parseInt(inputEl.value)
                   if (!isNaN(value)) {
-                    const clampedValue = Math.max(1, Math.min(totalPages, value))
-                    handlePageChange(clampedValue)
+                    handlePageChange(Math.max(1, Math.min(totalPages, value)))
                     inputEl.value = ''
                   }
                 }

@@ -554,3 +554,4 @@ export const Transfer = React.memo<TransferProps>(
 Transfer.displayName = 'Transfer'
 
 export type * from './types'
+export default Transfer

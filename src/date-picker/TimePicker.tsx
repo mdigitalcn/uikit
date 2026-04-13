@@ -136,8 +136,8 @@ const TimeColumnPicker = ({
         {is12Hour && <TimeColumn items={periods} selected={selectedPeriod} onSelect={(item) => setSelectedPeriod(item as string)} onHover={(item) => setHoverPeriod(item as string)} onLeave={() => setHoverPeriod(null)} />}
       </div>
       <div className="p-3 border-t border-border flex gap-2">
-        <button type="button" onClick={handleNowClick} className="flex-1 px-4 py-2 bg-surface text-text-primary rounded-md hover:bg-surface/80 transition-colors font-medium text-sm border border-border">Now</button>
-        <button type="button" onClick={handleOkClick} className={cn('flex-1 px-4 py-2 rounded-md hover:opacity-90 transition-colors font-medium text-sm', pickerSelectedClasses)}>OK</button>
+        <button type="button" onClick={handleNowClick} className="flex-1 px-4 py-2 bg-surface text-text-primary rounded-button hover:bg-surface/80 transition-colors font-medium text-sm border border-border">Now</button>
+        <button type="button" onClick={handleOkClick} className={cn('flex-1 px-4 py-2 rounded-button hover:opacity-90 transition-colors font-medium text-sm', pickerSelectedClasses)}>OK</button>
       </div>
     </div>
   )

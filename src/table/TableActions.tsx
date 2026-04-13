@@ -48,7 +48,7 @@ export function TableActions({
   ]
 
   return (
-    <div className={cn('table_actions flex flex-wrap items-center gap-4 rounded-md', className)}>
+    <div className={cn('table_actions flex flex-wrap items-center gap-4 rounded-card', className)}>
       {/* Search Input - Left */}
       <div className="w-auto mr-auto">
         <Input

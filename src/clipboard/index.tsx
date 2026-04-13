@@ -43,7 +43,7 @@ async function copyToClipboard(text: string): Promise<void> {
 }
 
 const clipboardVariants = cva(
-  "inline-flex items-center justify-between gap-2 [--_radius:var(--radius-button)] rounded-slot font-medium transition-colors cursor-pointer border focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background relative overflow-hidden",
+  "inline-flex items-center justify-between gap-2 [--_radius:var(--radius-button)] rounded-slot font-medium transition-colors cursor-pointer border focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background relative overflow-hidden",
   {
     variants: {
       size: {

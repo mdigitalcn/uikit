@@ -26,7 +26,7 @@ function useMergeRefs<T>(
 }
 
 const checkboxVariants = cva(
-  "appearance-none rounded border cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+  "appearance-none rounded border cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background",
   {
     variants: {
       variant: {

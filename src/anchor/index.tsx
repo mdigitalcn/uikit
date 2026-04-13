@@ -122,7 +122,8 @@ const Anchor = React.memo<AnchorProps>(
           const y = el.getBoundingClientRect().top + window.scrollY - targetOffset
           scrollTo(container, y)
         } else {
-          const y = el.offsetTop - targetOffset
+          const containerEl = container as HTMLElement
+          const y = el.getBoundingClientRect().top - containerEl.getBoundingClientRect().top + containerEl.scrollTop - targetOffset
           scrollTo(container, y)
         }
 

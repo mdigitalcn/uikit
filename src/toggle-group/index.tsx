@@ -13,7 +13,7 @@ const toggleGroupVariants = cva(
 )
 
 const toggleItemVariants = cva(
-  'font-medium transition-colors cursor-pointer border-r last:border-r-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+  'font-medium transition-colors cursor-pointer border-r last:border-r-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background',
   {
     variants: {
       size: {

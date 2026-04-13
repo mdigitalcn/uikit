@@ -247,7 +247,7 @@ describe('Tabs', () => {
 
   describe('Radius', () => {
     it('applies radius to pill wrapper', () => {
-      const radiusListMap = { xs: 'rounded-sm', sm: 'rounded-md', md: 'rounded-lg', lg: 'rounded-xl', full: 'rounded-full' } as const
+      const radiusListMap = { xs: 'rounded-button', sm: 'rounded-dropdown', md: 'rounded-card', lg: 'rounded-modal', full: 'rounded-full' } as const
       ;(Object.keys(radiusListMap) as Array<keyof typeof radiusListMap>).forEach((r) => {
         const { unmount } = render(<Tabs items={mockItems} variant="pill" radius={r} />)
         const list = screen.getByRole('tablist')
@@ -257,7 +257,7 @@ describe('Tabs', () => {
     })
 
     it('applies radius to pill tabs', () => {
-      const radiusTabMap = { xs: 'rounded-xs', sm: 'rounded-sm', md: 'rounded-md', lg: 'rounded-lg', full: 'rounded-full' } as const
+      const radiusTabMap = { xs: 'rounded-button', sm: 'rounded-dropdown', md: 'rounded-card', lg: 'rounded-modal', full: 'rounded-full' } as const
       ;(Object.keys(radiusTabMap) as Array<keyof typeof radiusTabMap>).forEach((r) => {
         const { unmount } = render(<Tabs items={mockItems} variant="pill" radius={r} />)
         const tabs = screen.getAllByRole('tab')
@@ -269,9 +269,9 @@ describe('Tabs', () => {
     it('defaults to md radius', () => {
       render(<Tabs items={mockItems} variant="pill" />)
       const list = screen.getByRole('tablist')
-      expect(list).toHaveClass('rounded-lg')
+      expect(list).toHaveClass('rounded-card')
       const tabs = screen.getAllByRole('tab')
-      tabs.forEach((tab) => expect(tab).toHaveClass('rounded-md'))
+      tabs.forEach((tab) => expect(tab).toHaveClass('rounded-card'))
     })
 
     it('does not apply radius rounding to non-pill variants', () => {
@@ -328,7 +328,7 @@ describe('Tabs', () => {
     })
 
     it('indicator uses radius-matched rounding for pill variant', () => {
-      const radiusIndicatorMap = { xs: 'rounded-xs', sm: 'rounded-sm', md: 'rounded-md', lg: 'rounded-lg', full: 'rounded-full' } as const
+      const radiusIndicatorMap = { xs: 'rounded-button', sm: 'rounded-dropdown', md: 'rounded-card', lg: 'rounded-modal', full: 'rounded-full' } as const
       ;(Object.keys(radiusIndicatorMap) as Array<keyof typeof radiusIndicatorMap>).forEach((r) => {
         const { container, unmount } = render(<Tabs items={mockItems} variant="pill" radius={r} />)
         const indicator = container.querySelector('[data-slot="tabs_indicator"]')

@@ -133,7 +133,7 @@ const MenuItems = React.memo<MenuItemsProps>(
                       ITEM_CLASS,
                       item.disabled
                         ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-surface focus-visible:bg-surface focus-visible:outline-none",
+                        : "hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/30 focus-visible:rounded-sm",
                       isFocused && !item.disabled && "bg-surface",
                       classNames?.item,
                     )}
@@ -184,7 +184,7 @@ const MenuItems = React.memo<MenuItemsProps>(
                 ITEM_CLASS,
                 item.disabled
                   ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-surface focus-visible:bg-surface focus-visible:outline-none",
+                  : "hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/30 focus-visible:rounded-sm",
                 isFocused && !item.disabled && "bg-surface",
                 isCheckboxOrRadio && classNames?.checkboxItem,
                 item.type === "radio" && classNames?.radioItem,
@@ -360,7 +360,7 @@ const Menubar = React.memo<MenubarProps>(
                   "menubar_trigger px-3 py-1.5 text-sm rounded-sm transition-colors",
                   menu.disabled
                     ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-surface focus-visible:bg-surface focus-visible:outline-none",
+                    : "hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/30 focus-visible:rounded-sm",
                   activeMenu === menu.key && "bg-surface",
                   classNames?.trigger,
                 )}

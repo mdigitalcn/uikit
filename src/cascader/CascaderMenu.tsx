@@ -10,7 +10,7 @@ import { colorVars } from "../variants";
 import type { CascaderOption, CascaderSize } from "./types";
 
 export const cascaderMenuVariants = cva(
-  "overflow-auto rounded-md border bg-background w-[200px] max-h-[300px]",
+  "overflow-auto rounded-dropdown border bg-background w-[200px] max-h-[300px]",
   {
     variants: {
       size: {

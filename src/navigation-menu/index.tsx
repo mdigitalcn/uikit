@@ -119,9 +119,9 @@ const NavigationMenuChildLink = React.memo(
     };
 
     const content = (
-      <div className="flex items-start gap-3 rounded-md p-3 hover:bg-surface transition-colors">
+      <div className="flex items-start gap-3 rounded-card p-3 hover:bg-surface transition-colors">
         {item.icon && (
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-surface">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-button bg-surface">
             {item.icon}
           </div>
         )}
@@ -429,3 +429,4 @@ export const NavigationMenu = React.memo<NavigationMenuProps>(
 NavigationMenu.displayName = "NavigationMenu";
 
 export type * from "./types";
+export default NavigationMenu;

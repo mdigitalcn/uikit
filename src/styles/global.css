@@ -160,7 +160,7 @@
   --color-warning:            oklch(72% 0.15 70);
   --color-warning-hover:      oklch(from var(--color-warning) calc(l - 0.05) c h);
   --color-warning-active:     oklch(from var(--color-warning) calc(l - 0.10) c h);
-  --color-warning-foreground: oklch(15% 0 0); /* always dark — do not override */
+  --color-warning-foreground: oklch(99% 0 0);
 
   --color-info:               oklch(55% 0.17 245);
   --color-info-hover:         oklch(from var(--color-info) calc(l - 0.05) c h);
@@ -266,7 +266,7 @@
   --color-warning:            oklch(80% 0.15 70);
   --color-warning-hover:      oklch(84% 0.17 70);
   --color-warning-active:     oklch(88% 0.19 70);
-  --color-warning-foreground: oklch(15% 0 0);
+  --color-warning-foreground: oklch(99% 0 0);
 
   --color-info:            oklch(62% 0.17 245);
   --color-info-hover:      oklch(67% 0.19 245);

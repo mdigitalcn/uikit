@@ -66,7 +66,7 @@ const ResizableHandle = React.memo(({
       className={cn(
         'resizable_handle',
         'group relative flex items-center justify-center',
-        'bg-border',
+        'bg-border focus-visible:bg-primary/40',
         'focus-visible:outline-none',
         isVertical ? 'h-px' : 'w-px',
         className,
@@ -75,8 +75,8 @@ const ResizableHandle = React.memo(({
     >
       {withHandle && (
         <div className={cn(
-          'z-10 flex items-center justify-center rounded-sm border border-border bg-background',
-          'opacity-0 transition-opacity group-hover:opacity-100',
+          'z-10 flex items-center justify-center rounded-button border border-border bg-background',
+          'opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100',
           isVertical ? 'w-4 h-3' : 'h-4 w-3',
         )}>
           <MoreVertical className={cn(

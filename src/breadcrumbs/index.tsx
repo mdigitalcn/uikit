@@ -234,7 +234,7 @@ export const BreadcrumbLink = React.memo<BreadcrumbLinkProps>(
 
     const linkClasses = cn(
       'breadcrumbs_link',
-      'inline-flex items-center gap-1.5 transition-colors hover:underline cursor-pointer rounded-sm',
+      'inline-flex items-center gap-1.5 transition-colors hover:underline cursor-pointer rounded-button',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background',
       classNames?.link,
       className,

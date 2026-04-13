@@ -40,7 +40,7 @@ export const multiSelectDropdownVariants = cva(
 );
 
 export const multiSelectOptionVariants = cva(
-  "relative cursor-pointer select-none px-3 py-2 text-text-primary rounded-sm",
+  "relative cursor-pointer select-none px-3 py-2 text-text-primary rounded-button",
   {
     variants: {
       selected: {

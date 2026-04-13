@@ -80,7 +80,7 @@ export function TableHeaderCell<TData>({
                 header.column.toggleSorting()
               }}
               className={cn(
-                'p-1 rounded transition-[colors,opacity]',
+                'p-1 rounded-button transition-[colors,opacity]',
                 header.column.getIsSorted()
                   ? `opacity-100 ${hoverSlot}`
                   : `opacity-0 group-hover:opacity-100 ${hoverSlot}`,
@@ -109,7 +109,7 @@ export function TableHeaderCell<TData>({
                 }
               }}
               className={cn(
-                'p-1 rounded transition-[colors,opacity]',
+                'p-1 rounded-button transition-[colors,opacity]',
                 isPinnedLeft || isPinnedRight
                   ? `opacity-100 ${hoverSlot} ${textSlot}`
                   : `opacity-0 group-hover:opacity-100 ${hoverSlot}`,

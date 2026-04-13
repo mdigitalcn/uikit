@@ -29,7 +29,7 @@ export const YearSelector = ({
         <button
           type="button"
           onClick={() => onDecadeChange(currentYear - 10)}
-          className="p-1 rounded hover:bg-surface text-text-primary transition-colors"
+          className="p-1 rounded-button hover:bg-surface text-text-primary transition-colors"
           aria-label="Previous decade"
         >
           <ChevronsLeft className={iconSizes.sm} />
@@ -40,7 +40,7 @@ export const YearSelector = ({
         <button
           type="button"
           onClick={() => onDecadeChange(currentYear + 10)}
-          className="p-1 rounded hover:bg-surface text-text-primary transition-colors"
+          className="p-1 rounded-button hover:bg-surface text-text-primary transition-colors"
           aria-label="Next decade"
         >
           <ChevronsRight className={iconSizes.sm} />
@@ -53,7 +53,7 @@ export const YearSelector = ({
             type="button"
             onClick={() => onYearSelect(year)}
             className={cn(
-              'px-4 py-2 rounded text-sm font-medium transition-colors',
+              'px-4 py-2 rounded-button text-sm font-medium transition-colors',
               year === currentYear
                 ? pickerSelectedClasses
                 : year < startYear || year > startYear + 9
