@@ -320,6 +320,7 @@ const MultiSelect = React.memo<MultiSelectProps>(
                       role="option"
                       aria-selected={isSelected}
                       aria-disabled={option.disabled}
+                      data-highlighted={isHighlighted || undefined}
                       data-slot="multiSelect_option"
                     >
                       {option.label}
@@ -376,6 +377,7 @@ const MultiSelect = React.memo<MultiSelectProps>(
                       role="option"
                       aria-selected={isSelected}
                       aria-disabled={option.disabled}
+                      data-highlighted={isHighlighted || undefined}
                       data-slot="multiSelect_option"
                     >
                       {option.label}

@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import React, { createContext, useContext } from "react";
 
+import { OverlayContainerContext } from "../hooks/useOverlayContainer";
 import { cn } from "../utils";
 import { colorVars } from "../variants";
 import type {
@@ -179,6 +180,7 @@ export const DrawerContent = React.memo<DrawerContentProps>(
   }) => {
     const { direction: contextDirection } = useContext(DrawerContext);
     const direction = directionProp ?? contextDirection;
+    const [container, setContainer] = React.useState<Element | null>(null)
 
     // Default showHandle based on direction
     const shouldShowHandle =
@@ -190,7 +192,11 @@ export const DrawerContent = React.memo<DrawerContentProps>(
       <DrawerPortal>
         <DrawerOverlay classNames={classNames} />
         <DrawerPrimitive.Content
-          ref={ref}
+          ref={(node) => {
+            setContainer(node)
+            if (typeof ref === 'function') ref(node)
+            else if (ref) (ref as React.MutableRefObject<Element | null>).current = node
+          }}
           className={cn(
             "drawer_content",
             drawerContentVariants({ direction, size }),
@@ -202,85 +208,87 @@ export const DrawerContent = React.memo<DrawerContentProps>(
           )}
           data-slot="drawer-content"
         >
-          {/* Handle for bottom drawer */}
-          {shouldShowHandle && direction === "bottom" && (
-            <div
-              className={cn(
-                "drawer_handle",
-                "mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-border mb-4",
-                classNames?.handle
-              )}
-              data-slot="drawer-handle"
-            />
-          )}
-
-          {/* Handle for top drawer */}
-          {shouldShowHandle && direction === "top" && (
-            <div
-              className={cn(
-                "drawer_handle",
-                "mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-border mb-4 order-last mt-auto",
-                classNames?.handle
-              )}
-              data-slot="drawer-handle"
-            />
-          )}
-
-          {/* Handle for left drawer */}
-          {shouldShowHandle && direction === "left" && (
-            <div
-              className={cn(
-                "drawer_handle",
-                "absolute right-2 top-1/2 -translate-y-1/2 w-1.5 h-12 rounded-full bg-border",
-                classNames?.handle
-              )}
-              data-slot="drawer-handle"
-            />
-          )}
-
-          {/* Handle for right drawer */}
-          {shouldShowHandle && direction === "right" && (
-            <div
-              className={cn(
-                "drawer_handle",
-                "absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-12 rounded-full bg-border",
-                classNames?.handle
-              )}
-              data-slot="drawer-handle"
-            />
-          )}
-
-          {/* Close button */}
-          {showCloseButton && (
-            <DrawerPrimitive.Close
-              className={cn(
-                "drawer_closeButton",
-                "absolute rounded-md opacity-70 transition-opacity hover:opacity-100",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                "text-text-secondary hover:text-text-primary hover:bg-surface",
-                closeButtonSizeClasses[size],
-                classNames?.closeButton,
-              )}
-              data-slot="drawer-closeButton"
-            >
-              <X />
-              <span className="sr-only">Close</span>
-            </DrawerPrimitive.Close>
-          )}
-
-          {/* Content wrapper */}
-          <div
-            className={cn(
-              "drawer_wrapper",
-              "flex flex-col flex-1 min-h-0",
-              isHorizontal && "overflow-y-auto",
-              showCloseButton && "pt-6",
-              classNames?.wrapper,
+          <OverlayContainerContext.Provider value={container}>
+            {/* Handle for bottom drawer */}
+            {shouldShowHandle && direction === "bottom" && (
+              <div
+                className={cn(
+                  "drawer_handle",
+                  "mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-border mb-4",
+                  classNames?.handle
+                )}
+                data-slot="drawer-handle"
+              />
             )}
-            data-slot="drawer-wrapper"
-          >
-            {children}
-          </div>
+
+            {/* Handle for top drawer */}
+            {shouldShowHandle && direction === "top" && (
+              <div
+                className={cn(
+                  "drawer_handle",
+                  "mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-border mb-4 order-last mt-auto",
+                  classNames?.handle
+                )}
+                data-slot="drawer-handle"
+              />
+            )}
+
+            {/* Handle for left drawer */}
+            {shouldShowHandle && direction === "left" && (
+              <div
+                className={cn(
+                  "drawer_handle",
+                  "absolute right-2 top-1/2 -translate-y-1/2 w-1.5 h-12 rounded-full bg-border",
+                  classNames?.handle
+                )}
+                data-slot="drawer-handle"
+              />
+            )}
+
+            {/* Handle for right drawer */}
+            {shouldShowHandle && direction === "right" && (
+              <div
+                className={cn(
+                  "drawer_handle",
+                  "absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-12 rounded-full bg-border",
+                  classNames?.handle
+                )}
+                data-slot="drawer-handle"
+              />
+            )}
+
+            {/* Close button */}
+            {showCloseButton && (
+              <DrawerPrimitive.Close
+                className={cn(
+                  "drawer_closeButton",
+                  "absolute rounded-md opacity-70 transition-opacity hover:opacity-100",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-slot focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                  "text-text-secondary hover:text-text-primary hover:bg-surface",
+                  closeButtonSizeClasses[size],
+                  classNames?.closeButton,
+                )}
+                data-slot="drawer-closeButton"
+              >
+                <X />
+                <span className="sr-only">Close</span>
+              </DrawerPrimitive.Close>
+            )}
+
+            {/* Content wrapper */}
+            <div
+              className={cn(
+                "drawer_wrapper",
+                "flex flex-col flex-1 min-h-0",
+                isHorizontal && "overflow-y-auto",
+                showCloseButton && "pt-6",
+                classNames?.wrapper,
+              )}
+              data-slot="drawer-wrapper"
+            >
+              {children}
+            </div>
+          </OverlayContainerContext.Provider>
         </DrawerPrimitive.Content>
       </DrawerPortal>
     );
@@ -450,6 +458,7 @@ export function ComposedDrawer({
       <DrawerContent
         direction={direction}
         size={size}
+        color={color}
         showCloseButton={showCloseButton}
         showHandle={showHandle}
         className={contentClassName}

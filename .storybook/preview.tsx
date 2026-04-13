@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { withThemeByClassName } from "@storybook/addon-themes";
 import type { Preview, Decorator } from "@storybook/react";
+import { TooltipProvider } from "../src/tooltip";
 
 // Base styles — light/dark mode built-in via .dark class
 import "../src/styles/global.css";
@@ -47,6 +48,13 @@ function ensureGlobalStyle() {
   `;
   document.head.appendChild(style);
 }
+
+// Decorator: wrap every story in TooltipProvider so Tooltip works anywhere
+const withTooltipProvider: Decorator = (Story) => (
+  <TooltipProvider>
+    <Story />
+  </TooltipProvider>
+);
 
 // Decorator: theme preset
 const withThemePreset: Decorator = (Story, context) => {
@@ -180,6 +188,7 @@ const preview: Preview = {
   },
 
   decorators: [
+    withTooltipProvider,
     withThemePreset,
     withFocusRing,
     withReduceMotion,

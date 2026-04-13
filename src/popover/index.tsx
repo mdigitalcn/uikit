@@ -4,6 +4,7 @@ import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 
+import { useOverlayContainer } from '../hooks/useOverlayContainer'
 import { cn } from '../utils'
 import { colorVars } from '../variants'
 import type { PopoverClassNames } from './types'
@@ -31,7 +32,7 @@ function PopoverTrigger({
 }
 
 const popoverContentVariants = cva(
-  'will-change-[transform,_opacity] [--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:data-[side=bottom]:slide-out-to-top-2 data-[state=closed]:data-[side=left]:slide-out-to-right-2 data-[state=closed]:data-[side=right]:slide-out-to-left-2 data-[state=closed]:data-[side=top]:slide-out-to-bottom-2 z-[var(--z-popover)] w-72 origin-(--radix-popover-content-transform-origin) [--_radius:var(--radius-popover)] rounded-slot border outline-none',
+  'will-change-[transform,_opacity] [--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:data-[side=bottom]:slide-out-to-top-2 data-[state=closed]:data-[side=left]:slide-out-to-right-2 data-[state=closed]:data-[side=right]:slide-out-to-left-2 data-[state=closed]:data-[side=top]:slide-out-to-bottom-2 z-[var(--z-popover)] w-72 [--_radius:var(--radius-popover)] rounded-slot border outline-none',
   {
     variants: {
       size: {
@@ -78,9 +79,15 @@ const PopoverContent = React.memo(({
   portal = true,
   ...props
 }: PopoverContentProps) => {
+  // When inside a Modal or Drawer, portal into its DOM node so the content
+  // stays inside react-remove-scroll's allowed zone (fixes wheel-scroll) and
+  // inside vaul's inert boundary (fixes pointer-event blocking).
+  const overlayContainer = useOverlayContainer()
+
   const content = (
     <PopoverPrimitive.Content
       data-slot="popover-content"
+      data-vaul-no-drag
       align={align}
       sideOffset={sideOffset}
       className={cn(
@@ -96,7 +103,7 @@ const PopoverContent = React.memo(({
   if (!portal) return content
 
   return (
-    <PopoverPrimitive.Portal>
+    <PopoverPrimitive.Portal container={overlayContainer ?? undefined}>
       {content}
     </PopoverPrimitive.Portal>
   )

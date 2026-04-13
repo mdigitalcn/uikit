@@ -4,6 +4,7 @@ import * as TooltipPrimitive from '@radix-ui/react-tooltip'
 import { cva } from 'class-variance-authority'
 import React from 'react'
 
+import { useOverlayContainer } from '../hooks/useOverlayContainer'
 import { cn } from '../utils'
 import { colorVars } from '../variants'
 import type { TooltipProps } from './types'
@@ -58,6 +59,8 @@ const Tooltip = React.memo<TooltipProps>(
     classNames,
     ...props
   }) => {
+    const overlayContainer = useOverlayContainer()
+
     if (disabled) {
       return <>{children}</>
     }
@@ -65,7 +68,7 @@ const Tooltip = React.memo<TooltipProps>(
     return (
       <TooltipPrimitive.Root delayDuration={delayDuration}>
         <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
-        <TooltipPrimitive.Portal>
+        <TooltipPrimitive.Portal container={overlayContainer ?? undefined}>
           <TooltipPrimitive.Content
             data-slot="tooltip-content"
             side={side}

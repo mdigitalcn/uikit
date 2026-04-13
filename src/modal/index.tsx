@@ -5,6 +5,7 @@ import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-react";
 import * as React from "react";
 
+import { OverlayContainerContext } from "../hooks/useOverlayContainer";
 import { cn } from "../utils";
 import { colorVars } from "../variants";
 import type {
@@ -93,7 +94,7 @@ function ModalOverlay({
 }
 
 const modalContentVariants = cva(
-  "bg-background will-change-[transform,_opacity] [--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] [--_radius:var(--radius-modal)] rounded-slot border",
+  "bg-background will-change-[opacity] [--_duration:var(--duration-enter)] data-[state=closed]:[--_duration:var(--duration-exit)] duration-slot data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] [--_radius:var(--radius-modal)] rounded-slot border",
   {
     variants: {
       size: {
@@ -147,10 +148,13 @@ function ModalContent({
   centered?: boolean;
   classNames?: ModalClassNames;
 }) {
+  const [container, setContainer] = React.useState<Element | null>(null)
+
   return (
     <ModalPortal data-slot="modal-portal">
       <ModalOverlay classNames={classNames} />
       <DialogPrimitive.Content
+        ref={setContainer}
         data-slot="modal-content"
         className={cn(
           "modal_content",
@@ -162,20 +166,22 @@ function ModalContent({
         )}
         {...props}
       >
-        {children}
-        {showCloseButton && (
-          <DialogPrimitive.Close
-            data-slot="modal-close"
-            className={cn(
-              "modal_closeButton",
-              modalCloseVariants({ size }),
-              classNames?.closeButton,
-            )}
-          >
-            <XIcon />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
-        )}
+        <OverlayContainerContext.Provider value={container}>
+          {children}
+          {showCloseButton && (
+            <DialogPrimitive.Close
+              data-slot="modal-close"
+              className={cn(
+                "modal_closeButton",
+                modalCloseVariants({ size }),
+                classNames?.closeButton,
+              )}
+            >
+              <XIcon />
+              <span className="sr-only">Close</span>
+            </DialogPrimitive.Close>
+          )}
+        </OverlayContainerContext.Provider>
       </DialogPrimitive.Content>
     </ModalPortal>
   );

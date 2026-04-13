@@ -1,4 +1,3 @@
-import type { ComponentSize } from '../types'
 import type { InputClassNames, InputProps } from '../input/types'
 
 export interface InputPasswordClassNames extends InputClassNames {

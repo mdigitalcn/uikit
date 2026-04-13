@@ -297,6 +297,7 @@ const Select = React.memo<SelectProps>(
                       role="option"
                       aria-selected={isSelected}
                       aria-disabled={option.disabled}
+                      data-highlighted={isHighlighted || undefined}
                     >
                       {option.label}
                       {isSelected && (
@@ -369,6 +370,7 @@ const Select = React.memo<SelectProps>(
                       role="option"
                       aria-selected={isSelected}
                       aria-disabled={option.disabled}
+                      data-highlighted={isHighlighted || undefined}
                     >
                       {option.label}
                       {isSelected && (

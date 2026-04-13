@@ -861,3 +861,22 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================
+   ADJACENT ACTIVE OPTION RADIUS COLLAPSING
+   When consecutive list options are selected or highlighted (no gap between
+   them), collapse the shared inner border radii so there is no visual seam.
+   Covers selected+selected, selected+highlighted, highlighted+selected.
+   ============================================ */
+[role="option"][aria-selected="true"]:has(+ [role="option"][aria-selected="true"]),
+[role="option"][aria-selected="true"]:has(+ [role="option"][data-highlighted]),
+[role="option"][data-highlighted]:has(+ [role="option"][aria-selected="true"]) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+[role="option"][aria-selected="true"] + [role="option"][aria-selected="true"],
+[role="option"][aria-selected="true"] + [role="option"][data-highlighted],
+[role="option"][data-highlighted] + [role="option"][aria-selected="true"] {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

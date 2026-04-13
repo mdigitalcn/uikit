@@ -5,7 +5,7 @@ import { Check, Copy } from 'lucide-react'
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 
 import { cn } from '../utils'
-import type { TitleProps, TextProps, ParagraphProps, TypographyLevel, TextSize } from './types'
+import type { TitleProps, TextProps, ParagraphProps, TypographyLevel } from './types'
 
 const levelElements: Record<TypographyLevel, string> = {
   h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4', h5: 'h5', h6: 'h6',

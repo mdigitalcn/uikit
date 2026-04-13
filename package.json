@@ -1,6 +1,6 @@
 {
   "name": "@mdigitalcn/uikit",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Modern React component library built with Tailwind CSS v4",
   "type": "module",
   "main": "./dist/index.js",

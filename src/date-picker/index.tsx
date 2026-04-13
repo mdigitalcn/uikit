@@ -211,3 +211,4 @@ export const DatePicker = Object.assign(DatePickerComponent, {
 })
 
 export { RangePickerComponent as RangePicker, TimePickerComponent as TimePicker }
+export default DatePicker

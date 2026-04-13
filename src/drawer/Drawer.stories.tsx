@@ -1,5 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Settings } from "lucide-react";
 import React, { useState } from "react";
+import Button from "../button";
+import DatePicker from "../date-picker";
+import Dropdown from "../dropdown";
+import Input from "../input";
+import MultiSelect from "../multi-select";
+import Select from "../select";
+import Tooltip from "../tooltip";
 import ComposedDrawer from "./index";
 import {
   Drawer,
@@ -12,7 +20,6 @@ import {
   DrawerFooter,
   DrawerClose,
 } from "./index";
-import Button from "../button";
 
 const meta: Meta<typeof ComposedDrawer> = {
   title: "Feedback/Drawer",
@@ -96,6 +103,138 @@ export const Playground: Story = {
     showHandle: false,
     dismissible: true,
     modal: true,
+  },
+};
+
+const fruitOptions = [
+  { value: "apple", label: "Apple" },
+  { value: "banana", label: "Banana" },
+  { value: "cherry", label: "Cherry" },
+  { value: "date", label: "Date" },
+  { value: "elderberry", label: "Elderberry" },
+  { value: "fig", label: "Fig" },
+  { value: "grape", label: "Grape" },
+  { value: "honeydew", label: "Honeydew" },
+  { value: "kiwi", label: "Kiwi" },
+  { value: "lemon", label: "Lemon" },
+  { value: "mango", label: "Mango" },
+  { value: "nectarine", label: "Nectarine" },
+];
+
+const roleOptions = [
+  { value: "admin", label: "Admin" },
+  { value: "editor", label: "Editor" },
+  { value: "viewer", label: "Viewer" },
+  { value: "moderator", label: "Moderator" },
+];
+
+const dropdownItems = [
+  { key: "profile", label: "Profile", href: "#" },
+  { key: "settings", label: "Settings", href: "#" },
+  { key: "billing", label: "Billing", href: "#" },
+  { key: "logout", label: "Log out", onClick: () => {} },
+];
+
+/**
+ * Verifies that Select, MultiSelect, DatePicker, Dropdown and Tooltip all work
+ * correctly when rendered inside a Drawer. Specifically:
+ * - Popover dropdowns portal into the Drawer's DOM tree so vaul's scroll-lock
+ *   and drag-gesture detection do not interfere with option-list scrolling
+ * - data-vaul-no-drag on PopoverContent prevents vaul from treating pointer
+ *   events inside a dropdown as swipe-to-close gestures
+ */
+export const OverlayNesting: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    const [fruit, setFruit] = useState("");
+    const [roles, setRoles] = useState<string[]>([]);
+    const [date, setDate] = useState<Date | undefined>(undefined);
+
+    return (
+      <div className="p-6 space-y-4">
+        <p className="text-sm text-text-secondary">
+          Open each drawer direction and verify all dropdowns open, scroll, and dismiss
+          without the drawer closing unexpectedly or scroll being blocked.
+        </p>
+
+        <div className="flex flex-wrap gap-3">
+          {(["right", "bottom", "left"] as const).map((dir) => (
+            <React.Fragment key={dir}>
+              <Button variant="outline" onClick={() => setOpen(true)}>
+                {dir.charAt(0).toUpperCase() + dir.slice(1)} drawer
+              </Button>
+              <Drawer open={open} onOpenChange={setOpen} direction={dir}>
+                <DrawerContent direction={dir} size="md" showCloseButton color="primary">
+                  <DrawerHeader>
+                    <DrawerTitle>Form controls — {dir} drawer</DrawerTitle>
+                    <DrawerDescription>
+                      Scroll the option lists to verify react-remove-scroll and vaul don't interfere.
+                    </DrawerDescription>
+                  </DrawerHeader>
+
+                  <DrawerBody>
+                    <div className="space-y-4">
+                      <Input label="Name" placeholder="Type something…" />
+
+                      <Select
+                        label="Favourite fruit"
+                        placeholder="Choose a fruit…"
+                        options={fruitOptions}
+                        value={fruit}
+                        onChange={setFruit}
+                      />
+
+                      <MultiSelect
+                        label="Roles"
+                        placeholder="Select roles…"
+                        options={roleOptions}
+                        value={roles}
+                        onChange={setRoles}
+                      />
+
+                      <DatePicker
+                        label="Start date"
+                        placeholder="Pick a date…"
+                        value={date}
+                        onChange={setDate}
+                      />
+
+                      <div>
+                        <p className="text-sm font-medium text-text-secondary mb-1.5">Dropdown menu</p>
+                        <Dropdown
+                          items={dropdownItems}
+                          trigger={
+                            <Button variant="outline" size="sm" rightIcon={<Settings className="w-4 h-4" />}>
+                              Actions
+                            </Button>
+                          }
+                        />
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium text-text-secondary mb-1.5">Tooltip</p>
+                        <Tooltip content="Portaled into the Drawer DOM" side="right">
+                          <Button variant="soft" size="sm">Hover for tooltip</Button>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  </DrawerBody>
+
+                  <DrawerFooter>
+                    <DrawerClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Button>Save</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    );
   },
 };
 

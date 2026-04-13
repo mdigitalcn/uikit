@@ -1,8 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { AlertTriangle, CheckCircle, Info, Trash2 } from "lucide-react";
+import { AlertTriangle, CheckCircle, Info, Settings, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import Button from "../button";
+import DatePicker from "../date-picker";
+import Dropdown from "../dropdown";
 import Input from "../input";
+import MultiSelect from "../multi-select";
+import Select from "../select";
+import Tooltip from "../tooltip";
 import ComposedModal, {
   Modal,
   ModalClose,
@@ -96,6 +101,129 @@ export const Playground: Story = {
     color: "default",
     centered: false,
     showCloseButton: true,
+  },
+};
+
+const fruitOptions = [
+  { value: "apple", label: "Apple" },
+  { value: "banana", label: "Banana" },
+  { value: "cherry", label: "Cherry" },
+  { value: "date", label: "Date" },
+  { value: "elderberry", label: "Elderberry" },
+  { value: "fig", label: "Fig" },
+  { value: "grape", label: "Grape" },
+  { value: "honeydew", label: "Honeydew" },
+  { value: "kiwi", label: "Kiwi" },
+  { value: "lemon", label: "Lemon" },
+  { value: "mango", label: "Mango" },
+  { value: "nectarine", label: "Nectarine" },
+];
+
+const roleOptions = [
+  { value: "admin", label: "Admin" },
+  { value: "editor", label: "Editor" },
+  { value: "viewer", label: "Viewer" },
+  { value: "moderator", label: "Moderator" },
+];
+
+const dropdownItems = [
+  { key: "profile", label: "Profile", href: "#" },
+  { key: "settings", label: "Settings", href: "#" },
+  { key: "billing", label: "Billing", href: "#" },
+  { key: "logout", label: "Log out", onClick: () => {} },
+];
+
+/**
+ * Verifies that Select, MultiSelect, DatePicker, Dropdown and Tooltip all work
+ * correctly when rendered inside a Modal. Specifically:
+ * - Popover dropdowns portal into the Modal's DOM tree (not document.body)
+ *   so react-remove-scroll does not block wheel-scroll inside the option list
+ * - Focus management stays consistent — typing in a search field does not
+ *   trigger the Dialog's focus-scope to steal focus back
+ * - Vaul drag-detection is bypassed (data-vaul-no-drag on PopoverContent)
+ */
+export const OverlayNesting: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    const [fruit, setFruit] = useState("");
+    const [roles, setRoles] = useState<string[]>([]);
+    const [date, setDate] = useState<Date | undefined>(undefined);
+
+    return (
+      <div className="p-6">
+        <p className="text-sm text-text-secondary mb-4">
+          Open the modal and verify that all dropdowns open, scroll, and close correctly.
+          The option lists should be fully scrollable without interference from the Modal scroll-lock.
+        </p>
+        <Button onClick={() => setOpen(true)}>Open Modal with form controls</Button>
+
+        <ComposedModal
+          open={open}
+          onOpenChange={setOpen}
+          title="Form controls inside Modal"
+          description="Every dropdown below portals into the Modal DOM — scroll the option lists to verify."
+          size="md"
+          footer={
+            <>
+              <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+              <Button onClick={() => setOpen(false)}>Save</Button>
+            </>
+          }
+        >
+          <div className="space-y-4">
+            {/* Plain input to verify focus is unaffected */}
+            <Input label="Name" placeholder="Type something…" />
+
+            {/* Select with a long, scrollable list */}
+            <Select
+              label="Favourite fruit"
+              placeholder="Choose a fruit…"
+              options={fruitOptions}
+              value={fruit}
+              onChange={setFruit}
+            />
+
+            {/* MultiSelect — multiple concurrent selections */}
+            <MultiSelect
+              label="Roles"
+              placeholder="Select roles…"
+              options={roleOptions}
+              value={roles}
+              onChange={setRoles}
+            />
+
+            {/* DatePicker popover */}
+            <DatePicker
+              label="Start date"
+              placeholder="Pick a date…"
+              value={date}
+              onChange={setDate}
+            />
+
+            {/* Dropdown (menu) */}
+            <div>
+              <p className="text-sm font-medium text-text-secondary mb-1.5">Dropdown menu</p>
+              <Dropdown
+                items={dropdownItems}
+                trigger={
+                  <Button variant="outline" size="sm" rightIcon={<Settings className="w-4 h-4" />}>
+                    Actions
+                  </Button>
+                }
+              />
+            </div>
+
+            {/* Tooltip inside modal */}
+            <div>
+              <p className="text-sm font-medium text-text-secondary mb-1.5">Tooltip</p>
+              <Tooltip content="Tooltips portal into the Modal too" side="right">
+                <Button variant="soft" size="sm">Hover for tooltip</Button>
+              </Tooltip>
+            </div>
+          </div>
+        </ComposedModal>
+      </div>
+    );
   },
 };
 
